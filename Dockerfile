@@ -1,10 +1,10 @@
 FROM node:18-alpine
 
-COPY ./package* /app
-WORKDIR /app
+COPY ./package* /src
+WORKDIR /src
 RUN npm install
 
-COPY . /app/src
+COPY . /src
 
 EXPOSE 3000
 CMD npm start
