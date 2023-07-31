@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext  } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
+import { useNavigate   } from 'react-router-dom';
+import { SignupContext } from '../../hooks/signupContext';
+
 
 const Container = styled.div`
     margin-top: 5em;
@@ -76,19 +78,15 @@ const Button = styled.button`
     cursor: pointer;
     text-align: center;
     margin: 0 auto; 
+    text-decoration: none;
 `;
 
 const SignupForm = () => {
+
+    const { updateSignupData } = useContext(SignupContext);
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
-        userType: "",
-        name: "",
-        birthDate: "",
-        email: "",
-        password: "",
-        passwordConfirm: "",
-        phoneNumber: "",
-        serviceArea: "",
-        agreement: false
     });
 
     const handleInputChange = (e) => {
@@ -98,23 +96,13 @@ const SignupForm = () => {
         });
     };
 
-    const handleCheckboxChange = (e) => {
-        setFormData({
-        ...formData,
-        [e.target.name]: e.target.checked
-        });
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('/api/signup', formData)
-        .then(response => {
-            console.log(response.data);
-            // 다음 회원 가입 프로세스 진행
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        updateSignupData(formData);
+        console.log(formData);
+        const nextPage = formData.userType === '멘토' ? '/signup/mentor' : '/signup/mentee';
+        navigate(nextPage);
     };
 
     return (
@@ -142,45 +130,44 @@ const SignupForm = () => {
                 </FormGroup>
 
                 <FormGroup>
-                    <Label for="name">이름</Label>
+                    <Label htmlFor="name">이름</Label>
                     <div>
-                        <Input type="text" name="name" onChange={handleInputChange} placeholder="이름을 입력해주세요." />
+                        <Input id="name" type="text" name="name" onChange={handleInputChange} placeholder="이름을 입력해주세요." />
                     </div>
                 </FormGroup>
 
                 <FormGroup>
-                    <Label for="birthDate">생년월일</Label>
+                    <Label htmlFor="birthDate">생년월일</Label>
                     <div>
-                        <Input type="date" name="birthDate" onChange={handleInputChange} />
+                        <Input id="birthDate" type="date" name="birthDate" onChange={handleInputChange} />
                     </div>
                 </FormGroup>
                 
                 <FormGroup>
-                    <Label for="email">이메일</Label>
+                    <Label htmlFor="email">이메일</Label>
                     <div>
-                        <Input type="text" name="email" onChange={handleInputChange} placeholder="이메일을 입력해주세요."/>
+                        <Input id="email" type="text" name="email" onChange={handleInputChange} placeholder="이메일을 입력해주세요."/>
                     </div>
                 </FormGroup>
 
                 <FormGroup>
-                    <Label for="password">비밀번호 입력</Label>
+                    <Label htmlFor="password">비밀번호 입력</Label>
                     <div>
-                        <Input type="text" name="password" onChange={handleInputChange} placeholder="비밀번호를 입력해주세요."/>
+                        <Input id="password" type="password" name="password" onChange={handleInputChange} placeholder="비밀번호를 입력해주세요."/>
                     </div>
                     <div>
-                        <Input type="text" name="passwordForCheck" onChange={handleInputChange} placeholder="비밀번호를 입력해주세요."/>
+                        <Input id="passwordForCheck" type="password" name="passwordForCheck" onChange={handleInputChange} placeholder="비밀번호를 입력해주세요."/>
                     </div>
                 </FormGroup>
 
                 <FormGroup>
-                    <Label for="phonenumber">휴대전화 번호</Label>
+                    <Label htmlFor="phonenumber">휴대전화 번호</Label>
                     <div>
-                        <Input type="text" name="phonenumber" onChange={handleInputChange} placeholder="번호를 입력해주세요."/>
+                        <Input id="phonenumber" type="text" name="phonenumber" onChange={handleInputChange} placeholder="휴대전화 번호를 입력해주세요."/>
                     </div>
                 </FormGroup>
-
-
-                <Button color="primary" type="submit" block>다음</Button>
+                
+                <Button type="submit">다음</Button>
                 </StyledForm>
         </FormContainer>
         </Container>
