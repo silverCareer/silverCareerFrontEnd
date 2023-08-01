@@ -42,28 +42,6 @@ const Input = styled.input`
     border-radius: 10px;
 `;
 
-const UserType = styled.div`
-    display: flex;
-    justify-content: flex-start;
-`;
-
-const Option = styled.div`
-    padding: 0.5em;
-    cursor: pointer;
-    transition: background-color 0.3s ease; 
-    border-radius: 15px;
-    &:hover {
-        background-color: #84A080;
-    }
-    ${({ selected }) =>
-        selected &&
-        `
-        background-color: #84A080;
-        color: white;
-    `}
-
-`;
-
 const Button = styled.button`
     display: block;
     font-size: 1em;
@@ -93,7 +71,7 @@ const Select = styled.select`
 
 
 
-function MentorSignupForm() {
+function MenteeSignupForm() {
 
     const { signupData, updateSignupData } = useContext(SignupContext);
     const navigate = useNavigate();
@@ -105,8 +83,8 @@ function MentorSignupForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const finalData = { ...signupData, ...formData };
+        //console.log(finalData); 
         updateSignupData(finalData);
-
         signup(finalData) 
         .then(response => {
             //console.log(response.data);
@@ -128,7 +106,7 @@ function MentorSignupForm() {
         <Container>
             <FormContainer>
                 <StyledForm onSubmit={handleSubmit}>
-                <Title className="mb-4">멘토 회원가입</Title>
+                <Title className="mb-4">멘티 회원가입</Title>
                     <FormGroup>
                         <Label htmlFor="bank">은행</Label>
                         <div>
@@ -153,42 +131,6 @@ function MentorSignupForm() {
                         </div>
                     </FormGroup>
 
-                    <FormGroup>
-                    
-                        <Label htmlFor="serviceArea">서비스 분야</Label>
-                        <UserType>
-                            <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '현장직' } })}
-                            selected={formData.userType === '현장직'}
-                            >
-                            현장직
-                            </Option>
-                            <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '사무직' } })}
-                            selected={formData.userType === '사무직'}
-                            >
-                            사무직
-                            </Option>
-                            <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '문화' } })}
-                            selected={formData.userType === '문화'}
-                            >
-                            문화
-                            </Option>
-                            <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '기술직' } })}
-                            selected={formData.userType === '기술직'}
-                            >
-                            기술직
-                            </Option>   
-                            <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '요리' } })}
-                            selected={formData.userType === '요리'}
-                            >
-                            요리
-                            </Option>                                                        
-                        </UserType>
-                    </FormGroup>
 
                     <Button type="submit">가입 완료</Button>
 
@@ -198,4 +140,4 @@ function MentorSignupForm() {
     );
 }
 
-export default MentorSignupForm;
+export default MenteeSignupForm;

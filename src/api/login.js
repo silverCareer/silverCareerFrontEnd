@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export const signup = async (data) => {
+export const login = async (data) => {
     try {
-        const response = await axios.post('/api/signup', data);
+        const response = await axios.post('/api/login', data);
         return response;
     } catch (error) {
         console.error(error);

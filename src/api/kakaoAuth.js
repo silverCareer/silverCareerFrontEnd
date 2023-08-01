@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-export const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize?client_id={3fc7941e2346eb6d089f1032ffe4c40b}&redirect_uri={http://localhost:9000/api/kakao}&response_type=code";
+export const KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize?client_id=3fc7941e2346eb6d089f1032ffe4c40b&redirect_uri=https://www.silvercareer.shop/api/kakao&response_type=code";
 
 export const sendAuthCodeToBackend = (authCode) => {
-    return axios.post('http://your-backend-url/token', {
-        code: authCode
+    return axios.post('https://www.silvercareer.shop/api/kakao?code='+authCode, {
     });
 };
 
