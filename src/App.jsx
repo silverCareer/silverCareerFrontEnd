@@ -6,6 +6,8 @@ import MentorSignup from './pages/Signup/MentorSignup';
 import MenteeSignup from './pages/Signup/MenteeSignup';
 import SignupProvider from './hooks/signupContext';
 import { LoginProvider } from './hooks/loginContext';
+import CategoryHomePage from './pages/Category';
+import MyPage from './pages/MyPage'
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route path="/signup" element={<SignupProvider><SignupPage /></SignupProvider>} />
           <Route path="/signup/mentor" element={<SignupProvider><MentorSignup /></SignupProvider>} />
           <Route path="/signup/mentee" element={<SignupProvider><MenteeSignup /></SignupProvider>} />
+          <Route path="/category" element={<CategoryHomePage />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Routes>
       </Router>
     </LoginProvider>
