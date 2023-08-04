@@ -85,8 +85,6 @@ const SelectedCategory = styled.div`
     margin-left : 100px;
     font-size: 2em;
     font-weight: bold;
-    
-
 `
 
 
