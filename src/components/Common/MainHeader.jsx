@@ -1,9 +1,11 @@
-import React, { useContext  } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logoImage from '../../assets/image/logoImage.jpg';
 import searchIconImage from '../../assets/image/searchIconImage.png';
 import { LoginContext } from '../../hooks/loginContext';
+// import { MypageContext } from '../../hooks/mypageContext';
+// import { getMyProfile } from '../../api/mypage/mypage';
 
 const Header = styled.header`
     display: flex;
@@ -74,14 +76,27 @@ const ReqButton = styled.button`
 
 const Line = styled.div`
     height: 1px;
-    width: 140%;
+    width: 100%;
     background-color: #ccc; 
     margin: 1em 0; 
 `;
 
 const MainHeader = () => {
     const { isLoggedIn } = useContext(LoginContext); 
+    //const { setMyPageForm } = useContext(MypageContext);
     const navigate = useNavigate();
+
+    const handleMyPageClick = async () => {
+            if (isLoggedIn) {
+            try {
+                // const data = await getMyProfile();
+                // setMyPageForm(data);
+                navigate('/mypage');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    };
 
 
     return (
@@ -98,7 +113,7 @@ const MainHeader = () => {
                     <Button onClick={() => navigate('/apply')}>수강등록</Button>
                     <Button onClick={() => navigate('/chat')}>채팅</Button>
                     <Button onClick={() => navigate('/notification')}>알림</Button>
-                    <Button onClick={() => navigate('/mypage')}>마이페이지</Button>
+                    <Button onClick={handleMyPageClick}>마이페이지</Button>
                 </>
                 ) : (
                 <>

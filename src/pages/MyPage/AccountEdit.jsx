@@ -1,8 +1,9 @@
 import React from 'react';
 import MainHeader from '../../components/Common/MainHeader'
 import styled from 'styled-components';
-import MyPageForm from '../../components/MyPageForm'
+import Container from '../../components/MyPageForm/AccountEdit'
 import Footer from '../../components/Common/Footer';
+
 
 const MainContainer = styled.div`
     margin-top:0px;
@@ -11,15 +12,15 @@ const MainContainer = styled.div`
     
 `;
 
-function MyPage() {
+function AccountEdit() {
 
     return (
         <MainContainer>
             <MainHeader />
-            <MyPageForm />
+            <Container />
             <Footer />
         </MainContainer>
     );
 }
 
-export default MyPage;
+export default AccountEdit;

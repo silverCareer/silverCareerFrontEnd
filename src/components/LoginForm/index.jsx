@@ -49,6 +49,9 @@ const LinkButton = styled.button`
   font-weight: 600;
   transition: all 0.3s ease-in-out;
   margin: 0 0.5em; 
+  background: transparent;
+  border: none;
+  padding: 0;
 
   &:hover {
     color: #1e90ff;
