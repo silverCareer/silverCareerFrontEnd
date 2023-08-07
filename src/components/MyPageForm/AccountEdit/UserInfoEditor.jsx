@@ -1,5 +1,8 @@
-import React, { useState  } from 'react';
+// import React, { useState  } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import { postMyInfo } from '../../../api/mypage/postMyInfo';
+import { MypageContext } from '../../../hooks/mypageContext';
 
 const MainContainer = styled.div`
     display: flex;
@@ -56,17 +59,45 @@ const Button = styled.button`
 
 function UserInfoEditor() {
 
-    //const { updateSignupData } = useContext(SignupContext);
-    //const navigate = useNavigate();
+    const { myPageForm, setMyPageForm } = useContext(MypageContext);
 
     const [formData, setFormData] = useState({
     });
+
+    const handleBirthChange = (e) => {
+        const birthYear = e.target.value.slice(0, 4);
+        const currentYear = new Date().getFullYear();
+        const age = currentYear - birthYear + 1; 
+    
+        setFormData({
+            ...formData,
+            age: age, 
+        });
+    };
+    
 
     const handleInputChange = (e) => {
         setFormData({
         ...formData,
         [e.target.name]: e.target.value
         });
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await postMyInfo(formData.phoneNum, formData.age);
+            console.log("Success!", response);
+
+            setMyPageForm({
+                ...myPageForm,
+                age : formData.age,
+                phone_num: formData.phoneNum,
+            });
+
+        } catch (error) {
+            console.error("An error occurred:", error);
+
+        }
     };
 
 
@@ -94,10 +125,10 @@ function UserInfoEditor() {
                 <InfoContainer>
                     <Label htmlFor="birth">생년월일</Label>
                         <div>
-                            <Input id="birth" type="date" name="birth" onChange={handleInputChange} placeholder="6자리로 입력해주세요." />
+                            <Input id="birth" type="date" name="birth" onChange={handleBirthChange} placeholder="6자리로 입력해주세요." />
                         </div>
                 </InfoContainer>
-                <Button onClick={() => {}}>확인</Button>
+                <Button onClick={handleSubmit}>확인</Button>
             </PayInfo>
 
             
