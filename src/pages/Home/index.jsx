@@ -15,7 +15,7 @@ function HomePage() {
     return (
         <MainContainer>
             <MainHeader />
-            <Home />;
+            <Home />
         </MainContainer>
     );
 }
