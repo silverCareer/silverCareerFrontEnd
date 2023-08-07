@@ -1,5 +1,5 @@
 import React from 'react';
-import Home from '../../components/Home';
+import CategoryHome from '../../components/Category';
 import MainHeader from '../../components/Common/MainHeader'
 import styled from 'styled-components';
 
@@ -10,14 +10,14 @@ const MainContainer = styled.div`
     
 `;
 
-function HomePage() {
+function CategoryHomePage() {
 
     return (
         <MainContainer>
             <MainHeader />
-            <Home />;
+            <CategoryHome />;
         </MainContainer>
     );
 }
 
-export default HomePage;
+export default CategoryHomePage;

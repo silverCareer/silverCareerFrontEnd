@@ -1,18 +1,20 @@
 import React from 'react';
 //import SignupForm from '../../components/SignupForm';
 import Header from '../../components/Common/Header';
-import SignupForm from '../../components/SignupForm/index';
 import Footer from '../../components/Common/Footer';
+import MenteeSignupForm from '../../components/SignupForm/MenteeSignupForm'
 
-function SignupPage() {
+
+
+function MenteeSignup() {
     return (
 
-        <div>
+        <div >
         <Header />
-        <SignupForm />
+        <MenteeSignupForm />
         <Footer />
         </div>
     );
 }
 
-export default SignupPage;
+export default MenteeSignup;
