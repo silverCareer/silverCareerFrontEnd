@@ -106,7 +106,7 @@ function MentorSignupForm() {
         e.preventDefault();
         const finalData = { ...signupData, ...formData };
         updateSignupData(finalData);
-
+        console.log(finalData)
         signup(finalData) 
         .then(response => {
             //console.log(response.data);
@@ -188,6 +188,23 @@ function MentorSignupForm() {
                             요리
                             </Option>                                                        
                         </UserType>
+                    </FormGroup>
+
+                    <FormGroup>
+                        <Label htmlFor="career">경력</Label>
+                        <div>
+                            <Select
+                                id ="career"
+                                name="career"
+                                onChange={handleInputChange}
+                            >
+                                <option value="">경력을 기입해주세요.</option>
+                                <option value="5년 미만">5년 미만</option>
+                                <option value="10년 미만">10년 미만</option>
+                                <option value="15년 미만">15년 미만</option>
+                                <option value="15년 이상">15년 이상</option>
+                            </Select>
+                        </div>
                     </FormGroup>
 
                     <Button type="submit">가입 완료</Button>
