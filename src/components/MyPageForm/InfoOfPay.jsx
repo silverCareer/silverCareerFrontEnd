@@ -43,7 +43,7 @@ function InfoOfPay() {
                     <Button onClick={()=>{}}>충전하기</Button>
                 </InfoContainer>
                 <InfoContainer>
-                    <Title>충전 / 사용 내역</Title>
+                    <Title>충전 내역</Title>
                     <Button onClick={()=>{}}>보러가기</Button>
                 </InfoContainer>
             </PayInfo>
