@@ -28,7 +28,7 @@ function App() {
             <Route path="/product" element={<ProductPage />}/>
             <Route path="/category" element={<CategoryHomePage />} />
             <Route path="/mypage/*" element={<Outlet />}>
-              <Route path=" " element={<MyPage />} />
+              <Route path="" element={<MyPage />} />
               <Route path="account_edit" element={<AccountEdit />} />
             </Route>
             <Route>

@@ -28,21 +28,13 @@ const item = [
 ]
 
 function ProductList() {
-    //1.
-    console.log(item)
-    const result = []
-    item.forEach(item => {
-        result.push(<Card goods={item} key={item.id} />)
-    });
-    //2. 컴포넌트화 한 결과
-    console.log(result)
     return (
         <main className="product">
             <ul className="product-list">
-                {result}
+                {item.map((item, index) => <Card goods={item} key={index} />)}
             </ul>
         </main>
-    );
+    )
 }
 
 export default ProductList;

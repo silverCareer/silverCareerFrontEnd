@@ -89,7 +89,7 @@ const MainHeader = () => {
     const navigate = useNavigate();
 
     const handleMyPageClick = async () => {
-            if (isLoggedIn) {
+        if (isLoggedIn) {
             try {
                 const data = await getMyProfile();
 
