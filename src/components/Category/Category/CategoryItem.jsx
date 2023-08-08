@@ -1,6 +1,7 @@
 // CategoryItem.jsx
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const imageUrls = {
   '현장직': 'https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f477-1f3fb.svg',
@@ -18,6 +19,13 @@ const ItemBox = styled.div`
   justify-content: space-evenly;
   width: 15%;
   height: 100%;
+  cursor: pointer;
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+
+  &:hover {
+        background-color: #84A080;
+        color: white;
+  }
 `;
 
 const ItemImage = styled.div`
@@ -28,22 +36,34 @@ const ItemImage = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+  
 `;
 
 const ItemTitleBox1 = styled.div`
   width: 100%;
   height: 20%;
-  margin: auto;
   font-size: 1.3em;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
+  
 `;
 
 const CategoryItem = ({ category, selected, onClick }) => {
+  const navigate = useNavigate();
+
+  const handleItemClick = () => {
+    onClick(category);
+    navigate(`/category?type=${encodeURIComponent(category)}`);
+  };
+
   return (
-    <ItemBox onClick={() => onClick(category)} style={{ border: selected ? '2px solid #84A080' : '1px solid #D3D3D3' }}>
+    <ItemBox onClick={handleItemClick} 
+            style={{
+              backgroundColor: selected ? '#84A080' : '',
+              color: selected ? 'white' : ''
+    }}>
       <ItemImage id={category} />
       <ItemTitleBox1>{category}</ItemTitleBox1>
     </ItemBox>

@@ -72,12 +72,23 @@ table, thead, tbody, tr {
   -webkit-box-orient: vertical;
 }
 
+.like-btn {
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: url(../assets/svg/icon-heart.svg) no-repeat center / contain;
+}
+
+.like-btn.on {
+    background: url(../assets/svg/icon-heart-on.svg) no-repeat center / contain;
+}
+
 /* 상품 리스트 */
 /* 상품 이미지 스타일 */
 .product-img {
     position: relative;
-    width: 380px;
-    height: 380px;
+    width: 350px;
+    height: 350px;
     border: 1px solid var(--border-color);
     border-radius: 10px;
     overflow: hidden;
@@ -91,7 +102,7 @@ table, thead, tbody, tr {
 
 /* 상품 가격 스타일 */
 /* medium 사이즈 */
-.m-price {
+/*.m-price {
     font-weight: 700;
     font-size: 24px;
     line-height: 30px;
@@ -103,10 +114,22 @@ table, thead, tbody, tr {
     line-height: 20px;
     margin-left: 2px;
 }
+*/
+
+.product-detail {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.product-category {
+    font-size: 15px;
+    color: rgb(157, 157, 157);
+}
 
 .product-price {
     display: flex;
-    align-items: center;
+    align-items: right;
 }
 
 .product-price .price-discount {
@@ -126,7 +149,7 @@ table, thead, tbody, tr {
 /* 상품 목록 페이지 */
 .product {
     display: flex;
-    justify-content: center;
+    padding: 0px 100px;
     margin-top: 50px;
     padding-bottom: 156px;
 }
@@ -135,25 +158,21 @@ table, thead, tbody, tr {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 60px;
-    width: 1260px;
-    margin-right: 60px;
 }
 
 .product .product-item {
+    width: 350px;
     position: relative;
     display: flex;
-    flex-direction: column;
+    gap: 10px;
     cursor: pointer;
-}
-
-.product .product-item .product-name {
-    width: 338px;
-    margin: 20px 0 10px;
+    flex-direction: column;
 }
 
 .product .product-item .like-btn {
     position: absolute;
     right: 0;
-    bottom: 40px;
+    bottom: 98px;
+    right: 20px;
 }
 

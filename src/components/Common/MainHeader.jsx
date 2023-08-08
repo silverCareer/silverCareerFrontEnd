@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logoImage from '../../assets/image/logoImage.jpg';
-import searchIconImage from '../../assets/image/searchIconImage.png';
+import searchIconImage from '../../assets/svg/icon-search.svg';
 import { LoginContext } from '../../hooks/loginContext';
 // import { MypageContext } from '../../hooks/mypageContext';
 // import { getMyProfile } from '../../api/mypage/mypage';
@@ -13,8 +13,7 @@ const Header = styled.header`
     gap: 20px;
     align-items: center;
     height: 70px;
-    margin-left: 50px;
-    margin-right: 50px;
+    margin : 10px 50px 0px 50px;
 `;
 
 const Logo = styled.div`
@@ -33,9 +32,12 @@ const SearchContainer = styled.div`
 
 const SearchBox = styled.input`
     padding: 5px;
-    border-radius: 15px;
+    border-radius: 10px;
     width: 300px;
-    height: 20px;
+
+    border-radius: 25px;
+    border: 1px solid #000;
+    background: #FFF;
 `;
 
 const SearchIcon = styled.span`
@@ -64,7 +66,7 @@ const ReqButton = styled.button`
     margin-left: 10px;
     background: none;
     border: 1px solid #84A080;
-    border-radius: 15px;
+    border-radius: 10px;
     color: #84A080;
     font: inherit;
     cursor: pointer;
@@ -104,7 +106,7 @@ const MainHeader = () => {
             <Header>
                 <Logo onClick={() => navigate('/')}></Logo>
                 <SearchContainer>
-                    <SearchBox type="text" placeholder="검색하기" />
+                    <SearchBox type="text" placeholder="  원하는 멘토를 찾아보세요!" />
                     <SearchIcon onClick={() => navigate('/search')} />
                 </SearchContainer>
                 {isLoggedIn ? (
@@ -117,6 +119,10 @@ const MainHeader = () => {
                 </>
                 ) : (
                 <>
+                    <ReqButton onClick={() => navigate('/request')}>의뢰하기</ReqButton>
+                    <Button onClick={() => navigate('/apply')}>수강등록</Button>
+                    <Button onClick={() => navigate('/chat')}>채팅</Button>
+                    <Button onClick={() => navigate('/notification')}>알림</Button>
                     <Button onClick={() => navigate('/login')}>로그인</Button>
                     <Button onClick={() => navigate('/signup')}>회원가입</Button>
                 </>

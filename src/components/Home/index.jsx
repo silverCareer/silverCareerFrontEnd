@@ -1,7 +1,7 @@
 import React from 'react';
 import HomeCarousel from './Carousel/Carousel'
 import MainCategory from './MainCategory/MainCategory'
-import ClassComponents from './ClassComponents/Components'
+import ProductList from './ClassComponents/ProductList'
 
 const CAROUSEL_IMAGES = [
     'https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2545.jpg',
@@ -15,7 +15,7 @@ function Home() {
             <HomeCarousel carouselList={CAROUSEL_IMAGES}/>
 
             <MainCategory />
-            <ClassComponents />
+            <ProductList />
         </div>
     );
 }

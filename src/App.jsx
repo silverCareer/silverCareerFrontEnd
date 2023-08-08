@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import HomePage from './pages/Home';
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
@@ -10,6 +10,7 @@ import CategoryHomePage from './pages/Category';
 import MyPage from './pages/MyPage'
 import { MypageProvider } from './hooks/mypageContext';
 import AccountEdit from './pages/MyPage/AccountEdit';
+import ProductPage from './pages/Product';
 
 function App() {
   return (
@@ -19,12 +20,20 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupProvider><SignupPage /></SignupProvider>} />
-            <Route path="/signup/mentor" element={<SignupProvider><MentorSignup /></SignupProvider>} />
-            <Route path="/signup/mentee" element={<SignupProvider><MenteeSignup /></SignupProvider>} />
+            <Route path="/signup/*" element={<Outlet />}>
+              <Route path="" element={<SignupProvider><SignupPage /></SignupProvider>} />
+              <Route path="mentor" element={<SignupProvider><MentorSignup /></SignupProvider>} />
+              <Route path="mentee" element={<SignupProvider><MenteeSignup /></SignupProvider>} />
+            </Route>              
+            <Route path="/product" element={<ProductPage />}/>
             <Route path="/category" element={<CategoryHomePage />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/mypage/account_edit" element={<AccountEdit />} />
+            <Route path="/mypage/*" element={<Outlet />}>
+              <Route path=" " element={<MyPage />} />
+              <Route path="account_edit" element={<AccountEdit />} />
+            </Route>
+            <Route>
+
+            </Route>
           </Routes>
         </Router>
       </MypageProvider>
