@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import logoImage from '../../assets/image/logoImage.jpg';
 import searchIconImage from '../../assets/image/searchIconImage.png';
 import { LoginContext } from '../../hooks/loginContext';
-// import { MypageContext } from '../../hooks/mypageContext';
-// import { getMyProfile } from '../../api/mypage/mypage';
+import { MypageContext } from '../../hooks/mypageContext';
+import { getMyProfile } from '../../api/mypage/mypage';
 
 const Header = styled.header`
     display: flex;
@@ -83,20 +83,40 @@ const Line = styled.div`
 
 const MainHeader = () => {
     const { isLoggedIn } = useContext(LoginContext); 
-    //const { setMyPageForm } = useContext(MypageContext);
+    const { setMyPageForm } = useContext(MypageContext);
     const navigate = useNavigate();
 
     const handleMyPageClick = async () => {
             if (isLoggedIn) {
             try {
-                // const data = await getMyProfile();
-                // setMyPageForm(data);
+                const data = await getMyProfile();
+
+
+                if (data.authority === 'ROLE_MENTOR') {
+                    data.authority = '멘토';
+                }
+
+                if (data.authority === 'ROLE_MENTEE') {
+                    data.authority = '멘티';
+                }
+
+                if (data.phoneNumber && data.phoneNumber.length === 11) {
+                    data.phoneNumber = data.phoneNumber.replace(
+                        /(\d{3})(\d{4})(\d{4})/,
+                        '$1-$2-$3'
+                    );
+                }
+                
+                console.log(data)
+                setMyPageForm(data);
                 navigate('/mypage');
             } catch (err) {
                 console.error(err);
             }
         }
     };
+
+    
 
 
     return (

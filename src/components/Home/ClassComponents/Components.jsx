@@ -1,16 +1,16 @@
 import Card from './Component'
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
-const Container = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    align-self: stretch;
-    padding: 50px 100px;
-    align-items: center;
-    gap: 30px;
-`
+// const Container = styled.div`
+//     display: flex;
+//     flex-wrap: wrap;
+//     justify-content: space-between;
+//     align-items: center;
+//     align-self: stretch;
+//     padding: 50px 100px;
+//     align-items: center;
+//     gap: 30px;
+// `
 
 const item = [
     {

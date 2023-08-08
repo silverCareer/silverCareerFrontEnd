@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+// import React, { useState } from 'react';
 import styled from 'styled-components';
-import CategoryItem from '../../Category/Category/CategoryItem'; // Import the CategoryItem component from the new file
+// import CategoryItem from '../../Category/Category/CategoryItem'; // Import the CategoryItem component from the new file
 
 const imageUrls = {
     '현장직': 'https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f477-1f3fb.svg',

@@ -68,6 +68,39 @@ const Select = styled.select`
 `;
 
 
+const Modal = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const ModalContent = styled.div`
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid #84A080; // 경계선 색상 추가
+`;
+
+const ModalButton = styled.button`
+    background-color: #84A080; // 버튼 배경 색상
+    color: white; // 텍스트 색상
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+`;
+
 
 
 
@@ -75,6 +108,7 @@ function MenteeSignupForm() {
 
     const { signupData, updateSignupData } = useContext(SignupContext);
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(false);
     
     const [formData, setFormData] = useState({
     });
@@ -83,12 +117,13 @@ function MenteeSignupForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const finalData = { ...signupData, ...formData };
-        //console.log(finalData); 
+
         updateSignupData(finalData);
         signup(finalData) 
         .then(response => {
-            //console.log(response.data);
-            navigate('/')
+            if (response.data.success) {
+                setShowModal(true);
+            }
         })
         .catch(error => {
             console.error(error);
@@ -100,6 +135,11 @@ function MenteeSignupForm() {
         ...formData,
         [e.target.name]: e.target.value
         });
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        navigate('/login'); 
     };
 
     return (
@@ -136,6 +176,15 @@ function MenteeSignupForm() {
 
                 </StyledForm>
             </FormContainer>
+
+            {showModal && (
+                <Modal onClick={closeModal}>
+                    <ModalContent>
+                        <p>회원가입 되셨습니다.</p>
+                        <ModalButton onClick={closeModal}>확인</ModalButton>
+                    </ModalContent>
+                </Modal>
+            )}
         </Container>
     );
 }

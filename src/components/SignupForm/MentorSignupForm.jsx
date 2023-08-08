@@ -34,13 +34,6 @@ const Label = styled.label`
     font-size: 0.9em;
 `;
 
-const Input = styled.input`
-    width: 100%;
-    padding: 0.5em;
-    margin-bottom: 0.5em;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-`;
 
 const UserType = styled.div`
     display: flex;
@@ -90,13 +83,46 @@ const Select = styled.select`
 `;
 
 
+const Modal = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
 
+const ModalContent = styled.div`
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid #84A080; // 경계선 색상 추가
+`;
+
+const ModalButton = styled.button`
+    background-color: #84A080; // 버튼 배경 색상
+    color: white; // 텍스트 색상
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+`;
 
 
 function MentorSignupForm() {
 
     const { signupData, updateSignupData } = useContext(SignupContext);
     const navigate = useNavigate();
+
+    const [showModal, setShowModal] = useState(false);
     
     const [formData, setFormData] = useState({
     });
@@ -106,11 +132,11 @@ function MentorSignupForm() {
         e.preventDefault();
         const finalData = { ...signupData, ...formData };
         updateSignupData(finalData);
-        console.log(finalData)
         signup(finalData) 
         .then(response => {
-            //console.log(response.data);
-            navigate('/')
+            if (response.data.success) {
+                setShowModal(true);
+            }
         })
         .catch(error => {
             console.error(error);
@@ -124,65 +150,49 @@ function MentorSignupForm() {
         });
     };
 
+    const closeModal = () => {
+        setShowModal(false);
+        navigate('/login'); 
+    };
+
     return (
         <Container>
             <FormContainer>
                 <StyledForm onSubmit={handleSubmit}>
                 <Title className="mb-4">멘토 회원가입</Title>
-                    <FormGroup>
-                        <Label htmlFor="bank">은행</Label>
-                        <div>
-                            <Select
-                                id ="bank"
-                                name="bank"
-                                onChange={handleInputChange}
-                            >
-                                <option value="">은행을 선택해주세요.</option>
-                                <option value="하나은행">하나은행</option>
-                                <option value="우리은행">우리은행</option>
-                                <option value="신한은행">신한은행</option>
-                                <option value="새마을금고">새마을금고</option>
-                            </Select>
-                        </div>
-                    </FormGroup>
 
-                    <FormGroup>
-                        <Label htmlFor="accountNum">계좌번호</Label>
-                        <div>
-                            <Input type="text" id="accountNum" name="accountNum" onChange={handleInputChange} placeholder="' - ' 없이 입력해주세요" />
-                        </div>
-                    </FormGroup>
+
 
                     <FormGroup>
                     
-                        <Label htmlFor="serviceArea">서비스 분야</Label>
+                        <Label htmlFor="category">서비스 분야</Label>
                         <UserType>
                             <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '현장직' } })}
+                            onClick={() => handleInputChange({ target: { name: 'category', value: '현장직' } })}
                             selected={formData.userType === '현장직'}
                             >
                             현장직
                             </Option>
                             <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '사무직' } })}
+                            onClick={() => handleInputChange({ target: { name: 'category', value: '사무직' } })}
                             selected={formData.userType === '사무직'}
                             >
                             사무직
                             </Option>
                             <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '문화' } })}
+                            onClick={() => handleInputChange({ target: { name: 'category', value: '문화' } })}
                             selected={formData.userType === '문화'}
                             >
                             문화
                             </Option>
                             <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '기술직' } })}
+                            onClick={() => handleInputChange({ target: { name: 'category', value: '기술직' } })}
                             selected={formData.userType === '기술직'}
                             >
                             기술직
                             </Option>   
                             <Option 
-                            onClick={() => handleInputChange({ target: { name: 'serviceArea', value: '요리' } })}
+                            onClick={() => handleInputChange({ target: { name: 'category', value: '요리' } })}
                             selected={formData.userType === '요리'}
                             >
                             요리
@@ -211,6 +221,15 @@ function MentorSignupForm() {
 
                 </StyledForm>
             </FormContainer>
+
+            {showModal && (
+                <Modal onClick={closeModal}>
+                    <ModalContent>
+                        <p>회원가입 되셨습니다.</p>
+                        <ModalButton onClick={closeModal}>확인</ModalButton>
+                    </ModalContent>
+                </Modal>
+            )}
         </Container>
     );
 }
