@@ -96,12 +96,23 @@ const SignupForm = () => {
         });
     };
 
+    const handleBirthChange = (e) => {
+        const birthYear = e.target.value.slice(0, 4);
+        const currentYear = new Date().getFullYear();
+        const age = currentYear - birthYear + 1; 
+    
+        setFormData({
+            ...formData,
+            age: age, 
+        });
+    };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
         updateSignupData(formData);
         console.log(formData);
-        const nextPage = formData.userType === '멘토' ? '/signup/mentor' : '/signup/mentee';
+        const nextPage = formData.authority === '멘토' ? '/signup/mentor' : '/signup/mentee';
         navigate(nextPage);
     };
 
@@ -115,14 +126,14 @@ const SignupForm = () => {
                     
                     <UserType>
                         <Option 
-                        onClick={() => handleInputChange({ target: { name: 'userType', value: '멘토' } })}
-                        selected={formData.userType === '멘토'}
+                        onClick={() => handleInputChange({ target: { name: 'authority', value: '멘토' } })}
+                        selected={formData.authority === '멘토'}
                         >
                         멘토
                         </Option>
                         <Option 
-                        onClick={() => handleInputChange({ target: { name: 'userType', value: '멘티' } })}
-                        selected={formData.userType === '멘티'}
+                        onClick={() => handleInputChange({ target: { name: 'authority', value: '멘티' } })}
+                        selected={formData.authority === '멘티'}
                         >
                         멘티
                         </Option>
@@ -139,7 +150,7 @@ const SignupForm = () => {
                 <FormGroup>
                     <Label htmlFor="birthDate">생년월일</Label>
                     <div>
-                        <Input id="birthDate" type="date" name="birthDate" onChange={handleInputChange} />
+                        <Input id="birthDate" type="date" name="birthDate" onChange={handleBirthChange} />
                     </div>
                 </FormGroup>
                 
@@ -161,9 +172,9 @@ const SignupForm = () => {
                 </FormGroup>
 
                 <FormGroup>
-                    <Label htmlFor="phonenumber">휴대전화 번호</Label>
+                    <Label htmlFor="phoneNumber">휴대전화 번호</Label>
                     <div>
-                        <Input id="phonenumber" type="text" name="phonenumber" onChange={handleInputChange} placeholder="휴대전화 번호를 입력해주세요."/>
+                        <Input id="phoneNumber" type="text" name="phoneNumber" onChange={handleInputChange} placeholder="휴대전화 번호를 입력해주세요."/>
                     </div>
                 </FormGroup>
                 

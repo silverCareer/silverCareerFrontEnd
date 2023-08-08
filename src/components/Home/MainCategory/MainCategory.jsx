@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+// import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+
 
 const imageUrls = {
     '현장직': 'https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f477-1f3fb.svg',

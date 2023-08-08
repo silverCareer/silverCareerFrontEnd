@@ -107,7 +107,7 @@ function LoginForm() {
 
     login(formData) 
     .then(response => {
-        //localStorage.setItem('token', response.data.token);
+        localStorage.setItem('jwttoken', response.data.response.accessToken);
         setIsLoggedIn(true);
         navigate('/')
     })
@@ -125,17 +125,17 @@ const handleInputChange = (e) => {
 
     return (
         <Form onSubmit={handleSubmit}>
-        <Input id="email" name="email" type="email" onChange={handleInputChange} placeholder="이메일을 입력해주세요." />
-        <Input id="password" name="password" type="password" onChange={handleInputChange} placeholder="비밀번호를 입력해주세요." />
-        <Button type="submit">이메일 로그인</Button>
-        <LinkContainer>
-        <LinkButton to="/find-id">아이디 찾기</LinkButton>
-        <LinkButton to="/find-password">비밀번호 찾기</LinkButton>
-        <LinkButton onClick={() => navigate('/signup')}>회원가입</LinkButton>
-        </LinkContainer>
-        <Line />
-        <KakaoButton onClick={handleKakaoLogin}> &nbsp;&nbsp;&nbsp;&nbsp; 카카오 계정으로 로그인</KakaoButton>
-        <GoogleLoginButton />
+          <Input id="email" name="email" type="email" onChange={handleInputChange} placeholder="이메일을 입력해주세요." />
+          <Input id="password" name="password" type="password" onChange={handleInputChange} placeholder="비밀번호를 입력해주세요." />
+          <Button type="submit">이메일 로그인</Button>
+          <LinkContainer>
+          <LinkButton to="/find-id">아이디 찾기</LinkButton>
+          <LinkButton to="/find-password">비밀번호 찾기</LinkButton>
+          <LinkButton onClick={() => navigate('/signup')}>회원가입</LinkButton>
+          </LinkContainer>
+          <Line />
+          <KakaoButton onClick={handleKakaoLogin}> &nbsp;&nbsp;&nbsp;&nbsp; 카카오 계정으로 로그인</KakaoButton>
+          <GoogleLoginButton />
         </Form>
     );
 }

@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-export const postMyInfo = async (phoneNum, birth) => {
+export const postMyInfo = async (phoneNum, age) => {
     const token = localStorage.getItem('jwt'); 
     const response = await axios.post('/api/editMyInfo', 
     {
-        phoneNum: phoneNum,
-        birth: birth
+        phoneNum : phoneNum,
+        age : age
     },
     {
         headers: {
