@@ -60,21 +60,10 @@ const Button = styled.button`
 function UserInfoEditor() {
 
     const { myPageForm, setMyPageForm } = useContext(MypageContext);
-
+    const { phoneNumber } = myPageForm;
     const [formData, setFormData] = useState({
     });
 
-    const handleBirthChange = (e) => {
-        const birthYear = e.target.value.slice(0, 4);
-        const currentYear = new Date().getFullYear();
-        const age = currentYear - birthYear + 1; 
-    
-        setFormData({
-            ...formData,
-            age: age, 
-        });
-    };
-    
 
     const handleInputChange = (e) => {
         setFormData({
@@ -85,13 +74,13 @@ function UserInfoEditor() {
 
     const handleSubmit = async () => {
         try {
-            const response = await postMyInfo(formData.phoneNum, formData.age);
+            const response = await postMyInfo(formData.phoneNum, formData.password);
             console.log("Success!", response);
 
             setMyPageForm({
                 ...myPageForm,
-                age : formData.age,
-                phone_num: formData.phoneNum,
+                phoneNumber : formData.phoneNum,
+                password: formData.password,
             });
 
         } catch (error) {
@@ -119,13 +108,13 @@ function UserInfoEditor() {
                 <InfoContainer>
                     <Label htmlFor="phoneNum">휴대폰</Label>
                         <div>
-                            <Input id="phoneNum" type="text" name="phoneNum" onChange={handleInputChange} placeholder="'-'제외하고 입력해주세요." />
+                            <Input id="phoneNum" type="text" name="phoneNum" onChange={handleInputChange} placeholder={phoneNumber} />
                         </div>
                 </InfoContainer>
                 <InfoContainer>
-                    <Label htmlFor="birth">생년월일</Label>
+                    <Label htmlFor="password">비밀번호</Label>
                         <div>
-                            <Input id="birth" type="date" name="birth" onChange={handleBirthChange} placeholder="6자리로 입력해주세요." />
+                            <Input id="password" type="password" name="password" onChange={handleInputChange} placeholder="변경할 비밀번호 입력" />
                         </div>
                 </InfoContainer>
                 <Button onClick={handleSubmit}>확인</Button>
