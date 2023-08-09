@@ -10,7 +10,7 @@ export const postProfilePic = async (formData) => {
         },
         };
 
-        const response = await axios.post('/api/profile-pic', formData, config);
+        const response = await axios.post('https://www.silvercareer.shop/api/updateProfileImg', formData, config);
 
         
         return response.data;

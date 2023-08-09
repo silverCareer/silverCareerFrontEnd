@@ -2,7 +2,7 @@ import React, { useState, useContext  } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { SignupContext } from '../../hooks/signupContext';
-import { signup } from '../../api/signup';
+import { signup } from '../../api/signup/signup';
 
 const Container = styled.div`
     margin-top: 5em;
