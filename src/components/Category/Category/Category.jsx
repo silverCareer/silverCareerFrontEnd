@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import CategoryItem from './CategoryItem.jsx'; // Import the CategoryItem component from the new file
+import ProductList from '../../Home/ClassComponents/ProductList'
 
 const Container = styled.div`
   display: flex;
@@ -8,14 +9,13 @@ const Container = styled.div`
   gap: 20px;
   align-items: center;
   height: 200px;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin: 25px 0px;
 `;
 
 const SelectedCategory = styled.div`
   margin-top: 30px;
-  margin-left: 100px;
-  font-size: 2em;
+  margin-left: 125px;
+  font-size: 27px;
   font-weight: bold;
 `;
 
@@ -41,6 +41,7 @@ const Category = () => {
         ))}
       </Container>
       <SelectedCategory>선택된 카테고리: {selectedCategory}</SelectedCategory>
+      <ProductList />
     </>
   );
 };

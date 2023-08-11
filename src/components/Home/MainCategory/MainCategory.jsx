@@ -1,7 +1,8 @@
 import React from 'react';
 // import React, { useState } from 'react';
 import styled from 'styled-components';
-// import CategoryItem from '../../Category/Category/CategoryItem'; // Import the CategoryItem component from the new file
+import { useNavigate } from 'react-router-dom';
+
 
 const imageUrls = {
     '현장직': 'https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f477-1f3fb.svg',
@@ -14,7 +15,7 @@ const imageUrls = {
 
 const Container = styled.div`
     display: flex;
-    height: 157px;
+    height: 150px;
     padding: 0px 100px;
     justify-content: space-between;
     align-items: flex-start;
@@ -30,11 +31,17 @@ const ItemBox = styled.div`
     justify-content: center;
     align-items: center;
     gap: 10px;
+    cursor : pointer;
 
     border-radius: 10px;
     border: 1px solid #84A080;
     background: #FFF;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+    &:hover {
+        background-color: #84A080;
+        color: white;
+    }
 `;
 
 const ItemImage = styled.img`
@@ -53,7 +60,7 @@ const ItemTitleBox1 = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-  `;
+`;
 
 const ItemDiv = styled.div`
     display: flex;
@@ -62,35 +69,39 @@ const ItemDiv = styled.div`
     flex: 1 0 0;
     align-self: stretch;
 `
+
 const ItemTitle = styled.div`
     color: #000;
     text-align: center;
-    font-feature-settings: 'clig' off, 'liga' off;
-    font-family: Expletus Sans;
-    font-size: 20px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 400;
-    line-height: 130%; /* 41.6px */
 `
+
 const categories = ["현장직", "사무직", "문화", "기술직", "요리"];
 
 const MainCategory = () => {
+    const navigate = useNavigate();
+
+    const handleCategoryClick = (category) => {
+        navigate(`/category?type=${encodeURIComponent(category)}`);
+    };
+
     return (
         <>
-            
-            <Container>
-                <ItemTitle>이런 카테고리는 어때요?</ItemTitle>
-                <ItemDiv>
-                    {categories.map((category, index) => (
-                        <ItemBox key={index}>
-                            <ItemImage src={imageUrls[category]} alt={category} />
-                            <ItemTitleBox1>{category}</ItemTitleBox1>
-                        </ItemBox>
-                    ))}
-                </ItemDiv>
-            </Container>
+        <Container>
+            <ItemTitle><strong>이런 카테고리는 어때요?</strong></ItemTitle>
+            <ItemDiv>
+                {categories.map((category, index) => (
+                <ItemBox key={index} onClick={() => handleCategoryClick(category)}>
+                    <ItemImage src={imageUrls[category]} alt={category} />
+                    <ItemTitleBox1>{category}</ItemTitleBox1>
+                </ItemBox>
+                ))}
+            </ItemDiv>
+        </Container>
         </>
     );
-};
+}
 
 export default MainCategory;

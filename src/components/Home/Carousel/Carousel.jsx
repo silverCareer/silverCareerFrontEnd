@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './carousel.module.css';
+import { ReactComponent as LeftIcon } from '../../../assets/svg/icon-left.svg';
+import { ReactComponent as RightIcon } from '../../../assets/svg/icon-right.svg';
 
 const HomeCarousel = ({ carouselList }) => {
     const [currIndex, setCurrIndex] = useState(0);
     const [currList, setCurrList] = useState([]);
+    const [totalImages, setTotalImages] = useState(0);
 
     const carouselRef = useRef(null);
 
@@ -25,6 +28,18 @@ const HomeCarousel = ({ carouselList }) => {
         }
     }, [currIndex]);
 
+    useEffect(() => {
+        if (carouselList.length !== 0) {
+            const startData = carouselList[0];
+            const endData = carouselList[carouselList.length - 1];
+            const newList = [endData, ...carouselList, startData];
+    
+            setCurrList(newList);
+            setCurrIndex(1); // Change to 1 to display the first image initially
+            setTotalImages(newList.length - 2);
+        }
+    }, [carouselList]);
+
     const moveToNthSlide = (index) => {
         setCurrIndex(index);
     };
@@ -44,12 +59,6 @@ const HomeCarousel = ({ carouselList }) => {
     return (
         <div className={styles.container}>
             <div className={styles.carouselWrapper}>
-                <button type="button" className={styles.swipeLeft} onClick={() => handleSwipe(-1)}>
-                    좌
-                </button>
-                <button type="button" className={styles.swipeRight} onClick={() => handleSwipe(1)}>
-                    우
-                </button>
                 <ul className={styles.carousel} ref={carouselRef}>
                     {currList.map((image, idx) => {
                         const key = `${image}-${idx}`;
@@ -61,6 +70,18 @@ const HomeCarousel = ({ carouselList }) => {
                         );
                     })}
                 </ul>
+            </div>
+            <div className={styles.carouselIndex}> 
+                <button type="button" className={styles.swipeLeft} onClick={() => handleSwipe(-1)}>
+                    <LeftIcon />
+                </button>
+                <span className={styles.nowIndex} >
+                    &nbsp;
+                    {`${currIndex}`}<span> / {`${totalImages}`}</span></span>
+                    &nbsp;
+                <button type="button" className={styles.swipeRight} onClick={() => handleSwipe(1)}>
+                    <RightIcon />
+                </button>
             </div>
         </div>
     );
