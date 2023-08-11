@@ -47,8 +47,6 @@ const Email = styled.div`
     color: #808080;
 `
 
-
-
 function Profile() {
     const { myPageForm } = useContext(MypageContext);
     const { name, email, profileImage } = myPageForm;

@@ -1,31 +1,36 @@
-import styled from 'styled-components';
 import '../../../style/style.css';
+/*
+{
+    productList : [
+			{
+					produtIdx : Long, //상품번호 (상세조회 시 사용)
+					productName : String, //상품명
+					productDescription : String, //상품설명
+					productImage : String, //상품 이미지 (여러장?)
+					productLikes : Long, //해당 상품의 좋아요 갯수
+					productPrice : Long //상품 가격
+			},
+		]
+}
+*/
 
-const ComponentStyle = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-    border: 1px solid black;
-    width: 25%;
-`
-export default function Card({goods}) {
-    console.log(goods)
+export default function Card({product}) {
+    console.log(product + "22")
     return (
         <li className="product-item">
             <div className="product-img">
-                <img src={goods.image} />
+                <img src={product.productImage} alt="img"/>
             </div>
             <div className="product-category">현장직</div>
             <div className="product-detail">
-                <span>{goods.contents}</span>
+                <span>{product.productDescription}</span>
             </div>            
             <button className="like-btn"></button>
             <div className="product-price">
-                <span>{goods.price} 원</span>
+                <span>{product.productPrice} 원</span>
             </div>
             <div className="product-rate">
-                <span>{goods.rate}</span>
+                <span>{product.productLikes}</span>
             </div>
         </li>
     );
