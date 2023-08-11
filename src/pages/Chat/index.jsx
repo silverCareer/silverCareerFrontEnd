@@ -1,7 +1,8 @@
 import React from 'react';
-import Home from '../../components/Home';
 import MainHeader from '../../components/Common/MainHeader'
 import styled from 'styled-components';
+import ChatPageForm from '../../components/ChatPageForm'
+import Footer from '../../components/Common/Footer';
 
 const MainContainer = styled.div`
     margin-top:0px;
@@ -10,14 +11,15 @@ const MainContainer = styled.div`
     
 `;
 
-function HomePage() {
+function ChatPage() {
 
     return (
         <MainContainer>
             <MainHeader />
-            <Home />
+            <ChatPageForm />
+            <Footer />
         </MainContainer>
     );
 }
 
-export default HomePage;
+export default ChatPage;
