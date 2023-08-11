@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { MypageContext } from '../../hooks/mypageContext';
+import { getChatRooms } from '../../api/chat/getChatRooms';
 
 const Sidebar = styled.div`
     width: 200px;
@@ -16,7 +18,7 @@ const ChatItem = styled.div`
 
     &:hover {
         background-color: #84A080;
-        color: white; // 텍스트를 하얀색으로 변경
+        color: white;
     }
 `;
 
@@ -24,21 +26,46 @@ const StyledLink = styled(Link)`
     text-decoration: none;
 
     &:hover {
-        color: white; // 하이퍼링크 텍스트를 하얀색으로 변경
+        color: white;
     }
 `;
 
-const ChatSidebar = ({ chats }) => {
+const ChatSidebar = () => {
+    const [chats, setChats] = useState([]);
+    const { myPageForm } = useContext(MypageContext);
+    const { name } = myPageForm;
+    console.log(name)
+
+    useEffect(() => {
+        const fetchChats = async () => {
+            try {
+                const response = await getChatRooms(name);
+                if (response.isSuccess) {
+                    setChats(response.result);
+                } else {
+                    console.error("Failed to fetch chats:", response.message);
+                }
+            } catch (error) {
+                console.error("Error fetching chats:", error);
+            }
+        };
+
+        fetchChats();
+    }, [name]);
+
     return (
         <Sidebar>
-        {chats.map((chat) => (
-            <StyledLink to={`/chat/${chat.id}`} key={chat.id}>
-            <ChatItem>
-                <div>{chat.title}</div>
-                <small>{chat.lastMessage}</small>
-            </ChatItem>
-            </StyledLink>
-        ))}
+            {chats.map((chat) => {
+                const lastMessage = chat.messages[chat.messages.length - 1];
+                return (
+                    <StyledLink to={`/chat/${chat._id}`} key={chat._id}>
+                        <ChatItem>
+                            <div>{chat.user2}</div>
+                            <small>{lastMessage.content}</small>
+                        </ChatItem>
+                    </StyledLink>
+                );
+            })}
         </Sidebar>
     );
 };
