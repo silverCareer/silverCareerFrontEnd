@@ -11,10 +11,10 @@ const MainContainer = styled.div`
 
 function ChatPageForm() {
 
-
     return (
         <MainContainer>
         <ChatSidebar />
+
         {/* 여기에 채팅 화면 컴포넌트를 추가할 예정 */}
         </MainContainer>
     );
