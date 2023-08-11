@@ -10,15 +10,11 @@ const MainContainer = styled.div`
 `;
 
 function ChatPageForm() {
-    // 임시 채팅 리스트 데이터
-    const chats = [
-        { id: '1', title: 'Chat Room 1', lastMessage: 'Last message...' },
-        { id: '2', title: 'Chat Room 2', lastMessage: 'Last message...' },
-    ];
+
 
     return (
         <MainContainer>
-        <ChatSidebar chats={chats} />
+        <ChatSidebar />
         {/* 여기에 채팅 화면 컴포넌트를 추가할 예정 */}
         </MainContainer>
     );

@@ -144,7 +144,8 @@ const SignupForm = () => {
         try {
             const phone = formData.phoneNumber;
             const response = await sendSMS(phone);
-            localStorage.setItem('authCode', response.authCode);
+            console.log(response.result.authCode)
+            localStorage.setItem('authCode', response.result.authCode);
             alert('인증번호가 전송되었습니다.');
         } catch (error) {
             console.error('인증번호 전송에 실패했습니다.', error);
@@ -155,6 +156,8 @@ const SignupForm = () => {
     const handleVerifyAuthCode = () => {
         const storedAuthCode = localStorage.getItem('authCode');
         const inputAuthCode = formData.authCode;
+        console.log(storedAuthCode)
+        console.log(inputAuthCode)
     
         if (storedAuthCode === inputAuthCode) {
             alert('인증번호가 확인되었습니다.');
