@@ -131,7 +131,7 @@ const MainHeader = () => {
                 <>
                     <ReqButton onClick={() => navigate('/request')}>의뢰하기</ReqButton>
                     <Button onClick={() => navigate('/apply')}>수강등록</Button>
-                    <Button onClick={() => navigate('/chat')}>채팅</Button>
+                    <Button onClick={() => navigate('/chatroom')}>채팅</Button>
                     <Button onClick={() => navigate('/notification')}>알림</Button>
                     <Button onClick={handleMyPageClick}>마이페이지</Button>
                 </>

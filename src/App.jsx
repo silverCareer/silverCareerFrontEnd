@@ -10,6 +10,7 @@ import CategoryHomePage from './pages/Category';
 import MyPage from './pages/MyPage'
 import { MypageProvider } from './hooks/mypageContext';
 import AccountEdit from './pages/MyPage/AccountEdit';
+import ChatPage from './pages/Chat';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/category" element={<CategoryHomePage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/mypage/account_edit" element={<AccountEdit />} />
+            <Route path="/chatroom" element={<ChatPage />} />
           </Routes>
         </Router>
       </MypageProvider>
