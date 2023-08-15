@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ChatSidebar from './ChatSidebar';
+import ChatRoom from './ChatRoom'
 
 const MainContainer = styled.div`
     display: flex;
@@ -14,8 +15,7 @@ function ChatPageForm() {
     return (
         <MainContainer>
         <ChatSidebar />
-
-        {/* 여기에 채팅 화면 컴포넌트를 추가할 예정 */}
+        <ChatRoom />
         </MainContainer>
     );
 }

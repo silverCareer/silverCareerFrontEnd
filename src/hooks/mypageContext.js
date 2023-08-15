@@ -7,7 +7,7 @@ export const MypageProvider = ({ children }) => {
 
     return (
         <MypageContext.Provider value={{ myPageForm, setMyPageForm}}>
-        {children}
+            {children}
         </MypageContext.Provider>
     );
 };

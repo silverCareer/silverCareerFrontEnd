@@ -55,7 +55,7 @@ const CategoryItem = ({ category, selected, onClick }) => {
 
   const handleItemClick = () => {
     onClick(category);
-    navigate(`/category?type=${encodeURIComponent(category)}`);
+    navigate(`/category/${encodeURIComponent(category)}`);
   };
 
   return (
