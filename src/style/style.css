@@ -166,7 +166,7 @@ table, thead, tbody, tr {
     display: flex;
     gap: 10px;
     cursor: pointer;
-    flex-direction: column;
+    flex-direction: column;    
 }
 
 .product .product-item .like-btn {
