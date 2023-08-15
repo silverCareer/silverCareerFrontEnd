@@ -11,6 +11,7 @@ import MyPage from './pages/MyPage'
 import AccountEdit from './pages/MyPage/AccountEdit';
 import ProductPage from './pages/Product';
 import ChatPage from './pages/Chat';
+import { ChatProvider } from './hooks/chatContext';
 
 /* Provider */
 import SignupProvider from './hooks/signupContext';
@@ -40,7 +41,7 @@ function App() {
               <Route path="" element={<MyPage />} />
               <Route path="account_edit" element={<AccountEdit />} />
             </Route>
-            <Route path="/chatroom" element={<ChatPage />} />
+            <Route path="/chatroom" element={<ChatProvider><ChatPage /></ChatProvider>} />
           </Routes>
         </Router>
         </ProductDetailProvider>
