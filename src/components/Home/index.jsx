@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import HomeCarousel from './Carousel/Carousel'
 import MainCategory from './MainCategory/MainCategory'
 import ProductList from './ClassComponents/ProductList'
-import Card from './ClassComponents/Card'
 import { getProductList } from '../../api/product/productList';
 
 const CAROUSEL_IMAGES = [

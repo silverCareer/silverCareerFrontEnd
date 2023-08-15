@@ -12,6 +12,7 @@ import { MypageProvider } from './hooks/mypageContext';
 import AccountEdit from './pages/MyPage/AccountEdit';
 import ProductPage from './pages/Product';
 import ChatPage from './pages/Chat';
+import { ChatProvider } from './hooks/chatContext';
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
               <Route path="" element={<MyPage />} />
               <Route path="account_edit" element={<AccountEdit />} />
             </Route>
-            <Route path="/chatroom" element={<ChatPage />} />
+            <Route path="/chatroom" element={<ChatProvider><ChatPage /></ChatProvider>} />
           </Routes>
         </Router>
       </MypageProvider>
