@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
-import { ProductContext } from '../../../hooks/productContext';
+import { ProductDetailContext } from './../../../hooks/productDetailContext';
 
 const ProductBottomsection = styled.div `
     display: flex;
@@ -32,9 +32,9 @@ const BottomContents = styled.div `
 `
 
 export default function ProductDetailBottom() {
-
-    const { productDetail } = useContext(ProductContext)
-
+    const { productDetailInfo } = useContext(ProductDetailContext);
+    const { description, memberName } = productDetailInfo
+    
     return (
         <ProductBottomsection>
             <BottomMenu>
@@ -46,10 +46,10 @@ export default function ProductDetailBottom() {
             
             <BottomContents>
                 <div className="mentorInfo">멘토정보</div>
-                <div className="content">내용</div>         
+                <div className="content">{memberName}</div>         
             
                 <div className="serviceDetail">서비스 상세설명</div>
-                <div className="content">내용</div>         
+                <div className="content">{description}</div>         
             </BottomContents>
         </ProductBottomsection>
     );
