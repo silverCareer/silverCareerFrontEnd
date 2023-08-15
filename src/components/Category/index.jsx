@@ -1,11 +1,11 @@
 import React from 'react';
-import Category from './Category/Category'
+import Category from './Category'
 
-function CategoryHome() {
+function CategoryHome({category}) {
+
     return (
         <div>
-        <Category />
-        
+        <Category category={category}/>
         </div>
     );
 }

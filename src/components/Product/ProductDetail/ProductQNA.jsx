@@ -1,5 +1,5 @@
 
-export default function ProductDetail() {
+export default function ProductQNA() {
     return (
         <>
         </>

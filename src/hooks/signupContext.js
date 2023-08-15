@@ -11,7 +11,7 @@ const SignupProvider = ({ children }) => {
 
     return (
         <SignupContext.Provider value={{ signupData, updateSignupData }}>
-        {children}
+            {children}
         </SignupContext.Provider>
     );
 };

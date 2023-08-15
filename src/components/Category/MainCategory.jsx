@@ -84,7 +84,8 @@ const MainCategory = () => {
     const navigate = useNavigate();
 
     const handleCategoryClick = (category) => {
-        navigate(`/category?type=${encodeURIComponent(category)}`);
+        //navigate(`/category?type=${encodeURIComponent(category)}`);
+        navigate(`/category/${encodeURIComponent(category)}`);
     };
 
     return (

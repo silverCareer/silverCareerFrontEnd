@@ -1,3 +1,5 @@
+import React, { useContext } from 'react';
+import { ProductContext } from '../../hooks/productContext';
 import Card from './Card'
 
 const item = [
@@ -27,33 +29,21 @@ const item = [
     }
 ]
 
-/*
-{
-    productList : [
-			{
-					produtIdx : Long, //상품번호 (상세조회 시 사용)
-					productName : String, //상품명
-					productDescription : String, //상품설명
-					productImage : String, //상품 이미지 (여러장?)
-					productLikes : Long, //해당 상품의 좋아요 갯수
-					productPrice : Long //상품 가격
-			},
-		]
-}
-*/
-
 function ProductList({ productList }) {
+    const { setProductDetail } = useContext(ProductContext);
+
+    const handleCardClick = (product) => {
+        setProductDetail(product);
+        // Navigate logic here
+    };
+
     return (
         <main className="product">
-            <ul className="product-list">
-                {/* {Object.keys(productList).map((key, index) => (
-                    <Card product={productList[key]} key={index} />
-                ))} */}
-                
-                {console.log("여기까지도 잘 나옴?" + productList)}
+                <ul className="product-list">
+                    {productList.map((product) => 
+                    <Card product={product} key={product.productIdx} handleCardClick={handleCardClick}/>)}
+                </ul>
 
-                {productList.map((product) => <Card product={product} key={product.productIdx} />)}
-            </ul>
         </main>
     );
 }

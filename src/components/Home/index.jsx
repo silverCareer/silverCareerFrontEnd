@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import HomeCarousel from './Carousel/Carousel'
-import MainCategory from './MainCategory/MainCategory'
-import ProductList from './ClassComponents/ProductList'
-import Card from './ClassComponents/Card'
+import HomeCarousel from './Carousel/Carousel';
+import MainCategory from '../Category/MainCategory';
+import ProductList from '../Product'
 import { getProductList } from '../../api/product/productList';
 
 const CAROUSEL_IMAGES = [
@@ -20,14 +19,14 @@ function Home() {
             try {
                 const productList = await getProductList('all');
                 console.log('Product List:', productList);
-                setProductList(productList.response);
                 
-                /*const response = await getProductList('all');
-                const productListData = await response.json();
-                console.log('Product List:', productListData);
-                setProductList(productListData.products);*/
+                if (productList.success) {
+                    setProductList(productList.response);
+                } else {
+                    console.error("Failed to fetch product List:", productList.error);
+                }
             } catch (error) {
-                // 에러 처리
+                console.error("Error fetching product List:", error);
             }
         }
         fetchData();
@@ -37,10 +36,6 @@ function Home() {
         <div>
             <HomeCarousel carouselList={CAROUSEL_IMAGES}/>
             <MainCategory />
-
-            {console.log(Array.isArray(productList) + " ???????????? ")}
-            {console.log(productList)}
-            
             <ProductList productList={productList}/>
         </div>
     );

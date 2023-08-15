@@ -5,8 +5,6 @@ import InfoOfPay from './InfoOfPay';
 import UserInfo from './UserInfo';
 import { MypageContext } from '../../hooks/mypageContext';
 
-
-
 const MainContainer = styled.div`
     margin-top:20px;
     margin-left:100px;
@@ -33,12 +31,10 @@ const Line = styled.div`
 `
 
 function MyPageForm() {
-
     const { myPageForm } = useContext(MypageContext);
     const { authority } = myPageForm;
 
     return (
-
         <MainContainer>
             <Title>마이페이지</Title>
             <Profile />
@@ -54,7 +50,6 @@ function MyPageForm() {
             <UserInfo />
             
         </MainContainer>
-        
     );
 }
 

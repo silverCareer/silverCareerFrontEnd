@@ -1,23 +1,19 @@
-import '../../../style/style.css';
-/*
-{
-    productList : [
-			{
-					produtIdx : Long, //상품번호 (상세조회 시 사용)
-					productName : String, //상품명
-					productDescription : String, //상품설명
-					productImage : String, //상품 이미지 (여러장?)
-					productLikes : Long, //해당 상품의 좋아요 갯수
-					productPrice : Long //상품 가격
-			},
-		]
-}
-*/
+import '../../style/style.css';
+import { useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ProductContext } from '../../hooks/productContext';
 
 export default function Card({product}) {
-    console.log(product + "22")
+    const navigate = useNavigate();
+    const { setProductDetail } = useContext(ProductContext);
+
+    const handleCardClick = (product) => {
+        setProductDetail(product)
+        navigate(`/product/${product.productIdx}`);
+    };
+
     return (
-        <li className="product-item">
+        <li className="product-item" onClick={() => handleCardClick(product)}>
             <div className="product-img">
                 <img src={product.productImage} alt="img"/>
             </div>
@@ -34,4 +30,4 @@ export default function Card({product}) {
             </div>
         </li>
     );
- }
+}
