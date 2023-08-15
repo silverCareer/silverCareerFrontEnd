@@ -17,13 +17,14 @@ import SignupProvider from './hooks/signupContext';
 import { LoginProvider } from './hooks/loginContext';
 import { MypageProvider } from './hooks/mypageContext';
 import ProductProvider from './hooks/productContext';
-
+import ProductDetailProvider from './hooks/productDetailContext';
 
 function App() {
   return (
     <LoginProvider>
       <MypageProvider>
         <ProductProvider>
+        <ProductDetailProvider>
         <Router>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -42,6 +43,7 @@ function App() {
             <Route path="/chatroom" element={<ChatPage />} />
           </Routes>
         </Router>
+        </ProductDetailProvider>
         </ProductProvider>
       </MypageProvider>
     </LoginProvider>

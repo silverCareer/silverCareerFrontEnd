@@ -3,10 +3,10 @@ import React, { createContext, useState } from 'react';
 export const ProductContext = createContext();
 
 const ProductProvider = ({ children }) => {
-    const [productDetail, setProductDetail] = useState({});
+    const [productTitle, setProductTitle] = useState({});
 
     return (
-        <ProductContext.Provider value={{ productDetail, setProductDetail }}>
+        <ProductContext.Provider value={{ productTitle, setProductTitle }}>
             {children}
         </ProductContext.Provider>
     );

@@ -38,9 +38,13 @@ const Category = ({ category }) => {
                   setProductList(productList.response);
               } else {
                   console.error("Failed to fetch product List:", productList.error);
+                  console.log("123");
+
               }
           } catch (error) {
               console.error("Error fetching product List:", error);
+              setProductList([]);
+
           }
       }
       fetchData();

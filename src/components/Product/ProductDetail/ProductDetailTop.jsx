@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
-import { ProductContext } from '../../../hooks/productContext';
 import shareIconImage from '../../../assets/svg/icon-share.svg'
-import likeIconImage from '../../../assets/svg/icon-heart-on.svg'
+import likeIconImage from '../../../assets/svg/icon-heart.svg'
 import locationIconImage from '../../../assets/svg/icon-location.svg'
+import { ProductDetailContext } from '../../../hooks/productDetailContext';
 
 const ProductTopSection = styled.div `
     display: flex;
@@ -37,8 +37,11 @@ const ShareIcon = styled.div `
 const LikeIcon = styled.div `
     width: 22px;
     height: 22px;
+    color: black;
     background-image: url(${likeIconImage});
     background-repeat: no-repeat;
+
+    cursor: pointer;
 `
 const LocationIcon = styled.div `
     width: 18px;
@@ -101,31 +104,33 @@ const Button = styled.div`
 
 
 export default function ProductDetailTop() {
-    const { productDetail } = useContext(ProductContext)
+    const { productDetailInfo } = useContext(ProductDetailContext);
+    const { productName, address, description, price, image, likes, memberCareer } = productDetailInfo
     
     return (
         <ProductTopSection>
             <TopLeft>
                 <TopIcon>
                     <ShareIcon />
-                    <LikeIcon /><span>{productDetail.productLikes}</span>
+                    <LikeIcon /><span>{likes}</span>
                 </TopIcon>
-                <Title>{productDetail.productName}</Title>
+                <Title>{productName}</Title>
                 <Location>
                     <LocationIcon />
-                    <span>서울시 성수동</span>
+                    <span>{address}</span>
                 </Location>
-                <div className="description">{productDetail.productDescription}
-                <br />
-                20년간의 노하우를 알려드리겠습니다. (멘토 한마디 느낌)
+                <div className="description">
+                    {description}
+                    <br />
+                    20년간의 노하우를 알려드리겠습니다. (멘토 한마디 느낌)
                 </div>
                 <Price>
-                    {productDetail.productPrice} 원
+                    {price} 원
                 </Price>
 
                 <ClassInfo>
                     <div>리뷰 ⭐5.0</div>
-                    <div>총 경력 <strong>20년</strong></div>
+                    <div>총 경력 <strong>{memberCareer}</strong></div>
                 </ClassInfo>
 
                 <ButtonList>
@@ -134,7 +139,7 @@ export default function ProductDetailTop() {
                 </ButtonList>
             </TopLeft>
             <TopRightImage>
-                <img src={productDetail.productImage} alt="Product" />
+                <img src="" alt="Product" />
             </TopRightImage>
         </ProductTopSection>
     );
