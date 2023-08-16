@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getChatRooms = async (name) => {
     try {
-        const response = await axios.get(`https://www.silvercareer.shop/api/chat`, {
+        const response = await axios.get(`http://localhost:8888/api/chat`, {
             params: { username: name }
         });
         return response.data;
