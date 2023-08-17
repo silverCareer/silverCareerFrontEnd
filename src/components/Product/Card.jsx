@@ -1,14 +1,14 @@
 import '../../style/style.css';
 import { useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProductContext } from '../../hooks/productContext';
+//import { ProductContext } from '../../hooks/productContext';
 import { ProductDetailContext } from '../../hooks/productDetailContext';
 import { getProductDetail } from '../../api/product/productDetail';
 
 export default function Card({product}) {
     
     const navigate = useNavigate();
-    const { setProductTitle } = useContext(ProductContext); //이건 간단하게 뜨는 상품 정보
+    //const { setProductTitle } = useContext(ProductContext); //이건 간단하게 뜨는 상품 정보
     const { setProductDetailInfo } = useContext(ProductDetailContext); //useContext로 넘길 상품 자세 페이지
     
     const handleCardClick = async () => {
@@ -17,7 +17,7 @@ export default function Card({product}) {
             console.log('Product Detail:', productDetailResponse);
             
             if (productDetailResponse.success) {
-                setProductTitle(product);
+                //setProductTitle(product);
                 setProductDetailInfo(productDetailResponse.response);
 
                 console.log(productDetailResponse.response, "dfsdfsdfsdfsf");

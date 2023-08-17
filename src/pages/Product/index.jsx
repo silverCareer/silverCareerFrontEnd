@@ -5,23 +5,6 @@ import MainHeader from '../../components/Common/MainHeader'
 import Footer from '../../components/Common/Footer';
 
 function ProductPage() {
-    /*const { productIdx } = useParams();
-
-    if (productIdx) {
-        return (
-            <>
-                <MainHeader />
-                <ProductDetail />
-                <Footer />
-            </>
-        );
-    }
-
-    return (
-        <>
-            <ProductList />
-        </>
-    );*/
     return (
         <>
             <MainHeader />

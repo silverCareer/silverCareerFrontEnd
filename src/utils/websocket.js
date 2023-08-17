@@ -11,5 +11,7 @@ export const createWebSocketClient = () => {
     return client;
 };
 
+//https://43.201.132.241:8888/ws
+
 //'http://localhost:8888/ws'
 //'https://www.silvercareer.shop/ws'

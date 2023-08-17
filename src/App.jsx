@@ -11,7 +11,6 @@ import MyPage from './pages/MyPage'
 import AccountEdit from './pages/MyPage/AccountEdit';
 import ProductPage from './pages/Product';
 import ChatPage from './pages/Chat';
-import { ChatProvider } from './hooks/chatContext';
 
 /* Provider */
 import SignupProvider from './hooks/signupContext';
@@ -19,6 +18,8 @@ import { LoginProvider } from './hooks/loginContext';
 import { MypageProvider } from './hooks/mypageContext';
 import ProductProvider from './hooks/productContext';
 import ProductDetailProvider from './hooks/productDetailContext';
+import { ChatProvider } from './hooks/chatContext';
+import ApplyProductPage from './pages/Product/apply';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
               <Route path="account_edit" element={<AccountEdit />} />
             </Route>
             <Route path="/chatroom" element={<ChatProvider><ChatPage /></ChatProvider>} />
+            <Route path="/apply" element={<ApplyProductPage />} />
           </Routes>
         </Router>
         </ProductDetailProvider>
