@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const postMyInfo = async (phoneNum, age) => {
-    const token = localStorage.getItem('jwt'); 
+    const token = localStorage.getItem('jwttoken'); 
     const response = await axios.post('/api/editMyInfo', 
     {
         phoneNum : phoneNum,
