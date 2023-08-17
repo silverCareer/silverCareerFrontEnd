@@ -6,6 +6,8 @@ import locationIconImage from '../../../assets/svg/icon-location.svg'
 import { ProductDetailContext } from '../../../hooks/productDetailContext';
 import { MypageContext } from '../../../hooks/mypageContext';
 import { createChatRoom } from '../../../api/chat/createChatRoom';
+import { useNavigate } from "react-router-dom";
+
 
 
 const ProductTopSection = styled.div `
@@ -167,19 +169,22 @@ function InquiryModal({ isOpen, onClose }) {
     const { name } = myPageForm;
 
     const [inquiryContent, setInquiryContent] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async () => {
 
         const newMessage = {
             content: inquiryContent,
-            sender: name, // sender name
-            timestamp: new Date().toISOString() // 현재 시간을 ISO 문자열로 전환
+            sender: name, 
+            timestamp: new Date().toISOString() 
         };
 
         try {
             const result = await createChatRoom(name, memberName, newMessage);
             console.log("Chat room created:", result);
-            onClose(); // 모달 닫기
+            onClose();
+            navigate("/chatroom") 
+
         } catch (error) {
             console.error("Error creating chat room:", error);
         }

@@ -3,7 +3,7 @@ import axios from 'axios';
 export const updateChatContents = async (chatId, newMessage) => {
     try {
         const response = await axios.post(
-            `http://localhost:8888/api/chat/update`, 
+            `https://www.silvercareer.shop/api/chat/update`, 
             {
                 _id: chatId, 
                 message: {
