@@ -1,5 +1,5 @@
 import '../../style/style.css';
-import { useContext, useState, useEffect } from 'react';
+import { useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 //import { ProductContext } from '../../hooks/productContext';
 import { ProductDetailContext } from '../../hooks/productDetailContext';

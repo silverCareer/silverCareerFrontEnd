@@ -62,11 +62,12 @@ function ProfilePicEditor() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('profileImage', selectedImage);
+        formData.append('img', selectedImage);
         
 
         try {
             const response = await postProfilePic(formData);
+            console.log(response)
 
             if (response.data && response.data.imageUrl) {
                 setMyPageForm({
