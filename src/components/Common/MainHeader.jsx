@@ -17,6 +17,7 @@ const Header = styled.header`
 `;
 
 const Logo = styled.div`
+    cursor: pointer;
     width: 100px;
     height: 50px;
     background-image: url(${logoImage});

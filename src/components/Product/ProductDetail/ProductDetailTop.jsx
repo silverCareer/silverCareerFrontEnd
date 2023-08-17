@@ -139,7 +139,7 @@ export default function ProductDetailTop() {
                 </ButtonList>
             </TopLeft>
             <TopRightImage>
-                <img src="" alt="Product" />
+                <img src={image} alt="Product" />
             </TopRightImage>
         </ProductTopSection>
     );
