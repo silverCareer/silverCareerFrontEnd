@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { MypageContext } from '../../hooks/mypageContext';
 import { getChatRooms } from '../../api/chat/getChatRooms';
 import { ChatContext } from '../../hooks/chatContext';
-import { createWebSocketClient } from '../../utils/websocket';
+
 
 const Sidebar = styled.div`
     width: 200px;
@@ -48,7 +48,7 @@ const StyledLink = styled(Link)`
 const ChatSidebar = () => {
     const [chats, setChats] = useState([]);
     const { myPageForm } = useContext(MypageContext);
-    const { setSelectedChat } = useContext(ChatContext);
+    const { setSelectedChat, selectedChat, isMessageUpdated } = useContext(ChatContext);
     const { name } = myPageForm;
 
 
@@ -67,45 +67,9 @@ const ChatSidebar = () => {
         };
 
         fetchChats();
-    }, [name]);
+    }, [selectedChat, isMessageUpdated, name]);
 
     
-    useEffect(() => {
-        const client = createWebSocketClient();
-    
-        client.onConnect = (frame) => {
-            console.log('Connected:', frame);
-    
-            client.subscribe(`/topic/messages`, (message) => {
-                const receivedMessage = JSON.parse(message.body);
-            
-                setChats(prevChats => {
-                    const updatedChats = prevChats.map(chat => {
-                        if (chat._id === receivedMessage.chatId) {
-                            return {
-                                ...chat,
-                                messages: [...chat.messages, receivedMessage]
-                            };
-                        }
-                        return chat;
-                    });
-                    return updatedChats;
-                });
-            });
-        };
-    
-        client.onDisconnect = () => {
-            console.log('Disconnected');
-        };
-    
-        client.activate(); // 연결 시작
-    
-        return () => {
-            if (client.connected) {
-                client.deactivate(); // 연결 종료
-            }
-        };
-    }, []);
 
     return (
         <Sidebar>
@@ -118,7 +82,7 @@ const ChatSidebar = () => {
                     onClick={() => {
                         setSelectedChat(chat);
                         console.log(chat)
-                    }}  
+                    }} 
                     >
                         <ChatItem>
                             <div>{lastMessage.sender}</div>

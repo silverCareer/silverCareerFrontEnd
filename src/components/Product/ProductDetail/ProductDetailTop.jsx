@@ -1,9 +1,14 @@
-import { useContext } from 'react';
+import { useContext, useState  } from 'react';
 import styled from 'styled-components';
 import shareIconImage from '../../../assets/svg/icon-share.svg'
 import likeIconImage from '../../../assets/svg/icon-heart.svg'
 import locationIconImage from '../../../assets/svg/icon-location.svg'
 import { ProductDetailContext } from '../../../hooks/productDetailContext';
+import { MypageContext } from '../../../hooks/mypageContext';
+import { createChatRoom } from '../../../api/chat/createChatRoom';
+import { useNavigate } from "react-router-dom";
+
+
 
 const ProductTopSection = styled.div `
     display: flex;
@@ -102,12 +107,120 @@ const Button = styled.div`
     cursor: pointer;
 `
 
+const ModalWrapper = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const ModalContent = styled.div`
+    width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
+
+const ModalLabel = styled.label`
+    display: block;
+    margin-bottom: 10px;
+    font-size: 20px;
+`;
+
+const ModalInput = styled.textarea`
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+`;
+
+const ModalButtonWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+`;
+
+const ModalButton = styled.button`
+    padding: 10px 20px;
+    background-color: #84A080;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #6f896d;
+    }
+`;
+
+function InquiryModal({ isOpen, onClose }) {
+
+    const { productDetailInfo } = useContext(ProductDetailContext);
+    const { memberName } = productDetailInfo;
+    const { myPageForm } = useContext(MypageContext);
+    const { name } = myPageForm;
+
+    const [inquiryContent, setInquiryContent] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async () => {
+
+        const newMessage = {
+            content: inquiryContent,
+            sender: name, 
+            timestamp: new Date().toISOString() 
+        };
+
+        try {
+            const result = await createChatRoom(name, memberName, newMessage);
+            console.log("Chat room created:", result);
+            onClose();
+            navigate("/chatroom") 
+
+        } catch (error) {
+            console.error("Error creating chat room:", error);
+        }
+
+    };
+
+    return (
+    isOpen && (
+        <ModalWrapper onClick={onClose}>
+        <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalLabel>멘토에게 문의할 내용</ModalLabel>
+            <ModalInput 
+                placeholder="첫 채팅할 내용을 적어주세요." 
+                rows="5"
+                value={inquiryContent}
+                onChange={(e) => setInquiryContent(e.target.value)}
+            />
+
+            <ModalButtonWrapper>
+            <ModalButton onClick={handleSubmit}>보내기</ModalButton>
+            <ModalButton onClick={onClose}>닫기</ModalButton>
+            </ModalButtonWrapper>
+        </ModalContent>
+        </ModalWrapper>
+    )
+    );
+}
+
 
 export default function ProductDetailTop() {
     const { productDetailInfo } = useContext(ProductDetailContext);
-    const { productName, address, description, price, image, likes, memberCareer } = productDetailInfo
+    const { productName, address, description, price, likes, memberCareer } = productDetailInfo;
+    const [isModalOpen, setModalOpen] = useState(false);
     
     return (
+        <>
         <ProductTopSection>
             <TopLeft>
                 <TopIcon>
@@ -135,12 +248,14 @@ export default function ProductDetailTop() {
 
                 <ButtonList>
                     <Button>결제하기</Button>
-                    <Button>문의하기</Button>
+                    <Button onClick={() => setModalOpen(true)}>문의하기</Button>
                 </ButtonList>
             </TopLeft>
             <TopRightImage>
                 <img src="" alt="Product" />
             </TopRightImage>
         </ProductTopSection>
+        <InquiryModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+        </>
     );
 }

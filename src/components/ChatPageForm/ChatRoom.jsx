@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useEffect} from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { ChatContext } from './../../hooks/chatContext';
 import { createWebSocketClient } from '../../utils/websocket';
@@ -62,7 +62,7 @@ const SendButton = styled.button`
 
 const ChatRoom = () => {
 
-    const { selectedChat } = useContext(ChatContext); // selectedChat 값을 가져옴
+    const { selectedChat, toggleMessageUpdated  } = useContext(ChatContext); // selectedChat 값을 가져옴
     const [message, setMessage] = useState(''); // 입력된 메시지 저장
     const [messages, setMessages] = useState([]); 
     const client = useRef(null);
@@ -86,8 +86,8 @@ const ChatRoom = () => {
             client.current.subscribe(`/topic/messages`, (message) => {
                 const receivedMessage = JSON.parse(message.body);
                 setMessages(prevMessages => [...prevMessages, receivedMessage]);
-                // receivedMessage를 selectedChat의 messages 배열에 추가합니다.
-                // ... (상태 업데이트 로직)
+                console.log("receiveMessage : " + receivedMessage.content)
+                toggleMessageUpdated();
             });
         };
 

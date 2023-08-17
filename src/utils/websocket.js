@@ -12,3 +12,4 @@ export const createWebSocketClient = () => {
 };
 
 //'http://localhost:8888/ws'
+//'https://www.silvercareer.shop/ws'
