@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { productRegistContents } from '../../api/product/productRegistContents';
-import ImageUploadBox from './ImageUpload';
+import uploadIconImage from '../../assets/svg/icon-upload.svg';
 
 const ProductContainer = styled.div `
     display: flex;
@@ -135,7 +136,14 @@ const SubmitButton = styled.div `
         background-color: #637560;
     }
 `;
-
+const ImageUploadDiv = styled.div `
+    display: flex;
+    gap: 20px;
+    padding: 10px 50px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`
 const ImageUpload = styled.div `
     display: flex;
     height: 100px;
@@ -145,20 +153,48 @@ const ImageUpload = styled.div `
     border-radius: 10px;
     border: 1px solid #CDCDCD;
 `
+const UploadIcon = styled.div `
+width: 18px;
+height: 18px;
+background-image: url(${uploadIconImage});
+background-repeat: no-repeat;
+
+cursor: pointer;
+`
 
 function ProductForm() {
+    const navigate = useNavigate();
+    
     const categories = ['현장직', '사무직', '문화', '기술직', '요리'];
     const [selectedCategory, setSelectedCategory] = useState('');  
     const [productName, setProductName] = useState('');
     const [productDescription, setProductDescription] = useState('');
     const [price, setPrice] = useState('');
     const [address, setAddress] = useState('');
-    const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+    const [selectedImageUrl, setSelectedImageUrl] = useState('');
+    const [ uploadedImageUrl, setUploadedImageUrl ] = useState(null); // 업로드한 이미지 URL
 
     // 이미지 URL을 업데이트하는 함수
-    const handleImageUrlChange = (imageUrl) => {
-        setSelectedImageUrl(imageUrl);
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedImageUrl(file);
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const imageUrl = e.target.result;
+            setUploadedImageUrl(imageUrl);
+        };
+        reader.readAsDataURL(file);
     };
+
+    /* image 클릭으로 파일업로드 */        
+    // 파일 입력(input) 요소를 가리키는 ref
+    const fileInputRef = useRef(null);
+
+    // 파일 선택(input) 요소 클릭 핸들러
+    const handleIconClick = () => {
+        fileInputRef.current.click(); // 파일 입력 요소 클릭
+    }
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
@@ -192,6 +228,11 @@ function ProductForm() {
 
 
     const handleSubmit = async () => {
+        if (!selectedImageUrl) {
+            alert('대표 이미지를 선택해주세요.');
+            return;
+        }
+
         const formData = new FormData();
         const createProductReq= {
             productName, //상품명
@@ -201,12 +242,14 @@ function ProductForm() {
             price,
         };
 
-        if (selectedImageUrl) {
-            formData.append('productImage', selectedImageUrl);
-        }
+        formData.append('productImage', selectedImageUrl);
     
         try {
-            await productRegistContents(createProductReq, formData);
+            const response = await productRegistContents(createProductReq, formData);
+
+            if (response.success) {
+                navigate(`/category/${encodeURIComponent(selectedCategory)}`);
+            }
         } catch (error) {
             console.error('Error sending data to backend:', error);
         }
@@ -260,8 +303,17 @@ function ProductForm() {
                     <div>{productDescription.length} / 1000자</div>
                 </ProductDetailBox>
                 <ImageUpload>
-                    <ImageUploadBox onImageUrlChange={handleImageUrlChange} />
-                    {selectedImageUrl && <img style={{ width: '50px' }} src={selectedImageUrl} alt="Selected" />}
+                    <ImageUploadDiv>
+                        <div>이미지 업로드</div>
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            onChange={handleImageChange}
+                            style={{ display: 'none' }} // 파일 입력(input) 요소를 숨김
+                        />
+                        <UploadIcon onClick={handleIconClick} />
+                    </ImageUploadDiv>
+                    {uploadedImageUrl && <img style={{ width: '50px' }} src={uploadedImageUrl} alt="Selected" />}
                 </ImageUpload>
             </ProductContainer>
         </>
