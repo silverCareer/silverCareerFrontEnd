@@ -1,22 +1,29 @@
-import React, { useContext } from 'react';
-import { ProductContext } from '../../hooks/productContext';
+import React from 'react';
+import styled from 'styled-components';
 import Card from './Card'
 
+const ProductContainer = styled.div `
+    margin: 10px 100px;
+    display: flex;
+    flex-direction: column;
+`
+const ProductListContainer = styled.div `
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 50px;
+
+    list-style: none;
+`
+
 function ProductList({ productList }) {
-    // const { setProductTitle } = useContext(ProductContext);
-
-    // const handleCardClick = (product) => {
-    //     setProductTitle(product);
-    // };
-
     return (
-        <main className="product">
-                <ul className="product-list">
-                    {productList.map((product) => 
-                    <Card product={product} key={product.productIdx} />)}
-                </ul>
-
-        </main>
+        <ProductContainer>
+            <ProductListContainer>
+                {productList.map((content) => 
+                    <Card product={content} key={content.productIdx} />)
+                }
+            </ProductListContainer>
+        </ProductContainer>
     );
 }
 export default ProductList;

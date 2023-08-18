@@ -102,9 +102,16 @@ const Button = styled.div`
     gap: 10px;
     flex: 1 0 0;
 
+    color: #84A080;
     border-radius: 15px;
     border: 1px solid #84A080;
+    font-weight: 600;
     cursor: pointer;
+
+    &:hover {
+        background-color: #84A080;
+        color: white;
+    }
 `
 
 const ModalWrapper = styled.div`
@@ -139,6 +146,7 @@ const ModalInput = styled.textarea`
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    resize: none;
 `;
 
 const ModalButtonWrapper = styled.div`
@@ -162,7 +170,6 @@ const ModalButton = styled.button`
 `;
 
 function InquiryModal({ isOpen, onClose }) {
-
     const { productDetailInfo } = useContext(ProductDetailContext);
     const { memberName } = productDetailInfo;
     const { myPageForm } = useContext(MypageContext);
@@ -172,7 +179,6 @@ function InquiryModal({ isOpen, onClose }) {
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
-
         const newMessage = {
             content: inquiryContent,
             sender: name, 
@@ -192,33 +198,42 @@ function InquiryModal({ isOpen, onClose }) {
     };
 
     return (
-    isOpen && (
-        <ModalWrapper onClick={onClose}>
-        <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalLabel>멘토에게 문의할 내용</ModalLabel>
-            <ModalInput 
-                placeholder="첫 채팅할 내용을 적어주세요." 
-                rows="5"
-                value={inquiryContent}
-                onChange={(e) => setInquiryContent(e.target.value)}
-            />
+        isOpen && (
+            <ModalWrapper onClick={onClose}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+                <ModalLabel>멘토에게 문의할 내용</ModalLabel>
+                <ModalInput 
+                    placeholder="첫 채팅할 내용을 적어주세요." 
+                    rows="5"
+                    value={inquiryContent}
+                    onChange={(e) => setInquiryContent(e.target.value)}
+                />
 
-            <ModalButtonWrapper>
-            <ModalButton onClick={handleSubmit}>보내기</ModalButton>
-            <ModalButton onClick={onClose}>닫기</ModalButton>
-            </ModalButtonWrapper>
-        </ModalContent>
-        </ModalWrapper>
-    )
+                <ModalButtonWrapper>
+                <ModalButton onClick={handleSubmit}>보내기</ModalButton>
+                <ModalButton onClick={onClose}>닫기</ModalButton>
+                </ModalButtonWrapper>
+            </ModalContent>
+            </ModalWrapper>
+        )
     );
 }
 
 
 export default function ProductDetailTop() {
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
     const { productDetailInfo } = useContext(ProductDetailContext);
-    const { productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
+    const { productIdx, productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
     const [isModalOpen, setModalOpen] = useState(false);
-    
+    const navigate = useNavigate();
+
+    const handlePaymentClick = () => {
+        navigate(`/product/${productIdx}/payment`);
+    };
+
     return (
         <>
         <ProductTopSection>
@@ -238,7 +253,7 @@ export default function ProductDetailTop() {
                     20년간의 노하우를 알려드리겠습니다. (멘토 한마디 느낌)
                 </div>
                 <Price>
-                    {price} 원
+                    {numberWithCommas(price)} 원
                 </Price>
 
                 <ClassInfo>
@@ -247,7 +262,7 @@ export default function ProductDetailTop() {
                 </ClassInfo>
 
                 <ButtonList>
-                    <Button>결제하기</Button>
+                    <Button onClick={handlePaymentClick}>결제하기</Button>
                     <Button onClick={() => setModalOpen(true)}>문의하기</Button>
                 </ButtonList>
             </TopLeft>
