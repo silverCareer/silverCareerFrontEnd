@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { MypageContext } from '../../hooks/mypageContext';
 
+
 const MainContainer = styled.div`
     display: flex;
     justify-content: space-between;
@@ -51,6 +52,7 @@ function Profile() {
     const { myPageForm } = useContext(MypageContext);
     const { name, email, profileImage } = myPageForm;
     const navigate = useNavigate();
+
     
     return (
         <MainContainer>
