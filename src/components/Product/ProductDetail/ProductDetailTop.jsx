@@ -183,7 +183,7 @@ function InquiryModal({ isOpen, onClose }) {
             const result = await createChatRoom(name, memberName, newMessage);
             console.log("Chat room created:", result);
             onClose();
-            navigate("/chatroom") 
+            navigate("/chatroom");
 
         } catch (error) {
             console.error("Error creating chat room:", error);
@@ -216,7 +216,10 @@ function InquiryModal({ isOpen, onClose }) {
 
 export default function ProductDetailTop() {
     const { productDetailInfo } = useContext(ProductDetailContext);
+
     const { productName, address, description, price, likes, image, memberCareer } = productDetailInfo;
+
+
     const [isModalOpen, setModalOpen] = useState(false);
     
     return (
