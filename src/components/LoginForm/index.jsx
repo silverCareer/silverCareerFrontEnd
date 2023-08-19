@@ -93,14 +93,17 @@ const KakaoButton = styled.button`
 
 
 function LoginForm() {
-  const { setIsLoggedIn } = useContext(LoginContext);
+  const { setIsLoggedIn, loginForm, setLoginForm } = useContext(LoginContext);
   const handleKakaoLogin = useKakaoLogin(); //훅 사용
   const navigate = useNavigate();
+
 
   const [formData, setFormData] = useState({
     email : '',
     password : ''
   });
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -109,7 +112,10 @@ function LoginForm() {
     .then(response => {
         localStorage.setItem('jwttoken', response.data.response.accessToken);
         setIsLoggedIn(true);
-        navigate('/')
+
+        localStorage.setItem('isLoggedIn', 'true');
+        setLoginForm({ name: response.data.response.name });
+        navigate('/') 
     })
     .catch(error => {
         console.error(error);

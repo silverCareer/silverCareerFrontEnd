@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { ProductContext } from '../../hooks/productContext';
+import React from 'react';
+
 import Card from './Card'
 
 function ProductList({ productList }) {
