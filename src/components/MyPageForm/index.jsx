@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Profile from './Profile';
 import InfoOfPay from './InfoOfPay';
 import UserInfo from './UserInfo';
+import MyCourses from './MyCourses';
 import { MypageContext } from '../../hooks/mypageContext';
 
 const MainContainer = styled.div`
@@ -43,6 +44,9 @@ function MyPageForm() {
             <Line></Line>
             <Title2>페이 정보</Title2>
             <InfoOfPay />
+            <Line></Line>
+            <Title2>구매 이력</Title2>
+            <MyCourses />
             </>
             )}
             <Line></Line>

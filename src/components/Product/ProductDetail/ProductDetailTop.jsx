@@ -216,7 +216,10 @@ function InquiryModal({ isOpen, onClose }) {
 
 export default function ProductDetailTop() {
     const { productDetailInfo } = useContext(ProductDetailContext);
-    const { productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
+
+    const { productName, address, description, price, likes, image, memberCareer } = productDetailInfo;
+
+
     const [isModalOpen, setModalOpen] = useState(false);
     
     return (

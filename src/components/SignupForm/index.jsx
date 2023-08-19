@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate   } from 'react-router-dom';
 import { SignupContext } from '../../hooks/signupContext';
 import { sendSMS } from '../../api/signup/sendSMS';
+import { nickNameCheck } from '../../api/signup/nickNameCheck';
 
 
 const Container = styled.div`
@@ -130,6 +131,12 @@ const SignupForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const isNicknameChecked = sessionStorage.getItem('checkNickname');
+        if (!isNicknameChecked) {
+            alert('닉네임 중복체크를 해주세요.');
+            return;
+        }
+
         if (!isAuthVerified) {
             alert('인증번호를 확인해주세요.');
             return;
@@ -153,6 +160,18 @@ const SignupForm = () => {
             alert('인증번호 전송에 실패했습니다. 다시 시도해주세요.');
         }
     };
+
+    const handleNicknameCheck = async () => {
+        try{
+            const name = formData.name;
+            const response = await nickNameCheck(name);
+
+            sessionStorage.setItem('checkNickname', 'true');
+            alert('사용가능한 닉네임입니다.');
+        }catch (error){
+            alert('닉네임 중복체크 실패;;;;')
+        }
+    }
 
     const handleVerifyAuthCode = () => {
         const storedAuthCode = localStorage.getItem('authCode');
@@ -192,10 +211,11 @@ const SignupForm = () => {
                 </FormGroup>
 
                 <FormGroup>
-                    <Label htmlFor="name">이름</Label>
-                    <div>
-                        <Input id="name" type="text" name="name" onChange={handleInputChange} placeholder="이름을 입력해주세요." />
-                    </div>
+                    <Label htmlFor="name">닉네임 입력</Label>
+                    <PhoneInputGroup>
+                        <Input id="name" type="text" name="name" onChange={handleInputChange} placeholder="닉네임을 입력해주세요."/>
+                        <AuthButton onClick={handleNicknameCheck}>중복 확인</AuthButton>
+                    </PhoneInputGroup>
                 </FormGroup>
 
                 <FormGroup>
