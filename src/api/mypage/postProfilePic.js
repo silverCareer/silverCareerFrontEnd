@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const postProfilePic = async (formData) => {
     try {
-        const token = localStorage.getItem('jwt');
+        const token = localStorage.getItem('jwttoken');
         const config = {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -10,7 +10,7 @@ export const postProfilePic = async (formData) => {
         },
         };
 
-        const response = await axios.post('https://www.silvercareer.shop/api/updateProfileImg', formData, config);
+        const response = await axios.patch('https://www.silvercareer.shop/api/updateProfileImg', formData, config);
 
         
         return response.data;
