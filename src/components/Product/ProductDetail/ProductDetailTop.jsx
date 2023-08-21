@@ -227,6 +227,7 @@ export default function ProductDetailTop() {
 
     const { productDetailInfo } = useContext(ProductDetailContext);
     const { productIdx, productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
+
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
 

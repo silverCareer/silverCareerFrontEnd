@@ -2,7 +2,6 @@ import axios from 'axios';
 
 export const productRegistContents = async (createProductReq, formData) => {
     const token = localStorage.getItem('jwttoken');
-
     const config = {
         headers: {
             'Content-Type': 'multipart/form-data',

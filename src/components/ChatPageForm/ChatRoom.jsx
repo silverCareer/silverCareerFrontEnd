@@ -4,6 +4,7 @@ import { ChatContext } from './../../hooks/chatContext';
 import { createWebSocketClient } from '../../utils/websocket';
 import { updateChatContents } from '../../api/chat/updateChatContents';
 import { MypageContext } from '../../hooks/mypageContext';
+import { LoginContext } from '../../hooks/loginContext';
 // import { getLatestChatRoom } from '../../api/chat/getLatestChatRoom';
 
 const ChatContainer = styled.div`
@@ -66,8 +67,10 @@ const ChatRoom = () => {
     const [message, setMessage] = useState(''); // 입력된 메시지 저장
     const [messages, setMessages] = useState([]); 
     const client = useRef(null);
-    const { myPageForm } = useContext(MypageContext);
-    const { name } = myPageForm;
+    const { loginForm } = useContext(LoginContext)
+    const { name } = loginForm
+    // const { myPageForm } = useContext(MypageContext);
+    // const { name } = myPageForm;
     const messagesEndRef = useRef(null); //마지막 메시지 따라가게 하려고 생성
     const otherUserName = selectedChat?.user1 === name ? selectedChat?.user2 : selectedChat?.user1;
 
@@ -86,8 +89,8 @@ const ChatRoom = () => {
             client.current.subscribe(`/topic/messages`, (message) => {
                 const receivedMessage = JSON.parse(message.body);
                 setMessages(prevMessages => [...prevMessages, receivedMessage]);
-                console.log("receiveMessage : " + receivedMessage.content)
-                toggleMessageUpdated();
+                //console.log("receiveMessage : " + receivedMessage.content)
+                toggleMessageUpdated(); // 사이드바 useEffect의 의존성배열에 신호주기 위함
             });
         };
 
