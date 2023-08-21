@@ -133,7 +133,7 @@ const SubmitButton = styled.div `
     cursor: pointer;
     &:hover {
         color: white;
-        background-color: #637560;
+        background-color: #6f896d;
     }
 `;
 const ImageUploadDiv = styled.div `

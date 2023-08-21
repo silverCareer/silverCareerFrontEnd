@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { MypageContext } from '../../hooks/mypageContext';
 import { getMyCourses } from '../../api/mypage/mycourses';
 import { postReview } from '../../api/mypage/postReview';
+import { ProductDetailContext } from '../../hooks/productDetailContext';
+import { getProductDetail } from '../../api/product/productDetail';
 
 
 const MainContainer = styled.div`
@@ -108,12 +110,15 @@ function MyCourses() {
 
     const [currentPage, setCurrentPage] = useState(1);
 
+    const navigate  = useNavigate();
+    const { setProductDetailInfo } = useContext(ProductDetailContext);
+
     useEffect(() => {
         async function fetchMyCourses() {
             try {
                 const response = await getMyCourses();
                 if (response.response) {
-                    // console.log("마이페이지 response:", JSON.stringify(response.response, null, 2));
+                    console.log("마이페이지 response:", JSON.stringify(response.response, null, 2));
                     setCourses(response.response);
                     // console.log(courses[0].productIdx)
                 }
@@ -158,6 +163,10 @@ function MyCourses() {
         try {
             const response = await postReview(selectedProductIdx, formdata);
             console.log(response)
+            const updatedCourses = await getMyCourses();
+            if (updatedCourses && updatedCourses.response) {
+                setCourses(updatedCourses.response);
+            }
         } catch (error) {
             console.error("Error sending review:", error);
         }
@@ -167,18 +176,39 @@ function MyCourses() {
         closeModal();
     };
 
+    const handleNavigateToProductDetail = async (productIdx) => {
+        try {
+            const productDetailResponse = await getProductDetail(productIdx);
+
+            if (productDetailResponse.success) {
+                setProductDetailInfo(productDetailResponse.response);
+                navigate(`/product/${productIdx}`);
+            } else {
+                console.error("Failed to fetch product Detail:", productDetailResponse.error);
+            }
+        } catch (error) {
+            console.error("Error fetching product Detail:", error);
+        }
+    };
+
+
     return (
         <MainContainer>
             {displayedCourses.map(course => (
                 <CourseCard key={course.localDate + course.mentorName}>
-                    <Info>멘토: {course.mentorName}</Info>
-                    <Info>날짜: {course.localDate}</Info>
-                    <Info>가격: {course.amount}</Info>
-                    <Info> {course.paymentName}</Info>
-                    {course.paymentType === '상품' ? 
+                <Info>멘토: {course.mentorName}</Info>
+                <Info>날짜: {course.localDate}</Info>
+                <Info>가격: {course.amount}</Info>
+                <Info> {course.paymentName}</Info>
+                {course.paymentType === '상품' ? 
+                    (course.reviewed ? 
+                        <ReviewButton onClick={() =>handleNavigateToProductDetail(course.productIdx)}>리뷰보러가기</ReviewButton> 
+                        : 
                         <ReviewButton onClick={() => openModal(course.productIdx)}>리뷰쓰기</ReviewButton>
-                        : <ReviewButton isHidden>리뷰쓰기</ReviewButton>}
-                </CourseCard>
+                    )
+                    : 
+                    <ReviewButton isHidden>리뷰쓰기</ReviewButton>}
+            </CourseCard>
             ))}
             <PageNavigation>
                 <NavButton 
@@ -230,56 +260,3 @@ export default MyCourses;
 
 
 
-// 아래는 리뷰쓰면 보러가기로직!
-// import { useNavigate, useLocation } from 'react-router-dom'; // 이미 import되어 있음.
-
-// function MyCourses() {
-//     // ...
-//     const navigate = useNavigate();  // 이 줄 추가
-//     const [isReviewPosted, setIsReviewPosted] = useState(false);  // 이 상태 추가
-
-//     // ...
-
-//     const sendReview = async () => {
-//         if (!reviewMessage.trim()) {
-//             alert('리뷰 메시지를 입력해주세요.');
-//             return;
-//         }
-
-//         const formdata = {
-//             context: reviewMessage,
-//             rating: rating
-//         };
-
-//         try {
-//             const response = await postReview(selectedProductIdx, formdata);
-//             console.log(response)
-            
-//             if (response.success) {  // 여기서 응답 구조에 따라 접근을 약간 수정할 수 있음.
-//                 setIsReviewPosted(true);
-//             }
-//         } catch (error) {
-//             console.error("Error sending review:", error);
-//         }
-
-//         closeModal();
-//     };
-
-//     // ...
-
-//     return (
-//         <MainContainer>
-//             {displayedCourses.map(course => (
-//                 <CourseCard key={course.localDate + course.mentorName}>
-//                     // ...
-//                     {course.paymentType === '상품' ? (
-//                         isReviewPosted ? 
-//                             <ReviewButton onClick={() => navigate('/product')}>리뷰보러가기</ReviewButton> 
-//                             : <ReviewButton onClick={() => openModal(course.productIdx)}>리뷰쓰기</ReviewButton>
-//                     ) : <ReviewButton isHidden>리뷰쓰기</ReviewButton>}
-//                 </CourseCard>
-//             ))}
-//             // ...
-//         </MainContainer>
-//     );
-// }
