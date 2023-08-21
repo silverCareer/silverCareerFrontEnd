@@ -34,6 +34,7 @@ function Home() {
                 setProductList(response.content);
                 setTotalPage(response.totalPages);
                 
+
             } catch (error) {
                 console.error("Error fetching product List:", error);
             }
