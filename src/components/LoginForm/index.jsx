@@ -114,7 +114,19 @@ function LoginForm() {
         setIsLoggedIn(true);
 
         localStorage.setItem('isLoggedIn', 'true');
-        setLoginForm({ name: response.data.response.name });
+
+        if (response.data.response.authority === 'ROLE_MENTOR') {
+          setLoginForm(prev => ({ ...prev, authority: '멘토' }));
+        } else if (response.data.response.authority === 'ROLE_MENTEE') {
+            setLoginForm(prev => ({ ...prev, authority: '멘티' }));
+        }
+
+        setLoginForm(prev => ({
+          ...prev,
+          name: response.data.response.name,
+          balance: response.data.response.balance
+        }));
+        
         navigate('/') 
     })
     .catch(error => {

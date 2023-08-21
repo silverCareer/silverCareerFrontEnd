@@ -16,9 +16,20 @@ const CAROUSEL_IMAGES = [
 const Paging = styled.div `
     display: flex;
     justify-content: center;
-    border: 1px solid black;
+    margin: 10px;
     align-items: center;
+    font-size: 25px;
+    margin: 10px;
+    margin-bottom: 1000px;;
 `
+const PagingNumber = styled.div`
+    cursor: pointer;
+    font-weight: ${props => props.isActive ? 'bold' : 'normal'};
+    margin-right: 5px; /* 간격 조정 */
+    border: 1px solid #ccc; /* 테두리 추가 */
+    padding: 5px 10px; /* 내부 패딩 추가 */
+    border-radius: 5px; /* 둥근 모서리 추가 */
+`;
 
 function Home() {
     const [productList, setProductList] = useState([]);
@@ -31,8 +42,8 @@ function Home() {
                 const response = await getProductList('all', currentPage, 9);
                 console.log('Product List:', response);
                 
-                setProductList(response.content);
-                setTotalPage(response.totalPages);
+                setProductList(response.response.content);
+                setTotalPage(response.response.totalPages);
                 
             } catch (error) {
                 console.error("Error fetching product List:", error);
@@ -41,17 +52,36 @@ function Home() {
         fetchData();
     }, [currentPage]);
 
+    const handlePageChange = (newPage) => {
+        // 페이지 변경 시 데이터를 다시 불러옴
+        setCurrentPage(newPage);
+    };
+
     return (
         <div>
             <HomeCarousel carouselList={CAROUSEL_IMAGES}/>
             <MainCategory />
             <ProductList productList={productList}/>
             <Paging>
-                <LeftIcon />
-                <div>{currentPage} </div>
-                /
-                <div> {totalPage}</div>
-                <RightIcon />
+                <LeftIcon onClick={() => {
+                        if (currentPage > 1) {
+                            handlePageChange(currentPage - 1);
+                        }
+                    }}/>
+                    {Array.from({ length: totalPage }, (_, index) => (
+                        <PagingNumber
+                            key={index}
+                            isActive={currentPage === index + 1}
+                            onClick={() => handlePageChange(index + 1)}
+                        >
+                            {index + 1}
+                        </PagingNumber>
+                    ))}
+                <RightIcon onClick={() => {
+                        if (currentPage < totalPage) {
+                            handlePageChange(currentPage + 1);
+                        }
+                    }}/>
             </Paging>
         </div>
     );
