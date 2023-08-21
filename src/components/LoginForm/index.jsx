@@ -125,8 +125,7 @@ function LoginForm() {
           ...prev,
           name: response.data.response.name,
           balance: response.data.response.balance
-      }));
-
+        }));
         navigate('/') 
     })
     .catch(error => {
