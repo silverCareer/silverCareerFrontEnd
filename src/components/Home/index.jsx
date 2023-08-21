@@ -31,8 +31,8 @@ function Home() {
                 const response = await getProductList('all', currentPage, 9);
                 console.log('Product List:', response);
                 
-                setProductList(response.content);
-                setTotalPage(response.totalPages);
+                setProductList(response.response.content);
+                setTotalPage(response.response.totalPages);
                 
 
             } catch (error) {
