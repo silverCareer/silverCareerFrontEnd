@@ -87,7 +87,6 @@ table, thead, tbody, tr {
 /* 상품 이미지 스타일 */
 .product-img {
     position: relative;
-    width: 350px;
     height: 350px;
     border: 1px solid var(--border-color);
     border-radius: 10px;
@@ -161,12 +160,13 @@ table, thead, tbody, tr {
 }
 
 .product .product-item {
-    width: 350px;
+    width: 400px;
     position: relative;
     display: flex;
     gap: 10px;
     cursor: pointer;
-    flex-direction: column;    
+    flex-direction: column;
+    padding: 20px;  
 }
 
 .product .product-item .like-btn {

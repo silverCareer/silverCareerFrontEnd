@@ -10,8 +10,8 @@ import CategoryHomePage from './pages/Category';
 import MyPage from './pages/MyPage'
 import AccountEdit from './pages/MyPage/AccountEdit';
 import ProductPage from './pages/Product';
+import PaymentPage from './pages/Payment';
 import ChatPage from './pages/Chat';
-import { ChatProvider } from './hooks/chatContext';
 
 /* Provider */
 import SignupProvider from './hooks/signupContext';
@@ -19,6 +19,8 @@ import { LoginProvider } from './hooks/loginContext';
 import { MypageProvider } from './hooks/mypageContext';
 import ProductProvider from './hooks/productContext';
 import ProductDetailProvider from './hooks/productDetailContext';
+import { ChatProvider } from './hooks/chatContext';
+import ApplyProductPage from './pages/Product/apply';
 
 function App() {
   return (
@@ -34,14 +36,21 @@ function App() {
               <Route path="" element={<SignupProvider><SignupPage /></SignupProvider>} />
               <Route path="mentor" element={<SignupProvider><MentorSignup /></SignupProvider>} />
               <Route path="mentee" element={<SignupProvider><MenteeSignup /></SignupProvider>} />
-            </Route>              
-            <Route path="/product/:productIdx" element={<ProductPage />}/>
+            </Route>
+
+            <Route path="/product/*" element={<Outlet />}>
+              <Route path=":productIdx" element={<ProductPage />}/>
+              <Route path=":productIdx/payment" element={<PaymentPage />}/>
+            </Route>
+
+            {/* <Route path="/product/:productIdx" element={<ProductPage />}/> */}
             <Route path="/category/:category" element={<CategoryHomePage />} />
             <Route path="/mypage/*" element={<Outlet />}>
               <Route path="" element={<MyPage />} />
               <Route path="account_edit" element={<AccountEdit />} />
             </Route>
             <Route path="/chatroom" element={<ChatProvider><ChatPage /></ChatProvider>} />
+            <Route path="/apply" element={<ApplyProductPage />} />
           </Routes>
         </Router>
         </ProductDetailProvider>
