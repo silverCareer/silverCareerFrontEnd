@@ -163,7 +163,7 @@ const ModalButton = styled.button`
     &:hover {
         background-color: #6f896d;
     }
-`
+`;
 
 function InquiryModal({ isOpen, onClose, name }) {
     const { productDetailInfo } = useContext(ProductDetailContext);
@@ -221,7 +221,6 @@ export default function ProductDetailTop() {
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
-    
     const { productDetailInfo } = useContext(ProductDetailContext);
     const { productIdx, productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
 

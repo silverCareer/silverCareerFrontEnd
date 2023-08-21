@@ -4,8 +4,6 @@ import HomeCarousel from './Carousel/Carousel';
 import MainCategory from '../Category/MainCategory';
 import ProductList from '../Product'
 import { getProductList } from '../../api/product/productList';
-// import { ReactComponent as LeftIcon } from '../../assets/svg/icon-left.svg';
-// import { ReactComponent as RightIcon } from '../../assets/svg/icon-right.svg';
 
 const CAROUSEL_IMAGES = [
     'https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2545.jpg',
@@ -55,10 +53,10 @@ function Home() {
             try {
                 const response = await getProductList('all', currentPage, 9);
                 console.log('Product List:', response);
-                
+              
                 setProductList(response.response.content);
                 setTotalPage(response.response.totalPages);
-                
+
             } catch (error) {
                 console.error("Error fetching product List:", error);
             }
@@ -103,7 +101,6 @@ function Home() {
     
         return pageNumbers;
     };
-    
 
     return (
         <div>

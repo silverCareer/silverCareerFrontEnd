@@ -7,6 +7,7 @@ import { LoginContext } from '../../hooks/loginContext';
 import { MypageContext } from '../../hooks/mypageContext';
 import { getMyProfile } from '../../api/mypage/mypage';
 import { getAlarm } from '../../api/alarm/getAlarm';
+import { getAlarmStatus } from '../../api/alarm/getAlarmStatus';
 
 
 const Header = styled.header`
@@ -22,7 +23,7 @@ const Logo = styled.div`
     cursor: pointer;
     width: 100px;
     height: 50px;
-    background-image: url(${logoImage});
+    background-image: url(${logoImage});;
     background-repeat: no-repeat;
 `;
 
@@ -118,12 +119,24 @@ const NotificationItem = styled.div`
     }
 `;
 
-// 알림이 없을 때 표시되는 문구에 대한 스타일
 const NoNotificationText = styled.div`
-    color: #84A080; // 포인트 컬러로 텍스트 표시
+    color: #84A080; 
     padding: 10px;
-    text-align: center; // 가운데 정렬
+    text-align: center; 
 `;
+
+const AlarmStatusIcon = styled.div`
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    display: ${props => (props.show ? 'block' : 'none')}; // 알림 상태에 따라 표시/숨김
+`;
+
+
 
 const MainHeader = () => {
     const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext); 
@@ -136,12 +149,37 @@ const MainHeader = () => {
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
 
+    const [hasNewAlarm, setHasNewAlarm] = useState(false); 
+
+    const { loginForm } = useContext(LoginContext)
+    const { authority, name} = loginForm
+
+
+    // 렌더링 될 때마다 새로운 알람있는지 체크
+    useEffect(() => {
+        const checkAlarmStatus = async () => {
+            try {
+                const statusData = await getAlarmStatus();
+                // console.log("렌더링될때마다 실행")
+                const status = statusData.status
+                // console.log(authority, name, status)
+
+                setHasNewAlarm(status);
+            } catch (error) {
+                console.error("Failed to fetch alarm status:", error);
+            }
+        };
+
+        checkAlarmStatus();
+    }, []);
+
+    //알람 클릭할때
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                console.log("Asdasd")
                 const alarmData = await getAlarm();
-                console.log("알람! : " + alarmData)
+                // console.log("알람데이터! : " + JSON.stringify(alarmData, null, 2));
+                // console.log(alarmData)
                 setNotifications(alarmData);
             } catch (error) {
                 console.error("Failed to fetch notifications:", error);
@@ -228,19 +266,35 @@ const MainHeader = () => {
                     <Button onClick={() => navigate('/apply')}>수강등록</Button>
                     <Button onClick={() => navigate('/chatroom')}>채팅</Button>
                     <NotificationWrapper>
-                        <Button  ref={buttonRef} onClick={toggleNotifications}>알림</Button>
+                        <Button ref={buttonRef} onClick={toggleNotifications}>알림</Button>
+                        <AlarmStatusIcon show={hasNewAlarm} /> {/* AlarmStatusIcon의 'show' props를 이용해서 보여주고 안보여주고 구현 */}
                         {isNotificationOpen && (
                             <NotificationContainer ref={notificationRef}>
+                                {hasNewAlarm ? ( /* 새로운 알림이 있을 경우 메시지 표시 */
+                                    <NotificationItem>새로운 알람이 도착했습니다!</NotificationItem>
+                                ) : null}
                                 {notifications.length === 0 ? (
                                     <NoNotificationText>알림이 없습니다.</NoNotificationText>
                                 ) : (
-                                    notifications.map(notification => (
-                                        <NotificationItem key={notification.suggestionIdx}>
-                                            제목: {notification.suggestionTitle} <br />
-                                            제안자: {notification.suggester} <br />
-                                            상태: {notification.suggestionStatus}
-                                        </NotificationItem>
-                                    ))
+                                    notifications.map(notification => {
+                                        let content;
+
+                                        if (authority === '멘토') {
+                                            content = `${notification.suggester}님의 ${notification.suggestionTitle}에 대한 의뢰 신청입니다.`;
+                                        } else if (authority === '멘티') {
+                                            content = `${notification.title}건에 ${notification.suggester}님이 ${notification.price}원으로 입찰을 요청했습니다.`;
+                                        } else {
+                                            content = "알림 내용"; // 다른 권한이나 예외 상황에 대한 내용. 필요에 따라 수정
+                                        }
+
+                                        const displayContent = content.length > 20 ? content.substring(0, 20) + '...' : content;
+
+                                        return (
+                                            <NotificationItem key={notification.suggestionIdx}>
+                                                {displayContent}
+                                            </NotificationItem>
+                                        );
+                                    })
                                 )}
                             </NotificationContainer>
                         )}
@@ -250,10 +304,7 @@ const MainHeader = () => {
                 </>
                 ) : (
                 <>
-                    <ReqButton onClick={() => navigate('/request')}>의뢰하기</ReqButton>
-                    <Button onClick={() => navigate('/apply')}>수강등록</Button>
-                    <Button onClick={() => navigate('/chat')}>채팅</Button>
-                    <Button onClick={() => navigate('/notification')}>알림</Button>
+
                     <Button onClick={() => navigate('/login')}>로그인</Button>
                     <Button onClick={() => navigate('/signup')}>회원가입</Button>
                 </>

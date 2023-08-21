@@ -200,7 +200,6 @@ const ModalContent = styled.div`
 export default function PaymentInfo({ productDetailInfo }) {
     const navigate = useNavigate();
     const { loginForm, setLoginForm } = useContext(LoginContext);
-    
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
