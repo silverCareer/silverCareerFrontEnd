@@ -10,6 +10,7 @@ import CategoryHomePage from './pages/Category';
 import MyPage from './pages/MyPage'
 import AccountEdit from './pages/MyPage/AccountEdit';
 import ProductPage from './pages/Product';
+import PaymentPage from './pages/Payment';
 import ChatPage from './pages/Chat';
 
 /* Provider */
@@ -35,8 +36,14 @@ function App() {
               <Route path="" element={<SignupProvider><SignupPage /></SignupProvider>} />
               <Route path="mentor" element={<SignupProvider><MentorSignup /></SignupProvider>} />
               <Route path="mentee" element={<SignupProvider><MenteeSignup /></SignupProvider>} />
-            </Route>              
-            <Route path="/product/:productIdx" element={<ProductPage />}/>
+            </Route>
+
+            <Route path="/product/*" element={<Outlet />}>
+              <Route path=":productIdx" element={<ProductPage />}/>
+              <Route path=":productIdx/payment" element={<PaymentPage />}/>
+            </Route>
+
+            {/* <Route path="/product/:productIdx" element={<ProductPage />}/> */}
             <Route path="/category/:category" element={<CategoryHomePage />} />
             <Route path="/mypage/*" element={<Outlet />}>
               <Route path="" element={<MyPage />} />
