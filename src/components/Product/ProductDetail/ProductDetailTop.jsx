@@ -7,6 +7,7 @@ import { ProductDetailContext } from '../../../hooks/productDetailContext';
 import { MypageContext } from '../../../hooks/mypageContext';
 import { createChatRoom } from '../../../api/chat/createChatRoom';
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from '../../../hooks/loginContext';
 
 
 
@@ -102,18 +103,18 @@ const Button = styled.div`
     gap: 10px;
     flex: 1 0 0;
 
-    color: #84A080;
+    background-color: ${props => props.disabled ? '#a9a9a9' : ''};
+    color: ${props => props.disabled ? 'white' : '#84A080'};
     border-radius: 15px;
-    border: 1px solid #84A080;
+    border: 1px solid ${props => props.disabled ? '#a9a9a9' : '#84A080'};
     font-weight: 600;
-    cursor: pointer;
+    cursor: ${props => props.disabled ? '' : 'pointer'};
 
     &:hover {
-        background-color: #84A080;
-        color: white;
+        background-color: ${props => props.disabled ? '' : '#84A080'};
+        color: ${props => props.disabled ? '' : 'white'};
     }
 `
-
 const ModalWrapper = styled.div`
     position: fixed;
     top: 0;
@@ -124,22 +125,19 @@ const ModalWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-`;
-
+`
 const ModalContent = styled.div`
     width: 400px;
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
-
+`
 const ModalLabel = styled.label`
     display: block;
     margin-bottom: 10px;
     font-size: 20px;
-`;
-
+`
 const ModalInput = styled.textarea`
     width: 100%;
     padding: 10px;
@@ -147,14 +145,12 @@ const ModalInput = styled.textarea`
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: none;
-`;
-
+`
 const ModalButtonWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-`;
-
+`
 const ModalButton = styled.button`
     padding: 10px 20px;
     background-color: #84A080;
@@ -169,12 +165,10 @@ const ModalButton = styled.button`
     }
 `;
 
-function InquiryModal({ isOpen, onClose }) {
+function InquiryModal({ isOpen, onClose, name }) {
     const { productDetailInfo } = useContext(ProductDetailContext);
     const { memberName } = productDetailInfo;
-    const { myPageForm } = useContext(MypageContext);
-    const { name } = myPageForm;
-
+    
     const [inquiryContent, setInquiryContent] = useState('');
     const navigate = useNavigate();
 
@@ -221,10 +215,12 @@ function InquiryModal({ isOpen, onClose }) {
 
 
 export default function ProductDetailTop() {
+    const { loginForm } = useContext(LoginContext);
+    const { name } = loginForm;
+
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
-
     const { productDetailInfo } = useContext(ProductDetailContext);
     const { productIdx, productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
 
@@ -263,15 +259,19 @@ export default function ProductDetailTop() {
                 </ClassInfo>
 
                 <ButtonList>
-                    <Button onClick={handlePaymentClick}>결제하기</Button>
-                    <Button onClick={() => setModalOpen(true)}>문의하기</Button>
+                    {/* <Button onClick={name ? handlePaymentClick : null} disabled={!name}>결제하기</Button>
+                    <Button onClick={name ? () => setModalOpen(true) : null} disabled={!name}>문의하기</Button> */}
+                    <Button onClick={name && productDetailInfo.status === 3 ? handlePaymentClick : null} 
+                            disabled={!name || productDetailInfo.status !== 3}>결제하기</Button>
+                    <Button onClick={name && productDetailInfo.status === 3 ? () => setModalOpen(true) : null} 
+                            disabled={!name || productDetailInfo.status !== 3}>문의하기</Button>
                 </ButtonList>
             </TopLeft>
             <TopRightImage>
                 <img src={image} alt="Product" />
             </TopRightImage>
         </ProductTopSection>
-        <InquiryModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+        <InquiryModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} name={name} />
         </>
     );
 }

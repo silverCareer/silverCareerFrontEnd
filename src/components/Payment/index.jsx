@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import PaymentInfo from './PaymentInfo';
-import PaymentTotal from './PaymentTotal';
 import { ProductDetailContext } from '../../hooks/productDetailContext';
-import { MypageContext } from '../../hooks/mypageContext';
+import { LoginContext } from '../../hooks/loginContext';
 
 const PaymentContainer = styled.div `
     display: flex;
@@ -32,15 +31,13 @@ const Title = styled.div `
 `
 
 function Payment() {
-    const { myPageForm } = useContext(MypageContext);
     const { productDetailInfo } = useContext(ProductDetailContext);
-    
+
     return (
         <PaymentContainer>
             <Title>결제하기</Title>
             <PaymentSubContainer>
-                <PaymentInfo myPageForm={myPageForm} productDetailInfo={productDetailInfo} />
-                <PaymentTotal myPageForm={myPageForm} productDetailInfo={productDetailInfo} />
+                <PaymentInfo productDetailInfo={productDetailInfo} />
             </PaymentSubContainer>
         </PaymentContainer>    
     );
