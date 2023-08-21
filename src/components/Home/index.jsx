@@ -4,8 +4,8 @@ import HomeCarousel from './Carousel/Carousel';
 import MainCategory from '../Category/MainCategory';
 import ProductList from '../Product'
 import { getProductList } from '../../api/product/productList';
-import { ReactComponent as LeftIcon } from '../../assets/svg/icon-left.svg';
-import { ReactComponent as RightIcon } from '../../assets/svg/icon-right.svg';
+// import { ReactComponent as LeftIcon } from '../../assets/svg/icon-left.svg';
+// import { ReactComponent as RightIcon } from '../../assets/svg/icon-right.svg';
 
 const CAROUSEL_IMAGES = [
     'https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2545.jpg',
@@ -13,22 +13,36 @@ const CAROUSEL_IMAGES = [
     'https://media.architecturaldigest.com/photos/6080a73d795a7b010f3dd2e0/2:1/w_2700,h_1350,c_limit/GettyImages-1213929929.jpg'
 ]
 
-const Paging = styled.div `
+const Paging = styled.div`
     display: flex;
-    justify-content: center;
-    margin: 10px;
     align-items: center;
-    font-size: 25px;
-    margin: 10px;
-    margin-bottom: 1000px;;
-`
-const PagingNumber = styled.div`
+    justify-content: center;
+`;
+
+const PageNumber = styled.div`
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
     cursor: pointer;
-    font-weight: ${props => props.isActive ? 'bold' : 'normal'};
-    margin-right: 5px; /* 간격 조정 */
-    border: 1px solid #ccc; /* 테두리 추가 */
-    padding: 5px 10px; /* 내부 패딩 추가 */
-    border-radius: 5px; /* 둥근 모서리 추가 */
+    ${({ isActive }) =>
+        isActive &&
+        `
+        background-color: #84A080;
+        color: white;
+        `
+    }
+`;
+
+const LeftIcon = styled.div`
+    cursor: pointer;
+    margin-right: 10px;
+    display: ${({ currentPage }) => (currentPage > 10 ? 'block' : 'none')};
+`;
+
+const RightIcon = styled.div`
+    cursor: pointer;
+    margin-left: 10px;
+    display: ${({ currentPage }) => (currentPage >= 10 ? 'block' : 'none')};
 `;
 
 function Home() {
@@ -52,10 +66,44 @@ function Home() {
         fetchData();
     }, [currentPage]);
 
-    const handlePageChange = (newPage) => {
-        // 페이지 변경 시 데이터를 다시 불러옴
-        setCurrentPage(newPage);
+    const onPageChange = (page) => {
+        // Ensure the page is within valid bounds
+        if (page >= 1 && page <= totalPage) {
+            setCurrentPage(page);
+        }
     };
+    
+    const renderPageNumbers = () => {
+        const pageNumbers = [];
+        const maxDisplayedPages = 9;
+        let startPage = 1;
+    
+        if (totalPage > maxDisplayedPages) {
+            if (currentPage > Math.floor(maxDisplayedPages / 2)) {
+                startPage = currentPage - Math.floor(maxDisplayedPages / 2);
+                if (startPage + maxDisplayedPages > totalPage) {
+                    startPage = totalPage - maxDisplayedPages + 1;
+                }
+            }
+        }
+    
+        const endPage = Math.min(startPage + maxDisplayedPages - 1, totalPage);
+    
+        for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(
+            <PageNumber
+                key={i}
+                isActive={i === currentPage}
+                onClick={() => onPageChange(i)}
+            >
+                {i}
+            </PageNumber>
+            );
+        }
+    
+        return pageNumbers;
+    };
+    
 
     return (
         <div>
@@ -63,25 +111,11 @@ function Home() {
             <MainCategory />
             <ProductList productList={productList}/>
             <Paging>
-                <LeftIcon onClick={() => {
-                        if (currentPage > 1) {
-                            handlePageChange(currentPage - 1);
-                        }
-                    }}/>
-                    {Array.from({ length: totalPage }, (_, index) => (
-                        <PagingNumber
-                            key={index}
-                            isActive={currentPage === index + 1}
-                            onClick={() => handlePageChange(index + 1)}
-                        >
-                            {index + 1}
-                        </PagingNumber>
-                    ))}
-                <RightIcon onClick={() => {
-                        if (currentPage < totalPage) {
-                            handlePageChange(currentPage + 1);
-                        }
-                    }}/>
+                <LeftIcon currentPage={currentPage} onClick={() => onPageChange(currentPage - 1)}>
+                    Left
+                </LeftIcon>
+                    {renderPageNumbers()}
+                <RightIcon onClick={() => onPageChange(currentPage + 1)}>Right</RightIcon>
             </Paging>
         </div>
     );
