@@ -20,7 +20,7 @@ const UploadIcon = styled.div `
 `
 
 function ImageUploadBox({ onImageUrlChange }) {
-    const [ selectedFile, setSelectedFile ] = useState(null);
+    const [ seletedFile, setSelectedFile ] = useState(null);
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState(null); // 업로드한 이미지 URL
     
     // 파일 입력(input) 요소를 가리키는 ref
