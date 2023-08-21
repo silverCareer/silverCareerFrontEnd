@@ -100,10 +100,9 @@ export default function PaymentTotal({myPageForm, productDetailInfo}) {
 
     const handlePaymentSubmit = async () => {
         try {
-            console.log(productDetailInfo.productName, "ㅋㅋ");
             const response = await paymentApi(productDetailInfo.productIdx);
             
-            if(response.success) {
+            if(response.productIdx === productDetailInfo.productIdx) {
                 setIsPaymentSuccess(true); 
             }
         } catch (error) {

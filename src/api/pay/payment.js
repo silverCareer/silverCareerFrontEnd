@@ -2,9 +2,6 @@ import axios from 'axios';
 
 //const response = await axios.post('http://localhost:8888/api/productpayment',
 export const paymentApi = async (productIdx) => {
-
-    console.log('??');
-
     const token = localStorage.getItem('jwttoken'); 
     const response = await axios.post('https://www.silvercareer.shop/api/productPayment', 
     {
