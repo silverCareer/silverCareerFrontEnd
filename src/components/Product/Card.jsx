@@ -1,14 +1,65 @@
-import '../../style/style.css';
-import { useContext} from 'react';
+
+import styled from 'styled-components';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import { ProductContext } from '../../hooks/productContext';
 import { ProductDetailContext } from '../../hooks/productDetailContext';
 import { getProductDetail } from '../../api/product/productDetail';
 
+/* svg */
+import likeIconImage from '../../assets/svg/icon-heart.svg'
+
+const ProductItem = styled.li `
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    cursor: pointer;
+`
+const ProductImg = styled.div `
+    height: 350px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+`
+const Product1 = styled.div `
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    font-size: 15px;
+    color: rgb(157, 157, 157);
+
+    .productLike {
+        display: flex;
+        align-items: center;
+        color: black;
+    }
+
+    .like-btn {
+        width: 20px;
+        cursor: pointer;
+
+        &:hover {
+
+        }
+    }   
+`
+const LikeIcon = styled.div `
+    width: 22px;
+    height: 22px;
+    color: black;
+    background-image: url(${likeIconImage});
+    background-repeat: no-repeat;
+
+    cursor: pointer;
+`
 export default function Card({product}) {
-    
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
     const navigate = useNavigate();
-    //const { setProductTitle } = useContext(ProductContext); //이건 간단하게 뜨는 상품 정보
     const { setProductDetailInfo } = useContext(ProductDetailContext); //useContext로 넘길 상품 자세 페이지
     
     const handleCardClick = async () => {
@@ -32,21 +83,26 @@ export default function Card({product}) {
     };
 
     return (
-        <li className="product-item" onClick={handleCardClick}>
-            <div className="product-img">
+        <ProductItem onClick={handleCardClick}>
+            <ProductImg>
                 <img src={product.productImage} alt="img"/>
-            </div>
-            <div className="product-category">현장직</div>
+            </ProductImg>
+            <Product1>
+                <div>{product.category}</div>
+                <div className="productLike">
+                    <LikeIcon />
+                    <span>&nbsp;{product.productLikes}</span>
+                </div>
+            </Product1>
             <div className="product-detail">
                 <span>{product.productDescription}</span>
             </div>            
-            <button className="like-btn"></button>
             <div className="product-price">
-                <span>{product.productPrice} 원</span>
+                <span>{numberWithCommas(product.productPrice ?? 0)} 원</span>
             </div>
             <div className="product-rate">
-                <span>{product.productLikes}</span>
+                
             </div>
-        </li>
+        </ProductItem>
     );
 }
