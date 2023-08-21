@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { paymentApi } from './../../api/pay/payment';
 import { LoginContext } from '../../hooks/loginContext';
 import { useNavigate } from 'react-router-dom';
+import { ProductDetailContext } from '../../hooks/productDetailContext';
+import { getProductDetail } from '../../api/product/productDetail';
 
 const InfoContainer = styled.div `
     display: flex;
@@ -217,6 +219,8 @@ export default function PaymentInfo({ productDetailInfo }) {
     const [showWarning, setShowWarning] = useState(isCashInsufficient);
     const [isPaymentSuccess, setIsPaymentSuccess] = useState(false); // State for payment success
 
+    const { setProductDetailInfo } = useContext(ProductDetailContext);
+
     const handlePaymentSubmit = async () => {
         try {
             const response = await paymentApi(productDetailInfo.productIdx);
@@ -228,6 +232,14 @@ export default function PaymentInfo({ productDetailInfo }) {
                     balance: remainingCash
                 }));
             }
+
+            const productDetailResponse = await getProductDetail(productDetailInfo.productIdx);
+            console.log('Product Detail:', productDetailResponse);
+            if (productDetailResponse.success) {
+                //setProductTitle(product);
+                setProductDetailInfo(productDetailResponse.response);
+            }
+
         } catch (error) {
             console.log('Error sending payment: ', error);
         }

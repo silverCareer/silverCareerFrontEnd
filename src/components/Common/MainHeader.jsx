@@ -282,7 +282,7 @@ const MainHeader = () => {
                                         if (authority === '멘토') {
                                             content = `${notification.suggester}님의 ${notification.suggestionTitle}에 대한 의뢰 신청입니다.`;
                                         } else if (authority === '멘티') {
-                                            content = `${notification.title}건에 ${notification.suggester}님이 ${notification.price}원으로 입찰을 요청했습니다.`;
+                                            content = `${notification.suggestionTitle}건에 ${notification.mentorName}님이 ${notification.price}원으로 입찰을 요청했습니다.`;
                                         } else {
                                             content = "알림 내용"; // 다른 권한이나 예외 상황에 대한 내용. 필요에 따라 수정
                                         }
