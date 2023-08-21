@@ -21,7 +21,7 @@ function Home() {
                 console.log('Product List:', productList);
                 
                 if (productList.success) {
-                    setProductList(productList.response);
+                    setProductList(productList.response.content);
                 } else {
                     console.error("Failed to fetch product List:", productList.error);
                 }
