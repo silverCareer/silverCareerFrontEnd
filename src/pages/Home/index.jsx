@@ -7,7 +7,7 @@ const MainContainer = styled.div`
     margin-top:0px;
     margin-left:0px;
     margin-right:0px;
-    
+    margin-bottom: 20px;
 `;
 
 function HomePage() {
