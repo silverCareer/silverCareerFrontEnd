@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ProductDetailContext } from '../../hooks/productDetailContext';
+import { paymentApi } from './../../api/pay/payment';
 
 const TotalContainer = styled.div `
     display: flex;
@@ -30,7 +30,7 @@ const PriceInfo = styled.div `
         font-weight: bold;
     }
     .total {
-        font-size: 23px;
+        font-size: 21px;
         font-weight: 600;
         color: black;
     }    
@@ -67,27 +67,50 @@ const SubmitButton = styled.div `
 
     flex-shrink: 0;
     border-radius: 10px;
-    background: #84A080;
+    background: ${props => props.disabled ? 'gray' : '#84A080'};
 
     font-weight: 500;
     font-size: 18px;
     color: white;
-
-    cursor: pointer;
-    &:hover {
-        color: white;
-        background-color: #6f896d;
-    }
+    
+    
+    cursor: ${props => props.disabled ? '' : 'pointer'};
+    ${props => !props.disabled && `
+        &:hover {
+            color: white;
+            background-color: #6f896d;
+        }
+    `}
 `;
 
-export default function PaymentTotal() {
-    const { productDetailInfo } = useContext(ProductDetailContext);
+export default function PaymentTotal({myPageForm, productDetailInfo}) {
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
     const price = numberWithCommas(productDetailInfo.price);
-    const cash = numberWithCommas(100000);
     
+    const availableCash = parseInt(myPageForm.balance ?? 0); // 사용 가능한 캐시
+    const usedCash = parseInt(productDetailInfo.price); // 사용 할 캐시
+
+    const remainingCash = availableCash - usedCash;
+    const isCashInsufficient = remainingCash < 0;
+    
+    const [showWarning, setShowWarning] = useState(isCashInsufficient);
+    const [isPaymentSuccess, setIsPaymentSuccess] = useState(false); // State for payment success
+
+    const handlePaymentSubmit = async () => {
+        try {
+            console.log(productDetailInfo.productName, "ㅋㅋ");
+            const response = await paymentApi(productDetailInfo.productIdx);
+            
+            if(response.success) {
+                setIsPaymentSuccess(true); 
+            }
+        } catch (error) {
+            console.log('Error sending payment: ', error);
+        }
+    };
+
     return (
         <TotalContainer>
             <PriceInfo>
@@ -100,17 +123,26 @@ export default function PaymentTotal() {
             </PriceInfo>
             <PriceInfo>
                 <div className="title">캐시</div>
-                <span>{cash} 원</span>
+                <span>{price} 원</span>
             </PriceInfo>
             <Line />
             <PriceInfo>
                 <div className="total">총 결제 금액</div>
-                <span className="total">{cash} 원</span>
+                <span className="total">{price} 원</span>
             </PriceInfo>
             <SubmitInfo>
                 <span>위 내용을 확인하였습니다.</span>
-                <SubmitButton>결제하기</SubmitButton>
+                <SubmitButton disabled={showWarning} onClick={handlePaymentSubmit}>결제하기</SubmitButton>
             </SubmitInfo>
+
+            {isPaymentSuccess && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>결제가 완료되었습니다!</h2>
+                        <button onClick={() => setIsPaymentSuccess(false)}>닫기</button>
+                    </div>
+                </div>
+            )}
         </TotalContainer>
     );
 }

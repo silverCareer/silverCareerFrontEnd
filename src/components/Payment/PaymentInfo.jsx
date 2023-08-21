@@ -1,6 +1,5 @@
-import { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ProductDetailContext } from '../../hooks/productDetailContext';
 
 const InfoContainer = styled.div `
     display: flex;
@@ -79,17 +78,16 @@ const PriceInfo = styled.div `
     }
 `
 
-export default function PaymentInfo() {
-    const { productDetailInfo } = useContext(ProductDetailContext);
+export default function PaymentInfo({myPageForm, productDetailInfo}) {
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
     //numberWithCommas
     const price = numberWithCommas(productDetailInfo.price);
-    const cash = numberWithCommas(100000);
+    const cash = numberWithCommas(myPageForm.balance ?? 0);
     
-    const availableCash = 100000; // 사용 가능한 캐시
+    const availableCash = parseInt(myPageForm.balance ?? 0); // 사용 가능한 캐시
     const usedCash = parseInt(productDetailInfo.price); // 사용 할 캐시
 
     const remainingCash = availableCash - usedCash;
