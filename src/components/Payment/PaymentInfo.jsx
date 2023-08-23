@@ -61,11 +61,11 @@ const PriceInfo = styled.div `
         width: 80px;
     }
     div {
-        width: 400px;
+        width: 300px;
     }    
-    span,
-    .normal {
-        width: 150px;
+    
+    span {
+        width: 200px;
         text-align: right;
         padding-right: 5px;
     }
@@ -164,18 +164,6 @@ const SubmitButton = styled.div `
 `;
 
 /* modal */
-const ModalWrapper = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999; /* Ensure the modal appears above other content */
-`;
 const ModalBackground = styled.div`
     position: fixed;
     top: 0;
@@ -221,6 +209,7 @@ const ButtonList = styled.div `
     width: 100%;
     gap: 10px;
 `
+
 export default function PaymentInfo({ productDetailInfo }) {
     const navigate = useNavigate();
     const { loginForm, setLoginForm } = useContext(LoginContext);
@@ -275,11 +264,6 @@ export default function PaymentInfo({ productDetailInfo }) {
         } catch (error) {
             console.log('Error sending payment: ', error);
         }
-    };
-
-    const handleCloseModal = () => {
-        setIsPaymentSuccess(false);
-        navigate(`/product/${productDetailInfo.productIdx}`); // Redirect to the product page
     };
 
     return (
@@ -356,10 +340,8 @@ export default function PaymentInfo({ productDetailInfo }) {
                         </ButtonList>                       
                     </ModalContainer>
                 </ModalBackground>
-            
             )}
-
-        </TotalContainer>
+            </TotalContainer>
         </> 
     );
 }

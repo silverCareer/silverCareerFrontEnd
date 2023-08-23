@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 
 /* Page */
 import HomePage from './pages/Home';
@@ -18,20 +18,21 @@ import Request from './pages/Request';
 import RequestInfo from './pages/Request/RequestInfo'
 import BidList from './pages/Request/BidList';
 import BidRequest from './pages/Request/BidRequest';
+import SearchPage from './pages/Search';
 
 /* Provider */
 import SignupProvider from './hooks/signupContext';
 import { LoginProvider } from './hooks/loginContext';
 import { MypageProvider } from './hooks/mypageContext';
-import ProductProvider from './hooks/productContext';
 import ProductDetailProvider from './hooks/productDetailContext';
 import { ChatProvider } from './hooks/chatContext';
+import SearchProvider from './hooks/searchContext';
 
 function App() {
   return (
     <LoginProvider>
       <MypageProvider>
-        <ProductProvider>
+        <SearchProvider>
         <ProductDetailProvider>
         <Router>
           <Routes>
@@ -42,13 +43,11 @@ function App() {
               <Route path="mentor" element={<SignupProvider><MentorSignup /></SignupProvider>} />
               <Route path="mentee" element={<SignupProvider><MenteeSignup /></SignupProvider>} />
             </Route>
-
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/product/*" element={<Outlet />}>
               <Route path=":productIdx" element={<ProductPage />}/>
               <Route path=":productIdx/payment" element={<PaymentPage />}/>
             </Route>
-
-            {/* <Route path="/product/:productIdx" element={<ProductPage />}/> */}
             <Route path="/category/:category" element={<CategoryHomePage />} />
             <Route path="/mypage/*" element={<Outlet />}>
               <Route path="" element={<MyPage />} />
@@ -64,7 +63,7 @@ function App() {
           </Routes>
         </Router>
         </ProductDetailProvider>
-        </ProductProvider>
+        </SearchProvider>
       </MypageProvider>
     </LoginProvider>
 
