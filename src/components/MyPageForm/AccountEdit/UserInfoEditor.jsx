@@ -64,7 +64,7 @@ function UserInfoEditor() {
     const [formData, setFormData] = useState({
     });
 
-    console.log(myPageForm, "이건ㄴ이넉넝기넝긴어ㅣㄹ미아ㅓ류미ㅏㅇ멍ㄻㅇㄹ")
+
     const handleInputChange = (e) => {
         setFormData({
         ...formData,
