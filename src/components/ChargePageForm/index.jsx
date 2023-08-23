@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { cashChargeApi } from '../../api/charge/cashCharge';
+import { MypageContext } from './../../hooks/mypageContext';
 
 const ChargeContainer = styled.div `
     margin: 10px 450px;
@@ -91,9 +92,11 @@ const ButtonList = styled.div `
 `
 
 function ChargePageForm() {
+    const { myPageForm, setMyPageForm } = useContext(MypageContext);
+    const balance = myPageForm.balance;
+    
     const navigate = useNavigate();
     const location = useLocation();
-    const { balance } = location.state;
     const [ chargeAmount, setChargeAmount ] = useState('');
     const [ isModalOpen, setIsModalOpen ] = useState(false); // 모달의 열림/닫힘 상태
 
@@ -123,11 +126,17 @@ function ChargePageForm() {
     const handleCharge = async () => {
         //cashChargeApi
         try {
-            const response = await cashChargeApi(balance);
+            const response = await cashChargeApi(chargeAmount);
+            alert("캐시 충전이 완료되었습니다!");
 
-            if(response.success) {
+            setMyPageForm(prevMyPageForm => ({
+                ...prevMyPageForm,
+                balance: newCharge
+            }));
+
+            //if(response.success) {
                 navigate(`/mypage`);        
-            }
+            //}
         } catch (error) {            
             console.log('Error sending payment: ', error);
             if(error.response.status === 403 || error.response.status === 406) {
