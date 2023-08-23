@@ -138,8 +138,6 @@ const AlarmStatusIcon = styled.div`
     display: ${props => (props.show ? 'block' : 'none')}; // 알림 상태에 따라 표시/숨김
 `;
 
-
-
 const MainHeader = () => {
     const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext); 
     const { setMyPageForm } = useContext(MypageContext);
@@ -216,7 +214,8 @@ const MainHeader = () => {
         if (isLoggedIn) {
             try {
                 const data = await getMyProfile();
-
+            
+                console.log("adfadfadfadf0");
                 if (data.authority === 'ROLE_MENTOR') {
                     data.authority = '멘토';
                 }
@@ -231,8 +230,6 @@ const MainHeader = () => {
                         '$1-$2-$3'
                     );
                 }
-                
-
                 setMyPageForm(data);
 
                 navigate('/mypage');

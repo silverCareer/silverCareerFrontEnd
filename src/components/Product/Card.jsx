@@ -71,8 +71,6 @@ export default function Card({product}) {
                 //setProductTitle(product);
                 setProductDetailInfo(productDetailResponse.response);
 
-                console.log(productDetailResponse.response, "dfsdfsdfsdfsf");
-
                 navigate(`/product/${product.productIdx}`);
             } else {
                 console.error("Failed to fetch product Detail:", productDetailResponse.error);

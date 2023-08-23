@@ -13,7 +13,6 @@ const MainContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 100px;
 `;
 
 const CourseCard = styled.div`
@@ -47,25 +46,30 @@ const PageNavigation = styled.div`
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+
+    span {
+        padding: 0 10px;
+        font-size: 1.2rem;
+    }
 `;
 
 const NavButton = styled.button`
-    padding: 5px 15px;
+    padding: 5px 10px;
     margin: 0 5px;
-    background-color: #84A080;
-    color: white;
+    background-color: white;
+    color: #84A080;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
+    border: 1px solid #84A080;
     transition: background-color 0.3s;
 
+    cursor: pointer;
     &:hover {
         background-color: #6f8a6a;
+        color: white;
     }
-
     &:disabled {
-        background-color: #c2cfc7;
-        cursor: not-allowed;
+        display: none;
     }
 `;
 
@@ -213,15 +217,13 @@ function MyCourses() {
             <PageNavigation>
                 <NavButton 
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                    disabled={currentPage <= 1}
-                >
+                    disabled={currentPage <= 1}>
                     &lt; 이전
                 </NavButton>
                 <span> {currentPage} / {totalPages}</span>
                 <NavButton 
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage >= totalPages}
-                >
+                    disabled={currentPage >= totalPages}>
                     다음 &gt;
                 </NavButton>
             </PageNavigation>
