@@ -12,6 +12,12 @@ import AccountEdit from './pages/MyPage/AccountEdit';
 import ProductPage from './pages/Product';
 import PaymentPage from './pages/Payment';
 import ChatPage from './pages/Chat';
+import ApplyProductPage from './pages/Product/apply';
+import ChargePage from './pages/Charge';
+import Request from './pages/Request';
+import RequestInfo from './pages/Request/RequestInfo'
+import BidList from './pages/Request/BidList';
+import BidRequest from './pages/Request/BidRequest';
 
 /* Provider */
 import SignupProvider from './hooks/signupContext';
@@ -20,7 +26,6 @@ import { MypageProvider } from './hooks/mypageContext';
 import ProductProvider from './hooks/productContext';
 import ProductDetailProvider from './hooks/productDetailContext';
 import { ChatProvider } from './hooks/chatContext';
-import ApplyProductPage from './pages/Product/apply';
 
 function App() {
   return (
@@ -48,9 +53,14 @@ function App() {
             <Route path="/mypage/*" element={<Outlet />}>
               <Route path="" element={<MyPage />} />
               <Route path="account_edit" element={<AccountEdit />} />
+              <Route path="charge" element={<ChargePage />} />
             </Route>
             <Route path="/chatroom" element={<ChatProvider><ChatPage /></ChatProvider>} />
             <Route path="/apply" element={<ApplyProductPage />} />
+            <Route path="/request" element={<Request/>} />
+            <Route path="/requestInfo" element={<RequestInfo/>} />
+            <Route path="/bidList" element={<BidList/>} />
+            <Route path="/bidRequest" element={<BidRequest/>} />
           </Routes>
         </Router>
         </ProductDetailProvider>
