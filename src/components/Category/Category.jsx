@@ -12,18 +12,47 @@ const Container = styled.div`
   height: 200px;
   margin: 25px 0px;
 `;
-
 const SelectedCategory = styled.div`
-  margin-top: 30px;
-  margin-left: 125px;
+  margin: 30px 10px 20px 125px;
+//  margin-left: 125px;
   font-size: 27px;
   font-weight: bold;
+`;
+const Paging = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+const PageNumber = styled.div`
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    ${({ isActive }) =>
+        isActive &&
+        `
+        background-color: #84A080;
+        color: white;
+        `
+    }
+`;
+const LeftIcon = styled.div`
+    cursor: pointer;
+    margin-right: 10px;
+    display: ${({ currentPage }) => (currentPage > 10 ? 'block' : 'none')};
+`;
+const RightIcon = styled.div`
+    cursor: pointer;
+    margin-left: 10px;
+    display: ${({ currentPage }) => (currentPage >= 10 ? 'block' : 'none')};
 `;
 
 const Category = ({ category }) => {
   const categories = ["현장직", "사무직", "문화", "기술직", "요리"];
   const [selectedCategory, setSelectedCategory] = useState(category); // 초기값 설정
   const [productList, setProductList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);  // 현재 페이지 상태 추가
+  const [totalPage, setTotalPage]  = useState(1);
 
   const handleBoxClick = (category) => {
     setSelectedCategory(category);
@@ -32,23 +61,60 @@ const Category = ({ category }) => {
   useEffect(() => {
       async function fetchData() {
           try {
-              const productList = await getProductList(selectedCategory);
-              
+              const productList = await getProductList(selectedCategory, currentPage, 9);
+
               if (productList.success) {
-                  setProductList(productList.response);
+                  setProductList(productList.response.content);
+                  setTotalPage(productList.response.totalPages);
               } else {
                   console.error("Failed to fetch product List:", productList.error);
-                  console.log("123");
-
               }
           } catch (error) {
               console.error("Error fetching product List:", error);
               setProductList([]);
-
           }
       }
       fetchData();
-  }, [selectedCategory]);
+  }, [selectedCategory, currentPage]);
+
+  //paging
+  const onPageChange = (page) => {
+    // Ensure the page is within valid bounds
+    if (page >= 1 && page <= totalPage) {
+        setCurrentPage(page);
+    }
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    const maxDisplayedPages = 9;
+    let startPage = 1;
+
+    if (totalPage > maxDisplayedPages) {
+        if (currentPage > Math.floor(maxDisplayedPages / 2)) {
+            startPage = currentPage - Math.floor(maxDisplayedPages / 2);
+            if (startPage + maxDisplayedPages > totalPage) {
+                startPage = totalPage - maxDisplayedPages + 1;
+            }
+        }
+    }
+
+    const endPage = Math.min(startPage + maxDisplayedPages - 1, totalPage);
+
+    for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(
+        <PageNumber
+            key={i}
+            isActive={i === currentPage}
+            onClick={() => onPageChange(i)}
+        >
+            {i}
+        </PageNumber>
+        );
+    }
+
+    return pageNumbers;
+  };
 
   return (
     <>
@@ -64,6 +130,13 @@ const Category = ({ category }) => {
       </Container>
       <SelectedCategory>선택된 카테고리: {selectedCategory}</SelectedCategory>
       <ProductList productList={productList}/>
+      <Paging>
+          <LeftIcon currentPage={currentPage} onClick={() => onPageChange(currentPage - 1)}>
+              Left
+          </LeftIcon>
+              {renderPageNumbers()}
+          <RightIcon onClick={() => onPageChange(currentPage + 1)}>Right</RightIcon>
+      </Paging>
     </>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import logoImage from '../../assets/image/logoImage.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const Container  = styled.div`
     display: flex;
@@ -14,11 +15,19 @@ const LogoFrame = styled.div`
     height: 50px;
     background-image: url(${logoImage});
     background-repeat: no-repeat;
+
+    cursor: pointer;
 `
 const Logo = () => {
+    const navigate = useNavigate();
+
+    const handleLogo = () => {
+        navigate('/');
+    }
+
     return (
         <Container>
-            <LogoFrame></LogoFrame>
+            <LogoFrame onClick={handleLogo}></LogoFrame>
         </Container>
         
     );
