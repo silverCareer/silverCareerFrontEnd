@@ -44,7 +44,7 @@ const Input = styled.input`
 
 function ProfilePicEditor() {
     const { myPageForm, setMyPageForm } = useContext(MypageContext);
-    const { profileImage } = myPageForm;
+    const { userImage } = myPageForm;
     const [selectedImage, setSelectedImage] = useState(null);
 
     const handleImageChange = (e) => {
@@ -66,7 +66,6 @@ function ProfilePicEditor() {
         const formData = new FormData();
         formData.append('img', selectedImage);
         
-
         try {
             const response = await postProfilePic(formData);
             console.log(response)

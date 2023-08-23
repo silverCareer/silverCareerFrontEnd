@@ -8,5 +8,5 @@ export const getMyProfile = async () => {
         }
     });
 
-    return response.data;
+    return response.data.response;
 }

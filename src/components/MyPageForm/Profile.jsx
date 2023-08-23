@@ -65,8 +65,6 @@ function Profile() {
     const { authority, name, email, profileImage } = myPageForm;
     const navigate = useNavigate();
 
-    console.log(myPageForm);
-    
     return (
         <MainContainer>
             <ProfileInfo>            
