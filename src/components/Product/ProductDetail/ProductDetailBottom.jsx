@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
 import { ProductDetailContext } from './../../../hooks/productDetailContext';
+import CancelInfo from './PageComponent/CancelInfo';
 
 const ProductBottomsection = styled.div `
     display: flex;
@@ -26,10 +27,23 @@ const BottomContents = styled.div `
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    gap: 10px;
+    gap: 50px;
     align-self: stretch;
 `
+const ContentComponent = styled.div `
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`
+const Title = styled.h1`
+    font-size: 25px;
+    font-weight: bold;
+`;
+const Line = styled.div`
+    height: 1px;
+    background-color: #ededed;
+`;
 
 export default function ProductDetailBottom() {
     const { productDetailInfo } = useContext(ProductDetailContext);
@@ -43,13 +57,22 @@ export default function ProductDetailBottom() {
                 <div className="menu-item">리뷰</div>
                 <div className="menu-item">질문답변</div>
             </BottomMenu>
-            
             <BottomContents>
-                <div className="mentorInfo">멘토정보</div>
-                <div className="content">{memberName}</div>         
-            
-                <div className="serviceDetail">서비스 상세설명</div>
-                <div className="content">{description}</div>         
+                <ContentComponent style={{'margin-top':'30px'}}>
+                    <Title>멘토정보</Title>
+                    <div className="content">{memberName}</div>      
+                </ContentComponent>
+                <Line />
+                <ContentComponent>
+                    <Title>서비스 상세설명</Title>
+                    <div className="content">{description}</div>         
+                </ContentComponent>
+                <Line />
+                <ContentComponent>
+                    <Title style={{ 'font-size':'23px'}}>취소 규정</Title>
+                    <CancelInfo />
+                </ContentComponent>
+                <Line />                
             </BottomContents>
         </ProductBottomsection>
     );

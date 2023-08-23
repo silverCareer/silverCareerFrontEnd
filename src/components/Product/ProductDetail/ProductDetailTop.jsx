@@ -214,7 +214,7 @@ function InquiryModal({ isOpen, onClose, name }) {
 }
 
 
-export default function ProductDetailTop() {
+export default function ProductDetailTop({avgRating}) {
     const { loginForm } = useContext(LoginContext);
     const { name } = loginForm;
 
@@ -246,16 +246,20 @@ export default function ProductDetailTop() {
                 </Location>
                 <div className="description">
                     {description}
-                    <br />
-                    20년간의 노하우를 알려드리겠습니다. (멘토 한마디 느낌)
                 </div>
                 <Price>
                     {numberWithCommas(price)} 원
                 </Price>
 
                 <ClassInfo>
-                    <div>리뷰 ⭐5.0</div>
-                    <div>총 경력 <strong>{memberCareer}</strong></div>
+                    {isNaN(avgRating) ? (
+                        <div>⭐평가 없음</div>
+                    ) : (
+                        <div>리뷰 ⭐ {avgRating.toFixed(1)}</div>
+                    )}
+                    <div>
+                        경력 <strong>{memberCareer === null || memberCareer === '' ? '5년 미만' : memberCareer}</strong>
+                    </div>
                 </ClassInfo>
 
                 <ButtonList>
