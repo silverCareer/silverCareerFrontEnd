@@ -214,23 +214,23 @@ const MainHeader = () => {
         if (isLoggedIn) {
             try {
                 const data = await getMyProfile();
-
-                if (data.response.authority === 'ROLE_MENTOR') {
-                    data.response.authority = '멘토';
+            
+                console.log("adfadfadfadf0");
+                if (data.authority === 'ROLE_MENTOR') {
+                    data.authority = '멘토';
                 }
 
-                if (data.response.authority === 'ROLE_MENTEE') {
-                    data.response.authority = '멘티';
+                if (data.authority === 'ROLE_MENTEE') {
+                    data.authority = '멘티';
                 }
 
-                if (data.response.phoneNumber && data.response.phoneNumber.length === 11) {
-                    data.response.phoneNumber = data.response.phoneNumber.replace(
+                if (data.phoneNumber && data.phoneNumber.length === 11) {
+                    data.phoneNumber = data.phoneNumber.replace(
                         /(\d{3})(\d{4})(\d{4})/,
                         '$1-$2-$3'
                     );
                 }
-              
-                setMyPageForm(data.response);
+                setMyPageForm(data);
 
                 navigate('/mypage');
             } catch (err) {
