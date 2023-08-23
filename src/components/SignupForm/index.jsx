@@ -147,10 +147,12 @@ const SignupForm = () => {
         navigate(nextPage);
     };
 
-    const handleSendAuthCode = async () => {
+    const handleSendAuthCode = async (event) => {
+        event.preventDefault();
         try {
             const phone = formData.phoneNumber;
             const response = await sendSMS(phone);
+            console.log("여기다!!! : " +response.authCode)
 
             localStorage.setItem('authCode', response.authCode);
 
@@ -161,21 +163,51 @@ const SignupForm = () => {
         }
     };
 
-    const handleNicknameCheck = async () => {
+    const handleNicknameCheck = async (event) => {
+        event.preventDefault();
         try{
             const name = formData.name;
             const response = await nickNameCheck(name);
+            console.log(response)
+            if (response.success){
+                sessionStorage.setItem('checkNickname', true);
+                alert('사용가능한 닉네임입니다.');
+            } else {
+                sessionStorage.setItem('checkNickname', false)
+                alert('같은 계정 존재;;;;')
+            }
 
-            sessionStorage.setItem('checkNickname', 'true');
-            alert('사용가능한 닉네임입니다.');
         }catch (error){
             alert('닉네임 중복체크 실패;;;;')
         }
     }
 
-    const handleVerifyAuthCode = () => {
+    const handleEmailCheck = async (event) => {
+        event.preventDefault();
+        try{
+            const email = formData.email;
+            const response = await nickNameCheck(email);  // 여기만 수정하기! 리스폰스형식도 보고!
+            console.log(response)
+            if (response.success){
+                sessionStorage.setItem('checkEmail', true);
+                alert('사용가능한 이메일입니다.');
+            } else {
+                sessionStorage.setItem('checkEmail', false)
+                alert('같은 계정 존재;;;;')
+            }
+
+        }catch (error){
+            alert('이메일 중복체크 실패;;;;')
+        }
+    }
+
+    const handleVerifyAuthCode = (event) => {
+        event.preventDefault();
         const storedAuthCode = localStorage.getItem('authCode');
         const inputAuthCode = formData.authCode;
+        console.log("너가 입력한 값 : "+inputAuthCode)
+        console.log("스토리지 저장 값 : "+ storedAuthCode)
+
 
     
         if (storedAuthCode === inputAuthCode) {
@@ -227,9 +259,10 @@ const SignupForm = () => {
                 
                 <FormGroup>
                     <Label htmlFor="email">이메일</Label>
-                    <div>
-                        <Input id="email" type="text" name="email" onChange={handleInputChange} placeholder="이메일을 입력해주세요."/>
-                    </div>
+                    <PhoneInputGroup>
+                        <Input id="email" type="email" name="email" onChange={handleInputChange} placeholder="이메일을 입력해주세요."/>
+                        <AuthButton onClick={handleEmailCheck}>중복 확인</AuthButton>
+                    </PhoneInputGroup>
                 </FormGroup>
 
                 <FormGroup>

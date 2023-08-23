@@ -50,10 +50,15 @@ const Input = styled.input`
 const Button = styled.button`
     width: 10%;
     padding: 10px;
-    border: 1px solid #84A080;
-    color: #84A080;;
+    
     border-radius: 5px;
+    border: 1px solid #84A080;
+    color: white;
+    background-color: #84A080;
     cursor: pointer;
+    &:hover {
+        background-color: #6f8a6a;
+    }
     margin: auto;
 `;
 
@@ -64,7 +69,7 @@ function UserInfoEditor() {
     const [formData, setFormData] = useState({
     });
 
-    console.log(myPageForm, "이건ㄴ이넉넝기넝긴어ㅣㄹ미아ㅓ류미ㅏㅇ멍ㄻㅇㄹ")
+
     const handleInputChange = (e) => {
         setFormData({
         ...formData,
@@ -117,7 +122,7 @@ function UserInfoEditor() {
                             <Input id="password" type="password" name="password" onChange={handleInputChange} placeholder="변경할 비밀번호 입력" />
                         </div>
                 </InfoContainer>
-                <Button onClick={handleSubmit}>확인</Button>
+                <Button onClick={handleSubmit}>수정 하기</Button>
             </PayInfo>
 
             

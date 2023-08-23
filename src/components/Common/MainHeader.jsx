@@ -8,6 +8,8 @@ import { MypageContext } from '../../hooks/mypageContext';
 import { getMyProfile } from '../../api/mypage/mypage';
 import { getAlarm } from '../../api/alarm/getAlarm';
 import { getAlarmStatus } from '../../api/alarm/getAlarmStatus';
+import { getSuggestion } from '../../api/request/getSuggestion';
+import { getBidInfo } from '../../api/request/getBidInfo';
 
 
 const Header = styled.header`
@@ -136,8 +138,6 @@ const AlarmStatusIcon = styled.div`
     display: ${props => (props.show ? 'block' : 'none')}; // 알림 상태에 따라 표시/숨김
 `;
 
-
-
 const MainHeader = () => {
     const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext); 
     const { setMyPageForm } = useContext(MypageContext);
@@ -179,7 +179,7 @@ const MainHeader = () => {
             try {
                 const alarmData = await getAlarm();
                 // console.log("알람데이터! : " + JSON.stringify(alarmData, null, 2));
-                // console.log(alarmData)
+                console.log(alarmData)
                 setNotifications(alarmData);
             } catch (error) {
                 console.error("Failed to fetch notifications:", error);
@@ -215,24 +215,22 @@ const MainHeader = () => {
             try {
                 const data = await getMyProfile();
 
-
-                if (data.authority === 'ROLE_MENTOR') {
-                    data.authority = '멘토';
+                if (data.response.authority === 'ROLE_MENTOR') {
+                    data.response.authority = '멘토';
                 }
 
-                if (data.authority === 'ROLE_MENTEE') {
-                    data.authority = '멘티';
+                if (data.response.authority === 'ROLE_MENTEE') {
+                    data.response.authority = '멘티';
                 }
 
-                if (data.phoneNumber && data.phoneNumber.length === 11) {
-                    data.phoneNumber = data.phoneNumber.replace(
+                if (data.response.phoneNumber && data.response.phoneNumber.length === 11) {
+                    data.response.phoneNumber = data.response.phoneNumber.replace(
                         /(\d{3})(\d{4})(\d{4})/,
                         '$1-$2-$3'
                     );
                 }
-                
-                console.log(data)
-                setMyPageForm(data);
+              
+                setMyPageForm(data.response);
 
                 navigate('/mypage');
             } catch (err) {
@@ -249,6 +247,33 @@ const MainHeader = () => {
         navigate('/login')
     }
 
+    const handleMentorNotificationClick = async (suggestionIdx) => {
+        try {
+            const response = await getSuggestion(suggestionIdx);
+            console.log(response);
+            if (response) {
+                navigate('/requestInfo', { state: { requestInfo: response } });
+            }
+        } catch (error) {
+            console.error("상세 의뢰 API 에러! :", error);
+        }
+    };
+    
+    const handleMenteeNotificationClick = async (bidIdx) => {
+        try{
+            console.log(bidIdx)
+            const response = await getBidInfo(bidIdx);
+            console.log(response)
+            if (response){
+                navigate('/bidRequest', { state : { requestInfo: response}})
+            }
+
+        } catch(error){
+            console.log("상세 입찰 내역 API 에러 ! : ", error)
+        }
+        
+    };
+
     
 
 
@@ -260,10 +285,14 @@ const MainHeader = () => {
                     <SearchBox type="text" placeholder="  원하는 멘토를 찾아보세요!" />
                     <SearchIcon onClick={() => navigate('/search')} />
                 </SearchContainer>
-                {isLoggedIn ? (
+                {isLoggedIn  ? (
                 <>
-                    <ReqButton onClick={() => navigate('/request')}>의뢰하기</ReqButton>
-                    <Button onClick={() => navigate('/apply')}>수강등록</Button>
+                    {authority === '멘티' && <ReqButton onClick={() => navigate('/request')}>의뢰하기</ReqButton>}
+                    {authority === '멘티' ? (
+                        <Button onClick={() => navigate('/bidList')}>입찰내역</Button> 
+                    ) : (
+                        <Button onClick={() => navigate('/apply')}>수강등록</Button>     
+                    )}
                     <Button onClick={() => navigate('/chatroom')}>채팅</Button>
                     <NotificationWrapper>
                         <Button ref={buttonRef} onClick={toggleNotifications}>알림</Button>
@@ -280,7 +309,7 @@ const MainHeader = () => {
                                         let content;
 
                                         if (authority === '멘토') {
-                                            content = `${notification.suggester}님의 ${notification.suggestionTitle}에 대한 의뢰 신청입니다.`;
+                                            content = `${notification.suggester}님의 ${notification.title}에 대한 의뢰 신청입니다.`;
                                         } else if (authority === '멘티') {
                                             content = `${notification.suggestionTitle}건에 ${notification.mentorName}님이 ${notification.price}원으로 입찰을 요청했습니다.`;
                                         } else {
@@ -290,8 +319,8 @@ const MainHeader = () => {
                                         const displayContent = content.length > 20 ? content.substring(0, 20) + '...' : content;
 
                                         return (
-                                            <NotificationItem key={notification.suggestionIdx}>
-                                                {displayContent}
+                                            <NotificationItem key={notification.suggestionIdx} onClick={() => authority === '멘토' ? handleMentorNotificationClick(notification.suggestionIdx) : handleMenteeNotificationClick(notification.bidIdx)}>
+                                            {displayContent}
                                             </NotificationItem>
                                         );
                                     })
