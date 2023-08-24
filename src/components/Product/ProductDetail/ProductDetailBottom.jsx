@@ -52,10 +52,9 @@ export default function ProductDetailBottom() {
     return (
         <ProductBottomsection>
             <BottomMenu>
-                <div className="menu-item">멘토정보</div>
-                <div className="menu-item">사진</div>
-                <div className="menu-item">리뷰</div>
-                <div className="menu-item">질문답변</div>
+                <div className="menu-mentor">멘토정보</div>
+                <div className="menu-info">상세설명</div>
+                <div className="menu-review">리뷰</div>
             </BottomMenu>
             <BottomContents>
                 <ContentComponent style={{'margin-top':'30px'}}>

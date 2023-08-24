@@ -1,15 +1,15 @@
 import { useContext, useState  } from 'react';
 import styled from 'styled-components';
-import shareIconImage from '../../../assets/svg/icon-share.svg'
 import likeIconImage from '../../../assets/svg/icon-heart.svg'
+import likeOnIconImage from '../../../assets/svg/icon-heart-on.svg'
 import locationIconImage from '../../../assets/svg/icon-location.svg'
 import { ProductDetailContext } from '../../../hooks/productDetailContext';
-import { MypageContext } from '../../../hooks/mypageContext';
 import { createChatRoom } from '../../../api/chat/createChatRoom';
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from '../../../hooks/loginContext';
-
-
+import { productLikeOn } from '../../../api/like/productLikeOn';
+import { getProductDetail } from '../../../api/product/productDetail';
+import { productLikeOff } from '../../../api/like/productLikeOff';
 
 const ProductTopSection = styled.div `
     display: flex;
@@ -29,25 +29,25 @@ const TopLeft = styled.div `
 const TopIcon = styled.div `
     display: flex;
     height: 30px;
-    align-items: center;
-    justify-content: space-between;
 `;
-
-const ShareIcon = styled.div `
-    width: 500px;
-    height: 22px;
-    background-image: url(${shareIconImage});
-    background-repeat: no-repeat;
-`
-
 const LikeIcon = styled.div `
     width: 22px;
     height: 22px;
     color: black;
     background-image: url(${likeIconImage});
     background-repeat: no-repeat;
-
+    margin-right: 5px;
     cursor: pointer;
+`
+const LikeOnIcon = styled.div `
+    width: 22px;
+    height: 22px;
+    color: black;
+    background-image: url(${likeOnIconImage});
+    background-repeat: no-repeat;
+    margin-right: 5px;
+    cursor: pointer;
+    
 `
 const LocationIcon = styled.div `
     width: 18px;
@@ -221,8 +221,12 @@ export default function ProductDetailTop({avgRating}) {
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
-    const { productDetailInfo } = useContext(ProductDetailContext);
-    const { productIdx, productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
+    const { productDetailInfo, setProductDetailInfo } = useContext(ProductDetailContext);
+    const { liked, productIdx, productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
+
+    const [ islike, setIsLike ] = useState(liked);
+
+    console.log(liked, islike, "ㅁㅇㄻㅇㄻㅇㅁㅇㄻㅇㄻㄴㅇㄹㄻㅇ");
 
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
@@ -231,13 +235,61 @@ export default function ProductDetailTop({avgRating}) {
         navigate(`/product/${productIdx}/payment`);
     };
 
+    const toggleLikeOn = async () => {
+        try {
+            const response = await productLikeOn(productIdx);
+
+            if(response.success) {
+                setIsLike((prevIsLiked) => !prevIsLiked);
+                
+                const productDetailResponse = await getProductDetail(productIdx);
+                const newLikes = productDetailResponse.response.likes;
+
+                setProductDetailInfo((prevProductDetailInfo => ({
+                    ...prevProductDetailInfo,
+                    likes: newLikes,
+                    liked: productDetailResponse.response.liked
+                })));
+            }
+
+        } catch (error) {
+
+        }
+    }
+
+    const toggleLikeOff = async () => {
+        try {
+            const response = await productLikeOff(productIdx);
+            
+            if(response.success) {
+                setIsLike((prevIsLiked) => !prevIsLiked);
+                
+                const productDetailResponse = await getProductDetail(productIdx);
+                const newLikes = productDetailResponse.response.likes;
+
+                setProductDetailInfo((prevProductDetailInfo => ({
+                    ...prevProductDetailInfo,
+                    likes: newLikes,
+                    liked: productDetailResponse.response.liked
+                })));
+            }
+
+        } catch (error) {
+
+        }
+    }
+
     return (
         <>
         <ProductTopSection>
             <TopLeft>
                 <TopIcon>
-                    <ShareIcon />
-                    <LikeIcon /><span>{likes}</span>
+                    {liked ? (
+                        <LikeOnIcon onClick={toggleLikeOff} />
+                    ) : (
+                        <LikeIcon onClick={toggleLikeOn} />
+                    )}
+                    <span>{likes}</span>
                 </TopIcon>
                 <Title>{productName}</Title>
                 <Location>
