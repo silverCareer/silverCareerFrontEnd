@@ -96,25 +96,6 @@ const CategoryItem = styled.div`
     cursor: pointer;
     font-weight: ${({ isselected }) => (isselected ? 'bold' : 'normal')};
 `;
-const AddressButton = styled.div `
-    display: flex;
-    width: 100px;
-    height: 30px;
-    padding: auto;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 10px;
-    border: 1px solid #84A080;
-    font-size: 15px;
-    color: #84A080;
-
-    cursor: pointer;
-    &:hover {
-        background-color: #84A080;
-        color: white;
-    }
-`;
 const SubmitButton = styled.div `
     display: flex;
     width: 140px;
@@ -174,7 +155,9 @@ function ProductForm() {
     const [address, setAddress] = useState('');
     const [selectedImageUrl, setSelectedImageUrl] = useState('');
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState(null); // 업로드한 이미지 URL
-
+    
+    const [selectedAddress, setSelectedAddress] = useState('');
+    
     // 이미지 URL을 업데이트하는 함수
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -220,31 +203,24 @@ function ProductForm() {
     
         setPrice(value);
     };
-    
-    const handleAddressChange = (e) => {
-        const value = e.target.value;
-    
-        setAddress(value);
-    };
-
-
     const handleSubmit = async () => {
         if (!selectedImageUrl) {
             alert('대표 이미지를 선택해주세요.');
             return;
         }
-
+        
         const formData = new FormData();
         const createProductReq= {
             productName, //상품명
             productDescription, //상품설명
             category : selectedCategory,
-            address,
+            address : selectedAddress,
             price,
         };
 
         formData.append('productImage', selectedImageUrl);
     
+        console.log(createProductReq);
         try {
             const response = await productRegistContents(createProductReq, formData);
 
@@ -293,12 +269,7 @@ function ProductForm() {
                 </ProductBox>
                 <ProductBox>
                     <BoxTitle>주소</BoxTitle>
-                    <TitleInput placeholder='주소를 검색해주세요' 
-                    value={address} onChange={handleAddressChange} />
-
-                    
-                    {/* <TitleInput value={address} onChange={handleAddressChange} /> */}
-                    <AddressButton>주소 찾기</AddressButton>
+                    <SelectAddress setSelectedAddress={setSelectedAddress} />
                 </ProductBox>
                 <ProductDetailBox>
                     <BoxTitle>서비스 설명</BoxTitle>
