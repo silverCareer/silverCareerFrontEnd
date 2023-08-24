@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import ProductDetailTop from './ProductDetailTop'
 import ProductDetailBottom from './ProductDetailBottom'
@@ -16,12 +16,14 @@ const ProductContianer = styled.div`
 `;
 
 function ProductDetail() {
+    const [ avgRating, setAvgRating ] = useState();
+
     return (
         <ProductContianer>
-            <ProductDetailTop />
+            <ProductDetailTop avgRating={avgRating}/>
             <ProductDetailBottom />
-            <ProductReview />
-            <ProductQNA />
+            <ProductReview setAvgRating={setAvgRating}/>
+            <ProductQNA/>
         </ProductContianer>
     );
 }

@@ -10,6 +10,8 @@ import { getAlarm } from '../../api/alarm/getAlarm';
 import { getAlarmStatus } from '../../api/alarm/getAlarmStatus';
 import { getSuggestion } from '../../api/request/getSuggestion';
 import { getBidInfo } from '../../api/request/getBidInfo';
+import { searchAPI } from '../../api/search/productSearch';
+import { SearchContext } from '../../hooks/searchContext';
 
 
 const Header = styled.header`
@@ -273,17 +275,39 @@ const MainHeader = () => {
         }
         
     };
-
     
+    /* search 검색기능 */
+    const [ searchTerm, setSearchTerm ] = useState('');
+    const { setSearchProductList, setSearchContent } = useContext(SearchContext);//useState([]);
 
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    }
+
+    const handleSearch = async () => {
+        try {
+            const result = await searchAPI(searchTerm, 1, 9);
+            setSearchProductList(result.response);
+            setSearchContent(searchTerm);
+
+            if(result.success) {
+                navigate('/search');
+            }
+        } catch (error) {
+            navigate('/search', { state: { error: error.response.status, content: searchTerm } });
+        }
+    }
 
     return (
         <>
             <Header>
                 <Logo onClick={() => navigate('/')}></Logo>
                 <SearchContainer>
-                    <SearchBox type="text" placeholder="  원하는 멘토를 찾아보세요!" />
-                    <SearchIcon onClick={() => navigate('/search')} />
+                    <SearchBox type="text"
+                            placeholder="원하는 멘토를 찾아보세요!"
+                            value={searchTerm}
+                            onChange={handleSearchChange} />
+                    <SearchIcon onClick={handleSearch} />
                 </SearchContainer>
                 {isLoggedIn  ? (
                 <>

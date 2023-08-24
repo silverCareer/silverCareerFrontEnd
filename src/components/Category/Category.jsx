@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import CategoryItem from './CategoryItem'; // Import the CategoryItem component from the new file
 import ProductList from '../Product';
 import { getProductList } from '../../api/product/productList';
+import PagingContent from '../Common/Paging';
 
 const Container = styled.div`
   display: flex;
@@ -18,34 +19,6 @@ const SelectedCategory = styled.div`
   font-size: 27px;
   font-weight: bold;
 `;
-const Paging = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-const PageNumber = styled.div`
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    ${({ isActive }) =>
-        isActive &&
-        `
-        background-color: #84A080;
-        color: white;
-        `
-    }
-`;
-const LeftIcon = styled.div`
-    cursor: pointer;
-    margin-right: 10px;
-    display: ${({ currentPage }) => (currentPage > 10 ? 'block' : 'none')};
-`;
-const RightIcon = styled.div`
-    cursor: pointer;
-    margin-left: 10px;
-    display: ${({ currentPage }) => (currentPage >= 10 ? 'block' : 'none')};
-`;
 
 const Category = ({ category }) => {
   const categories = ["현장직", "사무직", "문화", "기술직", "요리"];
@@ -56,6 +29,7 @@ const Category = ({ category }) => {
 
   const handleBoxClick = (category) => {
     setSelectedCategory(category);
+    setCurrentPage(1);
   };
 
   useEffect(() => {
@@ -72,49 +46,11 @@ const Category = ({ category }) => {
           } catch (error) {
               console.error("Error fetching product List:", error);
               setProductList([]);
+              setTotalPage(1);
           }
       }
       fetchData();
   }, [selectedCategory, currentPage]);
-
-  //paging
-  const onPageChange = (page) => {
-    // Ensure the page is within valid bounds
-    if (page >= 1 && page <= totalPage) {
-        setCurrentPage(page);
-    }
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-    const maxDisplayedPages = 9;
-    let startPage = 1;
-
-    if (totalPage > maxDisplayedPages) {
-        if (currentPage > Math.floor(maxDisplayedPages / 2)) {
-            startPage = currentPage - Math.floor(maxDisplayedPages / 2);
-            if (startPage + maxDisplayedPages > totalPage) {
-                startPage = totalPage - maxDisplayedPages + 1;
-            }
-        }
-    }
-
-    const endPage = Math.min(startPage + maxDisplayedPages - 1, totalPage);
-
-    for (let i = startPage; i <= endPage; i++) {
-        pageNumbers.push(
-        <PageNumber
-            key={i}
-            isActive={i === currentPage}
-            onClick={() => onPageChange(i)}
-        >
-            {i}
-        </PageNumber>
-        );
-    }
-
-    return pageNumbers;
-  };
 
   return (
     <>
@@ -130,13 +66,7 @@ const Category = ({ category }) => {
       </Container>
       <SelectedCategory>선택된 카테고리: {selectedCategory}</SelectedCategory>
       <ProductList productList={productList}/>
-      <Paging>
-          <LeftIcon currentPage={currentPage} onClick={() => onPageChange(currentPage - 1)}>
-              Left
-          </LeftIcon>
-              {renderPageNumbers()}
-          <RightIcon onClick={() => onPageChange(currentPage + 1)}>Right</RightIcon>
-      </Paging>
+      <PagingContent currentPage={currentPage} totalPage={totalPage} onPageChange={setCurrentPage} />
     </>
   );
 };

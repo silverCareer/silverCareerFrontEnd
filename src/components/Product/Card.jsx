@@ -93,7 +93,7 @@ export default function Card({product}) {
                 </div>
             </Product1>
             <div className="product-detail">
-                <span>{product.productDescription}</span>
+                <span>{product.productName}</span>
             </div>            
             <div className="product-price">
                 <span>{numberWithCommas(product.productPrice ?? 0)} 원</span>
