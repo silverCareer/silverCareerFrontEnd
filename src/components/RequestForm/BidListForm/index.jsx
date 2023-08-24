@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { getBidList } from '../../../api/request/getBidList';
-import { postBidConfirm } from '../../../api/request/postBidConfirm'
+import { postBidConfirm } from '../../../api/request/postBidPayment'
+import { LoginContext } from '../../../hooks/loginContext';
+import { createChatRoom } from '../../../api/chat/createChatRoom';
 
 const MainContainer = styled.div`
     border: 1px solid #E0E0E0;
@@ -64,12 +66,76 @@ const Alarm = styled.div`
     display: ${({ visible }) => (visible ? 'block' : 'none')};
 `;
 
+const ModalWrapper = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+const ModalContent = styled.div`
+    width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`
+const ModalLabel = styled.label`
+    display: block;
+    margin-bottom: 10px;
+    font-size: 20px;
+`
+const ModalInput = styled.textarea`
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+`
+const ModalButtonWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+`
+const ModalButton = styled.button`
+    padding: 10px 20px;
+    background-color: #84A080;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #6f896d;
+    }
+`;
+
+const CompletedBid = styled.div`
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+    color: #666;
+`;
+
 const BidListForm = () => {
     const [showAlarm, setShowAlarm] = useState(false);
     const navigate = useNavigate();
 
     const [bids, setBids] = useState([]);
 
+    const { loginForm } = useContext(LoginContext);
+    const { name } = loginForm;
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const [selectedMentorName, setSelectedMentorName] = useState("");
 
     useEffect(() => {
         async function fetchBidData() {
@@ -84,27 +150,29 @@ const BidListForm = () => {
         fetchBidData();
     }, []);
 
-    const handleAccepted = async (bidIdx) => { 
+    const handleAccepted = async (bidIdx, bidprice, bidtitle, mentor) => { 
         try {
-            const response = await postBidConfirm(bidIdx);
-    
-            if (response.response) {
+            if (true) {
                 setShowAlarm(true);
                 setTimeout(() => {
                     setShowAlarm(false); 
-                    navigate('/') 
-                }, 2000); 
+                    navigate('/bidList/payment',{ state : { requestInfo: { bidIdx, bidprice, bidtitle, mentor }}}) 
+                }, 1000); 
             }
         } catch (error) {
             console.log("입찰수락 API 에러닷! : "+ error)
         }
     };
 
+    const openInquiryModalWithMentor = (mentorName) => {
+        setSelectedMentorName(mentorName);
+        setModalOpen(true);
+    };
 
     return (
     <>   
         <Alarm visible={showAlarm}>
-        유익한 시간 보내슈
+        결제 페이지 이동...
         </Alarm>
         <MainContainer>
             {bids.length > 0 ? bids.map((bid) => (
@@ -116,45 +184,71 @@ const BidListForm = () => {
                         <div>멘토: {bid.mentorName}</div>
                     </BidDetail>
                     <div>
-                        <BidButton onClick={() => handleAccepted(bid.bidIdx)}>수락하기</BidButton>
-                        <BidButton>채팅하기</BidButton>
+                        {bid.status === '완료' ? (
+                                <CompletedBid>결제가 완료된 건입니다.</CompletedBid>
+                            ) : (
+                                <>
+                                    <BidButton onClick={() => handleAccepted(bid.bidIdx, bid.price, bid.title, bid.mentorName)}>결제하기</BidButton>
+                                    <BidButton onClick={name ? () => openInquiryModalWithMentor(bid.mentorName) : null} disabled={!name}>문의하기</BidButton>
+                                </>
+                            )}
                     </div>
                 </BidItem>
             )) : (
                 <div>입찰 내역이 없습니다.</div>
             )}
         </MainContainer>
+        <InquiryModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} name={name} mentorName={selectedMentorName}/>
     </>
+    );
+}
+
+function InquiryModal({ isOpen, onClose, name, mentorName }) {
+    
+    const [inquiryContent, setInquiryContent] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async () => {
+        const newMessage = {
+            content: inquiryContent,
+            sender: name, 
+            timestamp: new Date().toISOString() 
+        };
+
+        try {
+            const result = await createChatRoom(name, mentorName, newMessage);
+            console.log("Chat room created:", result);
+            onClose();
+            navigate("/chatroom");
+
+        } catch (error) {
+            console.error("Error creating chat room:", error);
+        }
+
+    };
+
+    return (
+        isOpen && (
+            <ModalWrapper onClick={onClose}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+                <ModalLabel>To {mentorName}</ModalLabel>
+                <ModalInput 
+                    placeholder="첫 채팅할 내용을 적어주세요." 
+                    rows="5"
+                    value={inquiryContent}
+                    onChange={(e) => setInquiryContent(e.target.value)}
+                />
+
+                <ModalButtonWrapper>
+                <ModalButton onClick={handleSubmit}>보내기</ModalButton>
+                <ModalButton onClick={onClose}>닫기</ModalButton>
+                </ModalButtonWrapper>
+            </ModalContent>
+            </ModalWrapper>
+        )
     );
 }
 
 export default BidListForm;
 
 
-    // // 임시 더미 데이터
-    // const dummyData = {
-    //     id: "12345",
-    //     dateTime: "2023-08-20T20:00:00",
-    //     success: true,
-    //     response: [
-    //         {
-    //             bidIdx: 1,
-    //             title: "Web Development",
-    //             category: "IT",
-    //             price: 2000,
-    //             mentorName: "John Doe"
-    //         },
-    //         {
-    //             bidIdx: 2,
-    //             title: "Graphic Design",
-    //             category: "Design",
-    //             price: 1500,
-    //             mentorName: "Jane Smith"
-    //         }
-    //     ],
-    //     error: {
-    //         status: 404,
-    //         code: "Not_Found",
-    //         message: "No data found"
-    //     }
-    // };
