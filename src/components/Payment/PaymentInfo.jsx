@@ -217,22 +217,6 @@ export default function PaymentInfo({ productDetailInfo }) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    //numberWithCommas
-    const price = numberWithCommas(productDetailInfo.price);
-    const cash = numberWithCommas(loginForm.balance ?? 0);
-    
-    const availableCash = parseInt(loginForm.balance ?? 0); // 사용 가능한 캐시
-    const usedCash = parseInt(productDetailInfo.price); // 사용 할 캐시
-
-    const remainingCash = availableCash - usedCash;
-    const isCashInsufficient = remainingCash < 0;
-    
-    const [showWarning, setShowWarning] = useState(isCashInsufficient);
-    const [isPaymentSuccess, setIsPaymentSuccess] = useState(false); // State for payment success
-    const [confirmPayment, setConfirmPayment] = useState(false);
-
-    const { setProductDetailInfo } = useContext(ProductDetailContext);
-
     const openModal = () => {
         setConfirmPayment(true);
     }
@@ -244,8 +228,8 @@ export default function PaymentInfo({ productDetailInfo }) {
     const handlePaymentSubmit = async () => {
         try {
             const response = await paymentApi(productDetailInfo.productIdx);
-            
-            if(response.productIdx === productDetailInfo.productIdx) {
+    
+            if(response.success) {
                 setIsPaymentSuccess(true); 
                 setLoginForm(prevLoginForm => ({
                     ...prevLoginForm,
@@ -265,6 +249,22 @@ export default function PaymentInfo({ productDetailInfo }) {
             console.log('Error sending payment: ', error);
         }
     };
+
+    //numberWithCommas
+    const price = numberWithCommas(productDetailInfo.price);
+    const cash = numberWithCommas(loginForm.balance ?? 0);
+    
+    const availableCash = parseInt(loginForm.balance ?? 0); // 사용 가능한 캐시
+    const usedCash = parseInt(productDetailInfo.price); // 사용 할 캐시
+
+    const remainingCash = availableCash - usedCash;
+    const isCashInsufficient = remainingCash < 0;
+    
+    const [showWarning, setShowWarning] = useState(isCashInsufficient);
+    const [isPaymentSuccess, setIsPaymentSuccess] = useState(false); // State for payment success
+    const [confirmPayment, setConfirmPayment] = useState(false);
+
+    const { setProductDetailInfo } = useContext(ProductDetailContext);
 
     return (
         <>
