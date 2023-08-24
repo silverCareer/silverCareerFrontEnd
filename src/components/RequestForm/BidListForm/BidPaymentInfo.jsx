@@ -1,10 +1,9 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { paymentApi } from './../../api/pay/payment';
-import { LoginContext } from '../../hooks/loginContext';
-import { useNavigate } from 'react-router-dom';
-import { ProductDetailContext } from '../../hooks/productDetailContext';
-import { getProductDetail } from '../../api/product/productDetail';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { LoginContext } from './../../../hooks/loginContext';
+import { postBidPayment } from '../../../api/request/postBidPayment';
+
 
 const InfoContainer = styled.div `
     display: flex;
@@ -61,11 +60,11 @@ const PriceInfo = styled.div `
         width: 80px;
     }
     div {
-        width: 300px;
+        width: 400px;
     }    
-    
-    span {
-        width: 200px;
+    span,
+    .normal {
+        width: 150px;
         text-align: right;
         padding-right: 5px;
     }
@@ -164,6 +163,18 @@ const SubmitButton = styled.div `
 `;
 
 /* modal */
+const ModalWrapper = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Ensure the modal appears above other content */
+`;
 const ModalBackground = styled.div`
     position: fixed;
     top: 0;
@@ -210,28 +221,49 @@ const ButtonList = styled.div `
     gap: 10px;
 `
 
-export default function PaymentInfo({ productDetailInfo }) {
+const Alarm = styled.div`
+    background: #84A080;
+    color: white;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 1000;
+    display: ${({ visible }) => (visible ? 'block' : 'none')};
+`;
+
+const BidPaymentInfo = () => {
+    const location = useLocation();
     const navigate = useNavigate();
-    const { loginForm, setLoginForm } = useContext(LoginContext);
+
+    const { loginForm, setLoginForm } = useContext(LoginContext)
+    const { balance } = loginForm
+    const requestInfo = location.state?.requestInfo;
+    const bidpricee = requestInfo.bidprice
+    const bidTitle = requestInfo.bidtitle
+    const bidmentorName = requestInfo.mentor
+
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    //numberWithCommas
-    const price = numberWithCommas(productDetailInfo.price);
-    const cash = numberWithCommas(loginForm.balance ?? 0);
+    const bidPrice = numberWithCommas(bidpricee);
+    const cash = numberWithCommas(balance ?? 0);
     
-    const availableCash = parseInt(loginForm.balance ?? 0); // 사용 가능한 캐시
-    const usedCash = parseInt(productDetailInfo.price); // 사용 할 캐시
+    const availableCash = parseInt(balance ?? 0); // 사용 가능한 캐시
+    const usedCash = parseInt(bidpricee); // 사용 할 캐시
 
     const remainingCash = availableCash - usedCash;
     const isCashInsufficient = remainingCash < 0;
     
     const [showWarning, setShowWarning] = useState(isCashInsufficient);
-    const [isPaymentSuccess, setIsPaymentSuccess] = useState(false); // State for payment success
+    const [isPaymentSuccess, setIsPaymentSuccess] = useState(false); 
     const [confirmPayment, setConfirmPayment] = useState(false);
 
-    const { setProductDetailInfo } = useContext(ProductDetailContext);
+    const [showAlarm, setShowAlarm] = useState(false);
 
     const openModal = () => {
         setConfirmPayment(true);
@@ -243,46 +275,47 @@ export default function PaymentInfo({ productDetailInfo }) {
 
     const handlePaymentSubmit = async () => {
         try {
-            const response = await paymentApi(productDetailInfo.productIdx);
+            const response = await postBidPayment(requestInfo.bidIdx);
             
-            if(response.productIdx === productDetailInfo.productIdx) {
+            if(response) {
                 setIsPaymentSuccess(true); 
                 setLoginForm(prevLoginForm => ({
                     ...prevLoginForm,
                     balance: remainingCash
                 }));
+                setShowAlarm(true);
+                setTimeout(() => {
+                    setShowAlarm(false); 
+                    navigate('/') 
+                }, 2000); 
             }
 
-            const productDetailResponse = await getProductDetail(productDetailInfo.productIdx);
-            console.log('Product Detail:', productDetailResponse);
-            if (productDetailResponse.success) {
-                //setProductTitle(product);
-                setProductDetailInfo(productDetailResponse.response);
-
-                navigate(`/product/${productDetailInfo.productIdx}`);
-            }
         } catch (error) {
             console.log('Error sending payment: ', error);
         }
     };
 
+
     return (
         <>
+        <Alarm visible={showAlarm}>
+        결제가 완료되었습니다! 좋은 시간 보내슈
+        </Alarm>
         <InfoContainer>
             <ProductInfo>
                 <Title>주문 내역</Title>
-                <div className="productName">{productDetailInfo.productName}</div>
-                <div className="mentorName">{productDetailInfo.memberName}</div>
+                <div className="productName">{bidTitle}</div>
+                <div className="mentorName">{bidmentorName}</div>
                 <PriceInfo>
-                    <div className="title">가격</div>
-                    <span>{price}</span>원
+                    <div className="title">입찰 가격</div>
+                    <span>{bidPrice}</span>원
                 </PriceInfo>
             </ProductInfo>
             <ProductInfo>
                 <Title>캐시</Title>
                 <PriceInfo>
                     <div className="title">캐시 사용</div>
-                    <span>{price}</span>원
+                    <span>{bidPrice}</span>원
                 </PriceInfo>
                 <PriceInfo id="subTitle">
                     <div className="title">보유 캐시</div>
@@ -297,7 +330,7 @@ export default function PaymentInfo({ productDetailInfo }) {
                     </PriceInfo>
                     <PriceInfo>
                         <div>사용 할 캐시 </div>
-                        <span>{price} 원</span>
+                        <span>{bidPrice} 원</span>
                     </PriceInfo>
                     <PriceInfo className={showWarning ? 'warning' : 'normal'}>
                         <div>사용 후 캐시 </div>
@@ -310,7 +343,7 @@ export default function PaymentInfo({ productDetailInfo }) {
         <TotalContainer>
             <PriceInfoSub>
                 <div className="title">주문 금액</div>
-                <span>{price} 원</span>
+                <span>{bidPrice} 원</span>
             </PriceInfoSub>
             <PriceInfoSub>
                 <div className="title">수수료</div>
@@ -318,17 +351,16 @@ export default function PaymentInfo({ productDetailInfo }) {
             </PriceInfoSub>
             <PriceInfoSub>
                 <div className="title">캐시</div>
-                <span>{price} 원</span>
+                <span>{cash} 원</span>
             </PriceInfoSub>
             <Line />
             <PriceInfoSub>
                 <div className="total">총 결제 금액</div>
-                <span className="total">{price} 원</span>
+                <span className="total">{bidPrice} 원</span>
             </PriceInfoSub>
             <SubmitInfo>
                 <span>위 내용을 확인하였습니다.</span>
-                {console.log(showWarning)}
-                <SubmitButton disabled={showWarning} onClick={showWarning ? null : openModal}>결제하기</SubmitButton>
+                <SubmitButton disabled={showWarning} onClick={openModal}>결제하기</SubmitButton>
             </SubmitInfo>
 
             {confirmPayment && (
@@ -341,8 +373,12 @@ export default function PaymentInfo({ productDetailInfo }) {
                         </ButtonList>                       
                     </ModalContainer>
                 </ModalBackground>
+            
             )}
-            </TotalContainer>
+
+        </TotalContainer>
         </> 
     );
 }
+
+export default BidPaymentInfo;

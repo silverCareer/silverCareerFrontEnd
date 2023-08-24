@@ -106,7 +106,8 @@ function ChargePageForm() {
 
     const handleChargeAmountChange = (event) => {
         const value = event.target.value;
-        setChargeAmount(value);
+        const numericValue = value.replace(/[^0-9]/g, ''); // 숫자 이외의 문자 제거
+        setChargeAmount(numericValue);
     };
 
     // 합산된 값을 계산
@@ -139,12 +140,7 @@ function ChargePageForm() {
             //}
         } catch (error) {            
             console.log('Error sending payment: ', error);
-            if(error.response.status === 403 || error.response.status === 406) {
-                alert("계좌 잔액이 부족합니다!");
-            }
-            else if(error.response.status === 404) {
-                alert("계좌 정보가 존재하지 않습니다!");
-            }
+            alert(error.response.data.error.message);
             closeModal();
         }
     };
@@ -160,7 +156,7 @@ function ChargePageForm() {
                 <ChargeInfo>
                     <div>충전 할 금액</div>
                     <input
-                        placeholder="천원 단위로 입력해주세요."
+                        placeholder="충전 금액을 입력해주세요."
                         type="text"
                         id="chargeAmount"
                         value={chargeAmount}

@@ -58,10 +58,6 @@ function InfoOfPay({myPageForm}) {
                         <div>{numberWithCommas(myPageForm.balance ?? 0)} 원</div>
                     <Button onClick={handleCharge}>충전하기</Button>
                 </InfoContainer>
-                <InfoContainer>
-                    <Title>충전 내역</Title>
-                    <Button onClick={()=>{}}>보러가기</Button>
-                </InfoContainer>
             </PayInfo>
         </MainContainer>
     );
