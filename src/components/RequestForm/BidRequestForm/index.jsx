@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { postBidConfirm } from '../../../api/request/postBidConfirm'
+import { LoginContext } from '../../../hooks/loginContext';
+import { createChatRoom } from '../../../api/chat/createChatRoom';
+import { postBidPayment } from './../../../api/request/postBidPayment';
 
 const MainContainer = styled.div`
     border: 1px solid #E0E0E0;
@@ -62,6 +64,56 @@ const Alarm = styled.div`
     display: ${({ visible }) => (visible ? 'block' : 'none')};
 `;
 
+const ModalWrapper = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+const ModalContent = styled.div`
+    width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`
+const ModalLabel = styled.label`
+    display: block;
+    margin-bottom: 10px;
+    font-size: 20px;
+`
+const ModalInput = styled.textarea`
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+`
+const ModalButtonWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+`
+const ModalButton = styled.button`
+    padding: 10px 20px;
+    background-color: #84A080;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #6f896d;
+    }
+`;
+
 const BidRequestForm = () => {
     const [showAlarm, setShowAlarm] = useState(false);
     const location = useLocation();
@@ -72,19 +124,23 @@ const BidRequestForm = () => {
     const mentorName = requestInfo.mentorName;
     const requestTitle = requestInfo.title;
     const requestPrice = requestInfo.price;
+    const bidIdx = requestInfo.bidIdx;
 
-    const handleAccepted = async () => {
-        const bidIdx = requestInfo.bidIdx;
+    const { loginForm } = useContext(LoginContext);
+    const { name } = loginForm;
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const handleAccepted = async (bidIdx, bidprice, bidtitle, mentor) => {
 
         try{
-            const response = await postBidConfirm(bidIdx);
+            // const response = await postBidPayment(bidIdx);
 
-            if (response.response){
+            if (true){
                 setShowAlarm(true);
                 setTimeout(() => {
                     setShowAlarm(false); 
-                    navigate('/') 
-                }, 2000); 
+                    navigate('/bidList/payment',{ state : { requestInfo: { bidIdx, bidprice, bidtitle, mentor }}}) 
+                }, 1000); 
             }
 
         } catch (error){
@@ -95,7 +151,7 @@ const BidRequestForm = () => {
     return (
         <>
             <Alarm visible={showAlarm}>
-                유익한 시간 보내슈
+                결제창으로 이동합니다...
             </Alarm>
             <MainContainer>
                 <InfoContainer>
@@ -120,11 +176,58 @@ const BidRequestForm = () => {
 
 
                 <ButtonContainer>
-                    <Button onClick={handleAccepted}>수락하기</Button>
-                    <Button>채팅하기</Button>
+                    <Button onClick={() => handleAccepted(bidIdx, requestPrice, requestTitle, mentorName )}>결제하기</Button>
+                    <Button onClick={name ? () => setModalOpen(true) : null} disabled={!name}>문의하기</Button>
                 </ButtonContainer>
             </MainContainer>
+            <InquiryModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} name={name} memtorName={mentorName}/>
         </>
+    );
+}
+
+function InquiryModal({ isOpen, onClose, name, memtorName }) {
+    
+    const [inquiryContent, setInquiryContent] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = async () => {
+        const newMessage = {
+            content: inquiryContent,
+            sender: name, 
+            timestamp: new Date().toISOString() 
+        };
+
+        try {
+            const result = await createChatRoom(name, memtorName, newMessage);
+            console.log("Chat room created:", result);
+            onClose();
+            navigate("/chatroom");
+
+        } catch (error) {
+            console.error("Error creating chat room:", error);
+        }
+
+    };
+
+    return (
+        isOpen && (
+            <ModalWrapper onClick={onClose}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+                <ModalLabel>To {memtorName}</ModalLabel>
+                <ModalInput 
+                    placeholder="첫 채팅할 내용을 적어주세요." 
+                    rows="5"
+                    value={inquiryContent}
+                    onChange={(e) => setInquiryContent(e.target.value)}
+                />
+
+                <ModalButtonWrapper>
+                <ModalButton onClick={handleSubmit}>보내기</ModalButton>
+                <ModalButton onClick={onClose}>닫기</ModalButton>
+                </ModalButtonWrapper>
+            </ModalContent>
+            </ModalWrapper>
+        )
     );
 }
 

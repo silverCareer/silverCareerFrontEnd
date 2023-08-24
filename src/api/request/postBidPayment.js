@@ -1,9 +1,11 @@
 import axios from "axios";
 
-export const postBidConfirm = async (bidIdx) => {
+export const postBidPayment = async (bidIdx) => {
     const token = localStorage.getItem('jwttoken')
-    const response = await axios.post(`https://www.silvercareer.shop/api/bid/${bidIdx}/confirm`, 
-    {},
+    const response = await axios.post(`https://www.silvercareer.shop/api/bidPayment`, 
+    {
+        bidIdx : bidIdx
+    },
     {
         headers : {
             'Authorization': `Bearer ${token}`

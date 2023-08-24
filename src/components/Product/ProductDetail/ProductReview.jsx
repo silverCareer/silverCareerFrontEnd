@@ -1,130 +1,185 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { ProductDetailContext } from '../../../hooks/productDetailContext';
+import fullstarIcon from '../../../assets/svg/icon-full-star.svg';
+import halfstarIcon from '../../../assets/svg/icon-half-star.svg';
 
 const PageContainer = styled.div`
+
+`;
+const Title = styled.h1`
+    font-size: 25px;
+    font-weight: bold;
+`;
+const ReviewContainer = styled.h2`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     padding: 10px 20px;
     gap: 10px;
-`;
-
-const Title = styled.h1`
-    font-size: 23px;
-`;
-
-const PhotoContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 10px;
-`;
-
-const Photo = styled.img`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-`;
-
-const ReviewContainer = styled.h2`
-    display: flex;
-    flex-direction: column;
+    width: 800px;
+    flex: 1;
     justify-content: center;
     align-items: flex-start;
     gap: 5px;
 `;
+const ReviewTotal = styled.div `
+    div {
 
+    }
+`;
 const RatingContainer = styled.div`
     display: flex;
-    width: 486px;
+    height: 70px;
     align-items: center;
     gap: 10px;
 `;
 
-const RatingValue = styled.div`
-    font-size: 30px;
-    font-weight: 500;
+const RatingAverage = styled.div`
+    font-size: 40px;
+    font-weight: bold;
 `;
-const RatingValue2 = styled.div`
+const RatingValue = styled.div`
     display: flex;
-    height: 49px;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-`
-
+`;
 const StarsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 5px;
+    gap: 1px;
+    margin-bottom: 3px;
 
+`;
 const StarIcon = styled.span`
-  margin-right: 5px;
-  color: gold;
 `;
-
 const ReviewList = styled.div`
-
+    width: 800px;
 `;
-
 const ReviewItem = styled.div`
+    margin-bottom: 5px;
+    border-radius: 5px;
+    padding: 5px;
 
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 `;
-
+const NoReview = styled.div `
+    div {
+        margin: 10px 0px;
+    }
+`
 const ReviewerName = styled.div`
-  font-weight: bold;
-  margin-right: 10px;
+    font-weight: bold;
+    font-size: 20px;
 `;
 
 const ReviewRating = styled.div`
-  margin-right: 10px;
-  color: gold;
-`;
 
+`;
 const ReviewContent = styled.div`
-  flex: 1;
+    margin: 10px 0px;
+    flex: 1;
+`;
+const ReviewDate = styled.div `
+    font-size: 12px;
+    color: #9d9d9d;
+`;
+const FullStar = styled.div`
+    display: flex;
+    align-items: center;
+    align-content: center;
+    width: 23px;
+    height: 23px;
+    background-image: url(${fullstarIcon});
+    background-repeat: no-repeat;
+`;
+const HalfStar = styled.div `
+    display: flex;
+    align-items: center;
+    align-content: center;
+    width: 23px;
+    height: 23px;
+    background-image: url(${halfstarIcon});
+    background-repeat: no-repeat;
+`
+const Line = styled.div`
+    height: 1px;
+    background-color: #ccc;
 `;
 
-const ReviewDate = styled.div`
-  font-style: italic;
-`;
+export default function ProductReview({setAvgRating}) {
+    const { productDetailInfo } = useContext(ProductDetailContext);
+    const [visibleReviews, setVisibleReviews] = useState(3);
 
-export default function ProductReview() {
+    const showMoreReviews = () => {
+      setVisibleReviews((prevVisibleReviews) => numberOfReviews);
+      console.log(visibleReviews);
+    };
+
+    
+    // 모든 리뷰의 rating 값을 합산
+    const totalRating = productDetailInfo.reviews.reduce((accumulator, review) => {
+        return accumulator + review.rating;
+    }, 0);
+
+    const numberOfReviews = productDetailInfo.reviews.length;
+    const averageRating = isNaN(totalRating) || isNaN(numberOfReviews) ? 0 : totalRating / numberOfReviews;
+    setAvgRating(averageRating);
+
+    // 리뷰 별 표시
+    const starIcons = [];
+    const fullStars = Math.floor(averageRating);
+    for (let i = 0; i < fullStars; i++) {
+        starIcons.push(<StarIcon key={i}><FullStar/></StarIcon>);
+    }
+
+    if (averageRating % 1 !== 0) {
+        starIcons.push(
+            <StarIcon key={starIcons.length}><HalfStar/></StarIcon>
+        );
+    }
+
     return (
-        <PageContainer>            
-            <PhotoContainer>
-                <Title>사진</Title>
-                <Photo src="your-photo-url.jpg" alt="사진" />
-            </PhotoContainer>
-            <ReviewContainer>
+        <ReviewContainer>
+            <ReviewTotal>
                 <Title>리뷰</Title>
-                <RatingContainer>
-                    <RatingValue>5.0</RatingValue>
-                    <RatingValue2>
-                        <StarsContainer>
-                            <StarIcon>⭐</StarIcon>
-                            <StarIcon>⭐</StarIcon>
-                            <StarIcon>⭐</StarIcon>
-                            <StarIcon>⭐</StarIcon>
-                            <StarIcon>⭐</StarIcon>
-                        </StarsContainer>
-                        <div>14개의 리뷰</div>
-                    </RatingValue2>
-            </RatingContainer>
+                {numberOfReviews === 0 ? (
+                    <NoReview>
+                        <div>아직 작성된 리뷰가 없습니다.</div>
+                        <div style={{ 'color': 'gray', 'font-size': '12px' }}>먼저 리뷰를 작성해보세요!</div>
+                    </NoReview>
+                ) : (
+                    <RatingContainer>
+                        <RatingAverage>{averageRating.toFixed(1)}</RatingAverage>
+                        <RatingValue>
+                            <StarsContainer>
+                                {starIcons}
+                            </StarsContainer>
+                            <div>&nbsp;{numberOfReviews} 개의 리뷰</div>
+                        </RatingValue>
+                    </RatingContainer>
+                )}
+            </ReviewTotal>
             <ReviewList>
-                <ReviewItem>
-                    <ReviewerName>John Doe</ReviewerName>
-                    <ReviewRating>⭐ 5.0</ReviewRating>
-                    <ReviewContent>정말 좋은 사진이에요!</ReviewContent>
-                    <ReviewDate>2023년 8월 15일</ReviewDate>
+                {productDetailInfo.reviews.slice(0, visibleReviews).map((review, index) => (
+                <ReviewItem key={index}>
+                    <ReviewerName>{review.authorName}</ReviewerName>
+                    <ReviewRating>⭐ {review.rating.toFixed(1)}</ReviewRating>
+                    <ReviewContent>{review.reviewContext}</ReviewContent>
+                    <ReviewDate>{review.postDate}</ReviewDate>
+                    {index < visibleReviews - 1 && <Line />}
                 </ReviewItem>
-                {/* 다른 리뷰들도 유사한 형식으로 추가 */}
+                ))}
             </ReviewList>
-            </ReviewContainer>
-        </PageContainer>
+            {visibleReviews < numberOfReviews && (
+                <button onClick={showMoreReviews}>더보기</button>
+            )}
+        </ReviewContainer>
     );
 }

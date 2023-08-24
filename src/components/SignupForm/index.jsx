@@ -4,6 +4,7 @@ import { useNavigate   } from 'react-router-dom';
 import { SignupContext } from '../../hooks/signupContext';
 import { sendSMS } from '../../api/signup/sendSMS';
 import { nickNameCheck } from '../../api/signup/nickNameCheck';
+import { emailCheck } from '../../api/signup/emailCheck';
 
 
 const Container = styled.div`
@@ -132,20 +133,73 @@ const SignupForm = () => {
         e.preventDefault();
 
         const isNicknameChecked = sessionStorage.getItem('checkNickname');
-        if (!isNicknameChecked) {
+        const isEmailChecked = sessionStorage.getItem('checkEmail');
+        const isAuthVerified = sessionStorage.getItem('checkAuthCode');
+        console.log('닉네임 체크여부 :'+isNicknameChecked)
+        console.log('이메일 체크여부 :'+isEmailChecked)
+        console.log('인증번호 체크여부 :'+isAuthVerified)
+        if (isNicknameChecked !== 'true') {
             alert('닉네임 중복체크를 해주세요.');
             return;
         }
 
-        if (!isAuthVerified) {
+        if (isEmailChecked !== 'true'){
+            alert('이메일 중복체크를 해주세요.')
+            return;
+        }
+
+        if (isAuthVerified !== 'true') {
             alert('인증번호를 확인해주세요.');
             return;
         }
         updateSignupData(formData);
         console.log(formData);
+        console.log(formData.authority)
         const nextPage = formData.authority === '멘토' ? '/signup/mentor' : '/signup/mentee';
         navigate(nextPage);
     };
+
+    const handleNicknameCheck = async (event) => {
+        event.preventDefault();
+        try{
+            const name = formData.name;
+            const response = await nickNameCheck(name);
+
+            if (response.success){
+                sessionStorage.setItem('checkNickname', 'true');
+                alert('사용가능한 닉네임입니다.');
+            } 
+
+        }catch (error){
+            if (error.response && error.response.data.error.code === "AUTH_010") {
+                alert('같은 닉네임이 존재합니다.');
+                sessionStorage.setItem('checkNickname', 'false');
+            } else {
+                alert('닉네임 중복체크 실패;;;;');
+            }
+        }
+    }
+
+    const handleEmailCheck = async (event) => {
+        event.preventDefault();
+        try{
+            const email = formData.email;
+            const response = await emailCheck(email);
+    
+            if (response.success){
+                sessionStorage.setItem('checkEmail', 'true');
+                alert('사용가능한 이메일입니다.');
+            } 
+
+        }catch (error){
+            if (error.response && error.response.data.error.code === "AUTH_011") {
+                alert('같은 계정이 존재합니다.');
+                sessionStorage.setItem('checkEmail', 'false');
+            } else {
+                alert('이메일 중복체크 실패;;;;');
+            }
+        }
+    }
 
     const handleSendAuthCode = async (event) => {
         event.preventDefault();
@@ -153,8 +207,7 @@ const SignupForm = () => {
             const phone = formData.phoneNumber;
             const response = await sendSMS(phone);
             console.log("여기다!!! : " +response.authCode)
-
-            localStorage.setItem('authCode', response.authCode);
+            sessionStorage.setItem('authCode', response.authCode);
 
             alert('인증번호가 전송되었습니다.');
         } catch (error) {
@@ -163,47 +216,9 @@ const SignupForm = () => {
         }
     };
 
-    const handleNicknameCheck = async (event) => {
-        event.preventDefault();
-        try{
-            const name = formData.name;
-            const response = await nickNameCheck(name);
-            console.log(response)
-            if (response.success){
-                sessionStorage.setItem('checkNickname', true);
-                alert('사용가능한 닉네임입니다.');
-            } else {
-                sessionStorage.setItem('checkNickname', false)
-                alert('같은 계정 존재;;;;')
-            }
-
-        }catch (error){
-            alert('닉네임 중복체크 실패;;;;')
-        }
-    }
-
-    const handleEmailCheck = async (event) => {
-        event.preventDefault();
-        try{
-            const email = formData.email;
-            const response = await nickNameCheck(email);  // 여기만 수정하기! 리스폰스형식도 보고!
-            console.log(response)
-            if (response.success){
-                sessionStorage.setItem('checkEmail', true);
-                alert('사용가능한 이메일입니다.');
-            } else {
-                sessionStorage.setItem('checkEmail', false)
-                alert('같은 계정 존재;;;;')
-            }
-
-        }catch (error){
-            alert('이메일 중복체크 실패;;;;')
-        }
-    }
-
     const handleVerifyAuthCode = (event) => {
         event.preventDefault();
-        const storedAuthCode = localStorage.getItem('authCode');
+        const storedAuthCode = sessionStorage.getItem('authCode');
         const inputAuthCode = formData.authCode;
         console.log("너가 입력한 값 : "+inputAuthCode)
         console.log("스토리지 저장 값 : "+ storedAuthCode)
@@ -212,10 +227,10 @@ const SignupForm = () => {
     
         if (storedAuthCode === inputAuthCode) {
             alert('인증번호가 확인되었습니다.');
-            setIsAuthVerified(true);
+            sessionStorage.setItem('checkAuthCode', 'true')
         } else {
             alert('인증번호가 일치하지 않습니다. 다시 입력해주세요.');
-            setIsAuthVerified(false); 
+            sessionStorage.setItem('checkAuthCode', 'false')
         }
     };
     return (

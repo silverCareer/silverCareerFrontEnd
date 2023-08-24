@@ -168,32 +168,32 @@ function MentorSignupForm() {
                         <Label htmlFor="category">서비스 분야</Label>
                         <UserType>
                             <Option 
-                            onClick={() => handleInputChange({ target: { name: 'category', value: '현장직' } })}
-                            selected={formData.userType === '현장직'}
+                                onClick={() => handleInputChange({ target: { name: 'category', value: '현장직' } })}
+                                selected={formData.category === '현장직'}
                             >
-                            현장직
+                                현장직
                             </Option>
                             <Option 
                             onClick={() => handleInputChange({ target: { name: 'category', value: '사무직' } })}
-                            selected={formData.userType === '사무직'}
+                            selected={formData.category === '사무직'}
                             >
                             사무직
                             </Option>
                             <Option 
                             onClick={() => handleInputChange({ target: { name: 'category', value: '문화' } })}
-                            selected={formData.userType === '문화'}
+                            selected={formData.category === '문화'}
                             >
                             문화
                             </Option>
                             <Option 
                             onClick={() => handleInputChange({ target: { name: 'category', value: '기술직' } })}
-                            selected={formData.userType === '기술직'}
+                            selected={formData.category === '기술직'}
                             >
                             기술직
                             </Option>   
                             <Option 
                             onClick={() => handleInputChange({ target: { name: 'category', value: '요리' } })}
-                            selected={formData.userType === '요리'}
+                            selected={formData.category === '요리'}
                             >
                             요리
                             </Option>                                                        
