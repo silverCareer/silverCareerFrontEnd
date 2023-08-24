@@ -327,7 +327,8 @@ export default function PaymentInfo({ productDetailInfo }) {
             </PriceInfoSub>
             <SubmitInfo>
                 <span>위 내용을 확인하였습니다.</span>
-                <SubmitButton disabled={showWarning} onClick={openModal}>결제하기</SubmitButton>
+                {console.log(showWarning)}
+                <SubmitButton disabled={showWarning} onClick={showWarning ? null : openModal}>결제하기</SubmitButton>
             </SubmitInfo>
 
             {confirmPayment && (

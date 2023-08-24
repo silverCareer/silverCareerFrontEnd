@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { productRegistContents } from '../../api/product/productRegistContents';
 import uploadIconImage from '../../assets/svg/icon-upload.svg';
+import SelectAddress from './SelectAddress';
 
 const ProductContainer = styled.div `
     display: flex;
@@ -294,6 +295,9 @@ function ProductForm() {
                     <BoxTitle>주소</BoxTitle>
                     <TitleInput placeholder='주소를 검색해주세요' 
                     value={address} onChange={handleAddressChange} />
+
+                    
+                    {/* <TitleInput value={address} onChange={handleAddressChange} /> */}
                     <AddressButton>주소 찾기</AddressButton>
                 </ProductBox>
                 <ProductDetailBox>
