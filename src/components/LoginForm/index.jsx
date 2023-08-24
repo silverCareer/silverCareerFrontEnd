@@ -90,12 +90,46 @@ const KakaoButton = styled.button`
   }
 `;
 
+const Modal = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const ModalContent = styled.div`
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border: 2px solid #84A080;
+`;
+
+const ModalButton = styled.button`
+    background-color: #84A080;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+`;
+
 
 
 function LoginForm() {
   const { setIsLoggedIn, loginForm, setLoginForm } = useContext(LoginContext);
   const handleKakaoLogin = useKakaoLogin(); //훅 사용
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
 
   const [formData, setFormData] = useState({
@@ -129,7 +163,8 @@ function LoginForm() {
         navigate('/') 
     })
     .catch(error => {
-        console.error(error);
+      console.error(error);
+      setShowModal(true);
     });
   };
 
@@ -141,19 +176,29 @@ const handleInputChange = (e) => {
   };
 
     return (
+      <>
         <Form onSubmit={handleSubmit}>
           <Input id="email" name="email" type="email" onChange={handleInputChange} placeholder="이메일을 입력해주세요." />
           <Input id="password" name="password" type="password" onChange={handleInputChange} placeholder="비밀번호를 입력해주세요." />
           <Button type="submit">이메일 로그인</Button>
           <LinkContainer>
-          <LinkButton to="/find-id">아이디 찾기</LinkButton>
-          <LinkButton to="/find-password">비밀번호 찾기</LinkButton>
+          {/* <LinkButton to="/find-id">아이디 찾기</LinkButton>
+          <LinkButton to="/find-password">비밀번호 찾기</LinkButton> */}
           <LinkButton onClick={() => navigate('/signup')}>회원가입</LinkButton>
           </LinkContainer>
           <Line />
-          <KakaoButton onClick={handleKakaoLogin}> &nbsp;&nbsp;&nbsp;&nbsp; 카카오 계정으로 로그인</KakaoButton>
-          <GoogleLoginButton />
+          {/* <KakaoButton onClick={handleKakaoLogin}> &nbsp;&nbsp;&nbsp;&nbsp; 카카오 계정으로 로그인</KakaoButton>
+          <GoogleLoginButton /> */}
         </Form>
+        {showModal && (
+        <Modal onClick={() => setShowModal(false)}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <p>비밀번호를 확인해주세요.</p>
+            <ModalButton onClick={() => setShowModal(false)}>확인</ModalButton>
+          </ModalContent>
+        </Modal>
+      )}
+      </>
     );
 }
 

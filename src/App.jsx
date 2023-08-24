@@ -18,6 +18,7 @@ import Request from './pages/Request';
 import RequestInfo from './pages/Request/RequestInfo'
 import BidList from './pages/Request/BidList';
 import BidRequest from './pages/Request/BidRequest';
+import PaymentService from './pages/Request/PaymentService'
 import SearchPage from './pages/Search';
 
 /* Provider */
@@ -58,7 +59,10 @@ function App() {
             <Route path="/apply" element={<ApplyProductPage />} />
             <Route path="/request" element={<Request/>} />
             <Route path="/requestInfo" element={<RequestInfo/>} />
-            <Route path="/bidList" element={<BidList/>} />
+            <Route path="/bidList/*" element={<Outlet/>}>
+              <Route path="" element={<BidList/>} />
+              <Route path="payment" element={<PaymentService/>} />
+            </Route>
             <Route path="/bidRequest" element={<BidRequest/>} />
           </Routes>
         </Router>
