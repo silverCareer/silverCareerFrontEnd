@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { SearchContext } from '../../hooks/searchContext';
 import ProductList from '../Product';
@@ -16,22 +15,6 @@ const Title = styled.div `
 `;
 
 function Search() {
-    const location = useLocation();
-    const error = location.state?.error;
-    const content = location.state?.content;
-
-    if (error) {
-        if (error === 404) {
-            return (
-                <SearchContainer>
-                    <Title>
-                        '{content}'에 대한 검색 결과가 없습니다.
-                    </Title>
-                </SearchContainer>
-            );
-        }
-    }
-    
     const { searchProductList, setSearchProductList, searchContent } = useContext(SearchContext);
     const totalPage = searchProductList.totalPages;
     const [ currentPage, setCurrentPage ] = useState(searchProductList.currentPage);

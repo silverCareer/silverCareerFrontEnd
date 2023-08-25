@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import ProductDetailTop from './ProductDetailTop'
 import ProductDetailBottom from './ProductDetailBottom'
 import ProductReview from './ProductReview'
-import ProductQNA from './ProductQNA'
 
 const ProductContianer = styled.div`
     display: flex;
@@ -23,7 +22,6 @@ function ProductDetail() {
             <ProductDetailTop avgRating={avgRating}/>
             <ProductDetailBottom />
             <ProductReview setAvgRating={setAvgRating}/>
-            <ProductQNA/>
         </ProductContianer>
     );
 }

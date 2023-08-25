@@ -6,107 +6,112 @@ import { sendSMS } from '../../api/signup/sendSMS';
 import { nickNameCheck } from '../../api/signup/nickNameCheck';
 import { emailCheck } from '../../api/signup/emailCheck';
 
-
 const Container = styled.div`
-    margin-top: 5em;
+    margin-top: 20px;
 `;
-
 const FormContainer = styled.div`
-    margin: 0 auto;
+    margin: auto;
     width: 50%;
 `;
-
 const StyledForm = styled.form`
+    border: 1px solid #84a0808e;
+    border-radius: 5px;
     padding: 2em;
-    border: 1px solid #ccc;
-    border-radius: 15px;
-
 `;
-
 const FormGroup = styled.div`
     margin-bottom: 1em;
 `;
-
-const Title = styled.h1`
-    text-align: center;
-    margin-bottom: 1em;
+const SubTitle = styled.div `
+    font-size: 14px;
+    color: gray;
 `;
-
+const Title = styled.h1`
+    font-size: 25px;
+    font-weight: bolder;
+    margin-bottom: 1em;
+    margin-left: 2px;
+`;
 const Label = styled.label`
     display: block;
     margin-bottom: 0.5em;
     font-size: 0.9em;
 `;
-
 const Input = styled.input`
-    width: 100%;
-    padding: 0.5em;
-
+    width: 500px;
+    padding: 5px;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
 `;
-
 const UserType = styled.div`
     display: flex;
     justify-content: flex-start;
+    font-size: 20px;
+    gap: 10px;
+    margin: 5px 0 20px 0;
 `;
-
 const Option = styled.div`
-    padding: 0.5em;
-    cursor: pointer;
     transition: background-color 0.3s ease; 
-    border-radius: 15px;
+    border-radius: 5px;
+    margin-top: 1px;
+    padding: 5px;
+
+    cursor: pointer;
     &:hover {
         background-color: #84A080;
+        color: white;
     }
     ${({ selected }) =>
         selected &&
         `
         background-color: #84A080;
         color: white;
+        padding: 5px;
     `}
 `;
-
 const Button = styled.button`
     display: block;
-    font-size: 1.2em;
-    font-weight: 900;
     width: 15%;
-    border-radius: 15px;
-
-    border: none;
-    color: white;
-    background-color: #84A080;
-    border-radius: 15px;
-    cursor: pointer;
-    text-align: center;
+    padding: 5px;
     margin: 0 auto; 
     text-decoration: none;
-`;
-
-const PhoneInputGroup = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const AuthButton = styled.button`
+    text-align: center;
+    border-radius: 5px;
     border: none;
-    background-color: #84A080;
     color: white;
-    padding: 0.5em 0.7em; 
-    border-radius: 10px;
+    background-color: #84A080;
+    font-size: 1.2em;
+    
+    cursor: pointer;
+`;
+const PhoneInputGroup = styled.div`
+    justify-content: left;
+    align-items: center;
+    display: flex;
+`;
+const AuthButton = styled.button`
+    border: 1px solid #84a080e9;
+    margin-bottom: 5px;
+    background-color: transparent;
+    color: #84a080;
+    padding: 5px; 
+    border-radius: 5px;
     cursor: pointer;
     margin-left: 0.5em;
     white-space: nowrap; 
     line-height: 1.2em; 
-    font-size: 0.9em; 
+    font-size: 0.7em; 
+`;
+const Line = styled.div`
+    height: 1px;
+    width: 100%;
+    background-color: #ccc; 
+    margin: 1em 0; 
 `;
 
 const SignupForm = () => {
-
     const { updateSignupData } = useContext(SignupContext);
     const navigate = useNavigate();
-
     const [formData, setFormData] = useState({});
     const [isAuthVerified, setIsAuthVerified] = useState(false);
 
@@ -175,7 +180,7 @@ const SignupForm = () => {
                 alert('같은 닉네임이 존재합니다.');
                 sessionStorage.setItem('checkNickname', 'false');
             } else {
-                alert('닉네임 중복체크 실패;;;;');
+                alert('닉네임 중복체크 실패 했스무니다.');
             }
         }
     }
@@ -196,7 +201,7 @@ const SignupForm = () => {
                 alert('같은 계정이 존재합니다.');
                 sessionStorage.setItem('checkEmail', 'false');
             } else {
-                alert('이메일 중복체크 실패;;;;');
+                alert('이메일 중복체크 실패했습니다.');
             }
         }
     }
@@ -240,7 +245,7 @@ const SignupForm = () => {
             <StyledForm onSubmit={handleSubmit}>
                 <Title className="mb-4">회원가입</Title>
                 <FormGroup>
-                    
+                    <SubTitle>멘토와 멘티를 골라주세요!</SubTitle>
                     <UserType>
                         <Option 
                         onClick={() => handleInputChange({ target: { name: 'authority', value: '멘토' } })}
@@ -283,7 +288,7 @@ const SignupForm = () => {
                 <FormGroup>
                     <Label htmlFor="password">비밀번호 입력</Label>
                     <div>
-                        <Input id="password" type="password" name="password" onChange={handleInputChange} placeholder="비밀번호를 입력해주세요."/>
+                        <Input id="password" type="password" name="password" onChange={handleInputChange} placeholder="최소 하나 이상의 알파벳/숫자/특수문자를 작성해주세요."/>
                     </div>
                     <div>
                         <Input id="passwordForCheck" type="password" name="passwordForCheck" onChange={handleInputChange} placeholder="비밀번호를 한번 더 입력해주세요."/>
