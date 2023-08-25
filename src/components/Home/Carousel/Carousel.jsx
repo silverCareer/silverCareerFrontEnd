@@ -83,7 +83,7 @@ const HomeCarousel = ({ carouselList }) => {
                                 <button 
                                     className={styles.enrollButton} 
                                     onClick={() => navigateToProductDetail(item.productIdx)}>
-                                    수강신청하러가기
+                                    수강신청 하러 가기
                                 </button>
                             </div>
                         </li>
