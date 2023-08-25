@@ -145,6 +145,7 @@ function LoginForm() {
     login(formData) 
     .then(response => {
         localStorage.setItem('jwttoken', response.data.response.accessToken);
+        localStorage.setItem('refreshToken', response.data.response.refreshToken)
         setIsLoggedIn(true);
 
         localStorage.setItem('isLoggedIn', 'true');
