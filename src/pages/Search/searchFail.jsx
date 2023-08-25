@@ -2,7 +2,7 @@ import React from 'react';
 import MainHeader from '../../components/Common/MainHeader'
 import styled from 'styled-components';
 import Footer from '../../components/Common/Footer'
-import Search from '../../components/Search';
+import SearchFail from '../../components/Search/SearchFail';
 
 const MainContainer = styled.div`
     margin-top:0px;
@@ -11,14 +11,14 @@ const MainContainer = styled.div`
     margin-bottom: 20px;
 `;
 
-function SearchPage() {
+function SearchFailPage() {
     return (
         <MainContainer>
             <MainHeader />
-            <Search />
+            <SearchFail />
             <Footer />
         </MainContainer>
     );
 }
 
-export default SearchPage;
+export default SearchFailPage;
