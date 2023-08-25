@@ -5,7 +5,7 @@ import { SearchContext } from '../../hooks/searchContext';
 import ProductList from '../Product';
 import { searchAPI } from '../../api/search/productSearch';
 import PagingContent from '../Common/Paging';
-
+//test
 const SearchContainer = styled.div `
     padding: 10px 100px;
 `;
