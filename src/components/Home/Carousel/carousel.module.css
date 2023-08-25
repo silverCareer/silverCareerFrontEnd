@@ -17,33 +17,8 @@
     overflow: hidden;
 }
 
-/* Hover styles for carouselWrapper */
-/*
-.container:hover .swipeLeft,
-.container:hover .swipeRight {
-    position: absolute;
-    top: 58%;
-    z-index: 1;
-    display: block;
-    padding: 8px 6px;
-    background-color: gray;
-    border-radius: 10px;
-}
-
-    display: none;
-}*/
-
 .carouselIndex {
-/*
-    position: absolute;
-    top: 68%;
-    z-index: 1;
-    display: block;
-
-    border-radius: 10px;
-*/
     display: flex;
-    
     align-items: center; /* 수평 가운데 정렬 */
     justify-content: center; /* 수직 가운데 정렬 */
     width: 100%;
@@ -126,18 +101,22 @@
     position: absolute;
     bottom: 10px;
     left: 10px;
-    background-color: rgba(0, 0, 0, 0.5); 
-    padding: 5px 10px;
+    width: 30%;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.732); 
     border-radius: 5px;
-    width: 40%;  
+    
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .category, .productName {
     display: block; 
     font-size: 16px;
-    color: white;
+    color: black;
     font-weight: bold;
-    margin-bottom: 5px;  
+    margin-bottom: 5px;
 }
 
 .productName {

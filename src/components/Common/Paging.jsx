@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components'
 
 
@@ -21,19 +21,17 @@ const PageNumber = styled.div`
         `
     }
 `;
-
 const LeftIcon = styled.div`
     cursor: pointer;
     margin-right: 10px;
-    display: ${({ currentPage }) => (currentPage > 10 ? 'block' : 'none')};
+    display: ${({ $displayLeftIcon }) => ($displayLeftIcon ? 'block' : 'none')};
 `;
 
 const RightIcon = styled.div`
     cursor: pointer;
     margin-left: 10px;
-    display: ${({ currentPage }) => (currentPage >= 10 ? 'block' : 'none')};
+    display: ${({ $displayRightIcon }) => ($displayRightIcon ? 'block' : 'none')};
 `;
-
 
 export default function PagingContent({ currentPage, totalPage, onPageChange }) {
     const renderPageNumbers = () => {
@@ -70,11 +68,11 @@ export default function PagingContent({ currentPage, totalPage, onPageChange }) 
 
     return (
         <Paging>
-            <LeftIcon currentPage={currentPage} onClick={() => onPageChange(currentPage - 1)}>
+            <LeftIcon $displayLeftIcon={currentPage > 10} onClick={() => onPageChange(currentPage - 1)}>
                 Left
             </LeftIcon>
-                {renderPageNumbers()}
-            <RightIcon onClick={() => onPageChange(currentPage + 1)}>Right</RightIcon>
+            {renderPageNumbers()}
+            <RightIcon $displayRightIcon={currentPage >= 10} onClick={() => onPageChange(currentPage + 1)}>Right</RightIcon>
         </Paging>
     );
 }

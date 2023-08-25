@@ -1,13 +1,8 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import kakaoLogo from '../../assets/image/kakaologo.png';
 import { useNavigate } from 'react-router-dom';
-import useKakaoLogin from '../../hooks/useKakaoLogin';
-import GoogleLoginButton from './GoogleLoginButton';
 import { login } from '../../api/login';
 import { LoginContext } from '../../hooks/loginContext';
-
-
 
 const Form = styled.form`
   display: flex;
@@ -17,7 +12,6 @@ const Form = styled.form`
   gap: 1em;
   padding: 1em;
 `;
-
 const Input = styled.input`
   width: 290px;
   height: 30px;
@@ -25,7 +19,6 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 4px;
 `;
-
 const Button = styled.button`
   width: 300px;
   height: 40px;
@@ -40,12 +33,11 @@ const Button = styled.button`
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
   }
 `;
-
 const LinkButton = styled.button`
   text-decoration: none;
   color: black;
   cursor: pointer;
-  font-size: 0.6em; 
+  font-size: 0.8em; 
   font-weight: 600;
   transition: all 0.3s ease-in-out;
   margin: 0 0.5em; 
@@ -57,39 +49,17 @@ const LinkButton = styled.button`
     color: #1e90ff;
   }
 `;
-
 const LinkContainer = styled.div`
   display: flex;  
   justify-content: center; 
   gap: 1em; 
 `;
-
 const Line = styled.div`
   height: 1px;
   width: 140%;
   background-color: #ccc; 
   margin: 1em 0; 
 `;
-
-const KakaoButton = styled.button`
-  width: 205px;
-  height: 40px;
-  border: none;
-  border-radius: 4px;
-  background-image: url(${kakaoLogo});
-  background-size: 11%;
-  background-repeat: no-repeat;
-  background-position: 10px center; 
-  background-color: #f3e141;
-  color: black;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out; 
-
-  &:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
-  }
-`;
-
 const Modal = styled.div`
     position: fixed;
     top: 0;
@@ -101,7 +71,6 @@ const Modal = styled.div`
     align-items: center;
     justify-content: center;
 `;
-
 const ModalContent = styled.div`
     background-color: #fff;
     padding: 20px;
@@ -109,7 +78,6 @@ const ModalContent = styled.div`
     text-align: center;
     border: 2px solid #84A080;
 `;
-
 const ModalButton = styled.button`
     background-color: #84A080;
     color: white;
@@ -123,21 +91,15 @@ const ModalButton = styled.button`
     margin-top: 10px;
 `;
 
-
-
 function LoginForm() {
   const { setIsLoggedIn, loginForm, setLoginForm } = useContext(LoginContext);
-  const handleKakaoLogin = useKakaoLogin(); //훅 사용
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-
 
   const [formData, setFormData] = useState({
     email : '',
     password : ''
   });
-
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -183,13 +145,8 @@ const handleInputChange = (e) => {
           <Input id="password" name="password" type="password" onChange={handleInputChange} placeholder="비밀번호를 입력해주세요." />
           <Button type="submit">이메일 로그인</Button>
           <LinkContainer>
-          {/* <LinkButton to="/find-id">아이디 찾기</LinkButton>
-          <LinkButton to="/find-password">비밀번호 찾기</LinkButton> */}
           <LinkButton onClick={() => navigate('/signup')}>회원가입</LinkButton>
           </LinkContainer>
-          <Line />
-          {/* <KakaoButton onClick={handleKakaoLogin}> &nbsp;&nbsp;&nbsp;&nbsp; 카카오 계정으로 로그인</KakaoButton>
-          <GoogleLoginButton /> */}
         </Form>
         {showModal && (
         <Modal onClick={() => setShowModal(false)}>

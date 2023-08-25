@@ -20,6 +20,7 @@ import BidList from './pages/Request/BidList';
 import BidRequest from './pages/Request/BidRequest';
 import PaymentService from './pages/Request/PaymentService'
 import SearchPage from './pages/Search';
+import SearchFailPage from './pages/Search/searchFail'
 
 /* Provider */
 import SignupProvider from './hooks/signupContext';
@@ -44,7 +45,10 @@ function App() {
               <Route path="mentor" element={<SignupProvider><MentorSignup /></SignupProvider>} />
               <Route path="mentee" element={<SignupProvider><MenteeSignup /></SignupProvider>} />
             </Route>
-            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search/*" element={<Outlet />} >
+              <Route path="" element={<SearchPage />} />
+              <Route path="noResult" element={<SearchFailPage />} />            
+            </Route>
             <Route path="/product/*" element={<Outlet />}>
               <Route path=":productIdx" element={<ProductPage />}/>
               <Route path=":productIdx/payment" element={<PaymentPage />}/>

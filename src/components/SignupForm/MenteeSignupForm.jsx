@@ -5,68 +5,60 @@ import { SignupContext } from '../../hooks/signupContext';
 import { signup } from '../../api/signup/signup';
 
 const Container = styled.div`
-    margin-top: 5em;
+    margin-top: 20px;
 `;
-
 const FormContainer = styled.div`
-    margin: 0 auto;
+    margin: auto;
     width: 50%;
 `;
-
 const StyledForm = styled.form`
+    border: 1px solid #84a0808e;
+    border-radius: 5px;
     padding: 2em;
-    border: 1px solid #ccc;
-    border-radius: 15px;
 `;
-
 const Title = styled.h1`
-    text-align: center;
+    font-size: 25px;
+    font-weight: bolder;
     margin-bottom: 1em;
+    margin-left: 2px;
 `;
-
 const FormGroup = styled.div`
     margin-bottom: 1em;
 `;
-
 const Label = styled.label`
     display: block;
     margin-bottom: 0.5em;
     font-size: 0.9em;
 `;
-
 const Input = styled.input`
     width: 100%;
     padding: 0.5em;
     margin-bottom: 0.5em;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    border-radius: 5px;
 `;
-
 const Button = styled.button`
     display: block;
-    font-size: 1em;
-    font-weight: 900;
     width: 15%;
-    border-radius: 15px;
-
+    padding: 5px;
+    margin: 0 auto; 
+    text-decoration: none;
+    text-align: center;
+    border-radius: 5px;
     border: none;
     color: white;
     background-color: #84A080;
-    border-radius: 15px;
+    font-size: 1.2em;
+    
     cursor: pointer;
-    text-align: center;
-    margin: 0 auto; 
-    text-decoration: none;
 `;
-
 const Select = styled.select`
     width: 30%;
     padding: 0.5em;
     margin-bottom: 0.5em;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    border-radius: 5px;
 `;
-
 
 const Modal = styled.div`
     position: fixed;
@@ -100,9 +92,6 @@ const ModalButton = styled.button`
     font-weight: bold;
     margin-top: 10px;
 `;
-
-
-
 
 function MenteeSignupForm() {
 

@@ -4,9 +4,6 @@ import { ProductDetailContext } from '../../../hooks/productDetailContext';
 import fullstarIcon from '../../../assets/svg/icon-full-star.svg';
 import halfstarIcon from '../../../assets/svg/icon-half-star.svg';
 
-const PageContainer = styled.div`
-
-`;
 const Title = styled.h1`
     font-size: 25px;
     font-weight: bold;
@@ -46,6 +43,11 @@ const RatingValue = styled.div`
     justify-content: center;
     align-items: flex-start;
 `;
+const ReviewInfo = styled.div `
+    display: flex;
+    align-items: center;
+
+`
 const StarsContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -77,6 +79,7 @@ const NoReview = styled.div `
 const ReviewerName = styled.div`
     font-weight: bold;
     font-size: 20px;
+    margin-right: 5px;
 `;
 
 const ReviewRating = styled.div`
@@ -107,10 +110,27 @@ const HalfStar = styled.div `
     height: 23px;
     background-image: url(${halfstarIcon});
     background-repeat: no-repeat;
-`
+`;
 const Line = styled.div`
     height: 1px;
     background-color: #ccc;
+    margin: 10px 0;
+`;
+const Button = styled.div `
+    border-radius: 5px;
+    margin-left: 20px;
+    padding: 5px;
+    width: 100%;
+    height: 28px;
+    color: white;
+    background-color: #a9c0a5;
+    border: 1px solid #a9c0a5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+
+    cursor: pointer;
 `;
 
 export default function ProductReview({setAvgRating}) {
@@ -118,8 +138,8 @@ export default function ProductReview({setAvgRating}) {
     const [visibleReviews, setVisibleReviews] = useState(3);
 
     const showMoreReviews = () => {
-      setVisibleReviews((prevVisibleReviews) => numberOfReviews);
-      console.log(visibleReviews);
+        setVisibleReviews((prevVisibleReviews) => numberOfReviews);
+        console.log(visibleReviews);
     };
 
     
@@ -169,8 +189,10 @@ export default function ProductReview({setAvgRating}) {
             <ReviewList>
                 {productDetailInfo.reviews.slice(0, visibleReviews).map((review, index) => (
                 <ReviewItem key={index}>
-                    <ReviewerName>{review.authorName}</ReviewerName>
-                    <ReviewRating>⭐ {review.rating.toFixed(1)}</ReviewRating>
+                    <ReviewInfo>
+                        <ReviewerName>{review.authorName}</ReviewerName>
+                        <ReviewRating>⭐ {review.rating.toFixed(1)}</ReviewRating>
+                    </ReviewInfo>
                     <ReviewContent>{review.reviewContext}</ReviewContent>
                     <ReviewDate>{review.postDate}</ReviewDate>
                     {index < visibleReviews - 1 && <Line />}
@@ -178,7 +200,7 @@ export default function ProductReview({setAvgRating}) {
                 ))}
             </ReviewList>
             {visibleReviews < numberOfReviews && (
-                <button onClick={showMoreReviews}>더보기</button>
+                <Button onClick={showMoreReviews}>리뷰 더보기</Button>
             )}
         </ReviewContainer>
     );
