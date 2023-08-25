@@ -88,7 +88,7 @@ export default function Card({product}) {
     return (
         <ProductItem>
             <ProductImg onClick={handleCardClick}>
-                <img src={product.productImage} alt="img"/>
+                <img src={product.productImage} alt="img" style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
             </ProductImg>
             <Product1>
                 <div>{product.category}</div>
@@ -111,7 +111,6 @@ export default function Card({product}) {
                 <span>{numberWithCommas(product.productPrice ?? 0)} 원</span>
             </div>
             <div className="product-rate">
-                
             </div>
         </ProductItem>
     );
