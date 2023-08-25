@@ -5,12 +5,14 @@ import { ReactComponent as RightIcon } from '../../../assets/svg/icon-right.svg'
 import { useNavigate } from 'react-router-dom'; // for navigating
 import { ProductDetailContext } from '../../../hooks/productDetailContext';
 import { getProductDetail } from '../../../api/product/productDetail';
+import { LoginContext } from '../../../hooks/loginContext'
 
 const HomeCarousel = ({ carouselList }) => {
     const [currIndex, setCurrIndex] = useState(1);
     const [currList, setCurrList] = useState([]);
     const [totalImages, setTotalImages] = useState(0);
     const carouselRef = useRef(null);
+    const { isLoggedIn } = useContext(LoginContext);
 
     const navigate = useNavigate(); 
 
@@ -54,7 +56,7 @@ const HomeCarousel = ({ carouselList }) => {
 
     const navigateToProductDetail = async (productIdx) => {
         try {
-            const productDetailResponse = await getProductDetail(productIdx);
+            const productDetailResponse = await getProductDetail(productIdx, isLoggedIn);
 
             if (productDetailResponse.success) {
                 setProductDetailInfo(productDetailResponse.response);
