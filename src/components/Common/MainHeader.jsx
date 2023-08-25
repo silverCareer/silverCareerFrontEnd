@@ -294,7 +294,8 @@ const MainHeader = () => {
                 navigate('/search');
             }
         } catch (error) {
-            navigate('/search', { state: { error: error.response.status, content: searchTerm } });
+            setSearchContent(searchTerm);
+            navigate('/search/noResult');
         }
     }
 
