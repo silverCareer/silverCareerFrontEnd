@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Card from './Card'
 
 const ProductContainer = styled.div `
-    margin: 10px 100px;
+    margin: 30px 100px;
     display: flex;
     flex-direction: column;
 `

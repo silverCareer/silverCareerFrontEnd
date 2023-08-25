@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { paymentApi } from './../../api/pay/payment';
 import { LoginContext } from '../../hooks/loginContext';
 import { useNavigate } from 'react-router-dom';
+import { ProductDetailContext } from '../../hooks/productDetailContext';
+import { getProductDetail } from '../../api/product/productDetail';
 
 const InfoContainer = styled.div `
     display: flex;
@@ -59,11 +61,11 @@ const PriceInfo = styled.div `
         width: 80px;
     }
     div {
-        width: 400px;
+        width: 300px;
     }    
-    span,
-    .normal {
-        width: 150px;
+    
+    span {
+        width: 200px;
         text-align: right;
         padding-right: 5px;
     }
@@ -162,46 +164,90 @@ const SubmitButton = styled.div `
 `;
 
 /* modal */
-const ModalWrapper = styled.div`
+const ModalBackground = styled.div`
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 999; /* Ensure the modal appears above other content */
 `;
-const ModalContent = styled.div`
+const ModalContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 10px;
-
-    background-color: white;
+    background-color: #fff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     text-align: center;
-    gap: 10px;
-
-    button {
-        background-color: #84A080;
-        color: white;
-        border: transparent;
-        border-radius: 5px;
-        font-size: 15px;
-
-        cursor: pointer;
-    }
 `;
+const Button = styled.div `
+    margin-top: 10px;
+    width: 100%;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+
+    border-radius: 5px;
+    background: #84A080;
+    color: white;
+
+    cursor: pointer;
+    &:hover {
+        background: #6f8a6a;
+    }
+`
+const ButtonList = styled.div `
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    gap: 10px;
+`
 
 export default function PaymentInfo({ productDetailInfo }) {
     const navigate = useNavigate();
     const { loginForm, setLoginForm } = useContext(LoginContext);
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    const openModal = () => {
+        setConfirmPayment(true);
+    }
+
+    const closeModal = () => {
+        setConfirmPayment(false);
+    };
+
+    const handlePaymentSubmit = async () => {
+        try {
+            const response = await paymentApi(productDetailInfo.productIdx);
+    
+            if(response.success) {
+                setIsPaymentSuccess(true); 
+                setLoginForm(prevLoginForm => ({
+                    ...prevLoginForm,
+                    balance: remainingCash
+                }));
+            }
+
+            const productDetailResponse = await getProductDetail(productDetailInfo.productIdx);
+            console.log('Product Detail:', productDetailResponse);
+            if (productDetailResponse.success) {
+                //setProductTitle(product);
+                setProductDetailInfo(productDetailResponse.response);
+
+                navigate(`/product/${productDetailInfo.productIdx}`);
+            }
+        } catch (error) {
+            console.log('Error sending payment: ', error);
+        }
     };
 
     //numberWithCommas
@@ -216,27 +262,9 @@ export default function PaymentInfo({ productDetailInfo }) {
     
     const [showWarning, setShowWarning] = useState(isCashInsufficient);
     const [isPaymentSuccess, setIsPaymentSuccess] = useState(false); // State for payment success
+    const [confirmPayment, setConfirmPayment] = useState(false);
 
-    const handlePaymentSubmit = async () => {
-        try {
-            const response = await paymentApi(productDetailInfo.productIdx);
-            
-            if(response.productIdx === productDetailInfo.productIdx) {
-                setIsPaymentSuccess(true); 
-                setLoginForm(prevLoginForm => ({
-                    ...prevLoginForm,
-                    balance: remainingCash
-                }));
-            }
-        } catch (error) {
-            console.log('Error sending payment: ', error);
-        }
-    };
-
-    const handleCloseModal = () => {
-        setIsPaymentSuccess(false);
-        navigate(`/product/${productDetailInfo.productIdx}`); // Redirect to the product page
-    };
+    const { setProductDetailInfo } = useContext(ProductDetailContext);
 
     return (
         <>
@@ -299,18 +327,22 @@ export default function PaymentInfo({ productDetailInfo }) {
             </PriceInfoSub>
             <SubmitInfo>
                 <span>위 내용을 확인하였습니다.</span>
-                <SubmitButton disabled={showWarning} onClick={handlePaymentSubmit}>결제하기</SubmitButton>
+                {console.log(showWarning)}
+                <SubmitButton disabled={showWarning} onClick={showWarning ? null : openModal}>결제하기</SubmitButton>
             </SubmitInfo>
 
-            {isPaymentSuccess && (
-                <ModalWrapper>
-                    <ModalContent>
-                        <h2>결제가 완료되었습니다!</h2>
-                        <button onClick={handleCloseModal}>닫기</button>
-                    </ModalContent>
-                </ModalWrapper>
+            {confirmPayment && (
+                <ModalBackground>
+                    <ModalContainer>
+                        <div>결제 하시겠습니까?</div>
+                        <ButtonList>
+                            <Button onClick={handlePaymentSubmit}>확인</Button>
+                            <Button onClick={closeModal}>취소</Button>
+                        </ButtonList>                       
+                    </ModalContainer>
+                </ModalBackground>
             )}
-        </TotalContainer>
+            </TotalContainer>
         </> 
     );
 }

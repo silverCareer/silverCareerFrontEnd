@@ -1,11 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const MainContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 100px;
 `;
 
 const PayInfo = styled.div`
@@ -23,32 +23,42 @@ const InfoContainer = styled.div`
 const Button = styled.button`
     padding: 10px;
     border: 1px solid #84A080;
-    color: #84A080;;
+    color: white;
+    background-color: #84A080;
     border-radius: 5px;
     margin-left: 30px;
     cursor: pointer;
+    &:hover {
+        background-color: #6f8a6a;
+    }
 `;
 
 const Title = styled.div`
     font-size: 1.2rem;
+    width: 200px;
 `;
 
-function InfoOfPay() {
+function InfoOfPay({myPageForm}) {
+    const navigate = useNavigate();
+
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    const handleCharge = () => {
+        navigate('/mypage/charge', { state: { balance: myPageForm.balance } });
+    };
+
     return (
+
         <MainContainer>
             <PayInfo>
                 <InfoContainer>
                     <Title>잔여금</Title>
-                    <div>1000000원</div>
-                    <Button onClick={()=>{}}>충전하기</Button>
-                </InfoContainer>
-                <InfoContainer>
-                    <Title>충전 내역</Title>
-                    <Button onClick={()=>{}}>보러가기</Button>
+                        <div>{numberWithCommas(myPageForm.balance ?? 0)} 원</div>
+                    <Button onClick={handleCharge}>충전하기</Button>
                 </InfoContainer>
             </PayInfo>
-
-            
         </MainContainer>
     );
 }

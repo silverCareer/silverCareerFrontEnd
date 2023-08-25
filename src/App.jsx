@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 
 /* Page */
 import HomePage from './pages/Home';
@@ -12,21 +12,28 @@ import AccountEdit from './pages/MyPage/AccountEdit';
 import ProductPage from './pages/Product';
 import PaymentPage from './pages/Payment';
 import ChatPage from './pages/Chat';
+import ApplyProductPage from './pages/Product/apply';
+import ChargePage from './pages/Charge';
+import Request from './pages/Request';
+import RequestInfo from './pages/Request/RequestInfo'
+import BidList from './pages/Request/BidList';
+import BidRequest from './pages/Request/BidRequest';
+import PaymentService from './pages/Request/PaymentService'
+import SearchPage from './pages/Search';
 
 /* Provider */
 import SignupProvider from './hooks/signupContext';
 import { LoginProvider } from './hooks/loginContext';
 import { MypageProvider } from './hooks/mypageContext';
-import ProductProvider from './hooks/productContext';
 import ProductDetailProvider from './hooks/productDetailContext';
 import { ChatProvider } from './hooks/chatContext';
-import ApplyProductPage from './pages/Product/apply';
+import SearchProvider from './hooks/searchContext';
 
 function App() {
   return (
     <LoginProvider>
       <MypageProvider>
-        <ProductProvider>
+        <SearchProvider>
         <ProductDetailProvider>
         <Router>
           <Routes>
@@ -37,24 +44,30 @@ function App() {
               <Route path="mentor" element={<SignupProvider><MentorSignup /></SignupProvider>} />
               <Route path="mentee" element={<SignupProvider><MenteeSignup /></SignupProvider>} />
             </Route>
-
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/product/*" element={<Outlet />}>
               <Route path=":productIdx" element={<ProductPage />}/>
               <Route path=":productIdx/payment" element={<PaymentPage />}/>
             </Route>
-
-            {/* <Route path="/product/:productIdx" element={<ProductPage />}/> */}
             <Route path="/category/:category" element={<CategoryHomePage />} />
             <Route path="/mypage/*" element={<Outlet />}>
               <Route path="" element={<MyPage />} />
               <Route path="account_edit" element={<AccountEdit />} />
+              <Route path="charge" element={<ChargePage />} />
             </Route>
             <Route path="/chatroom" element={<ChatProvider><ChatPage /></ChatProvider>} />
             <Route path="/apply" element={<ApplyProductPage />} />
+            <Route path="/request" element={<Request/>} />
+            <Route path="/requestInfo" element={<RequestInfo/>} />
+            <Route path="/bidList/*" element={<Outlet/>}>
+              <Route path="" element={<BidList/>} />
+              <Route path="payment" element={<PaymentService/>} />
+            </Route>
+            <Route path="/bidRequest" element={<BidRequest/>} />
           </Routes>
         </Router>
         </ProductDetailProvider>
-        </ProductProvider>
+        </SearchProvider>
       </MypageProvider>
     </LoginProvider>
 

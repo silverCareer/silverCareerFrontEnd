@@ -71,8 +71,6 @@ export default function Card({product}) {
                 //setProductTitle(product);
                 setProductDetailInfo(productDetailResponse.response);
 
-                console.log(productDetailResponse.response, "dfsdfsdfsdfsf");
-
                 navigate(`/product/${product.productIdx}`);
             } else {
                 console.error("Failed to fetch product Detail:", productDetailResponse.error);
@@ -95,7 +93,7 @@ export default function Card({product}) {
                 </div>
             </Product1>
             <div className="product-detail">
-                <span>{product.productDescription}</span>
+                <span>{product.productName}</span>
             </div>            
             <div className="product-price">
                 <span>{numberWithCommas(product.productPrice ?? 0)} 원</span>

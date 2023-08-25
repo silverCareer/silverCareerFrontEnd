@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { MypageContext } from '../../hooks/mypageContext';
 import { getChatRooms } from '../../api/chat/getChatRooms';
 import { ChatContext } from '../../hooks/chatContext';
+import { LoginContext } from '../../hooks/loginContext';
 
 
 const Sidebar = styled.div`
@@ -47,9 +47,9 @@ const StyledLink = styled(Link)`
 
 const ChatSidebar = () => {
     const [chats, setChats] = useState([]);
-    const { myPageForm } = useContext(MypageContext);
     const { setSelectedChat, selectedChat, isMessageUpdated } = useContext(ChatContext);
-    const { name } = myPageForm;
+    const { loginForm } = useContext(LoginContext)
+    const { name } = loginForm
 
 
     useEffect(() => {

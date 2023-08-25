@@ -13,7 +13,6 @@ const MainContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 100px;
 `;
 
 const CourseCard = styled.div`
@@ -47,25 +46,30 @@ const PageNavigation = styled.div`
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+
+    span {
+        padding: 0 10px;
+        font-size: 1.2rem;
+    }
 `;
 
 const NavButton = styled.button`
-    padding: 5px 15px;
+    padding: 5px 10px;
     margin: 0 5px;
-    background-color: #84A080;
-    color: white;
+    background-color: white;
+    color: #84A080;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
+    border: 1px solid #84A080;
     transition: background-color 0.3s;
 
+    cursor: pointer;
     &:hover {
         background-color: #6f8a6a;
+        color: white;
     }
-
     &:disabled {
-        background-color: #c2cfc7;
-        cursor: not-allowed;
+        display: none;
     }
 `;
 
@@ -105,7 +109,6 @@ function MyCourses() {
     const location = useLocation();
     const [rating, setRating] = useState(0);
     
-
     const ITEMS_PER_PAGE = 5;
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -117,16 +120,14 @@ function MyCourses() {
         async function fetchMyCourses() {
             try {
                 const response = await getMyCourses();
-                if (response.response) {
-                    console.log("마이페이지 response:", JSON.stringify(response.response, null, 2));
+                if (response.response && response.response.length > 0) {
                     setCourses(response.response);
-                    // console.log(courses[0].productIdx)
                 }
             } catch (error) {
                 console.error("Error fetching courses:", error);
             }
         }
-
+    
         fetchMyCourses();
     }, [location.pathname]); //location.pathname 해당 url 즉 /mypage 값을 가짐 (여기 올때마다 useEffect 작동하게 하려고!)
 
@@ -138,7 +139,7 @@ function MyCourses() {
     );
 
     const openModal = (productIdx) => {
-        console.log(productIdx)
+        //console.log(productIdx)
         setSelectedProductIdx(productIdx);
         setIsModalOpen(true);
     };
@@ -162,7 +163,7 @@ function MyCourses() {
 
         try {
             const response = await postReview(selectedProductIdx, formdata);
-            console.log(response)
+            //console.log(response)
             const updatedCourses = await getMyCourses();
             if (updatedCourses && updatedCourses.response) {
                 setCourses(updatedCourses.response);
@@ -171,8 +172,6 @@ function MyCourses() {
             console.error("Error sending review:", error);
         }
         
-
-
         closeModal();
     };
 
@@ -195,7 +194,7 @@ function MyCourses() {
     return (
         <MainContainer>
             {displayedCourses.map(course => (
-                <CourseCard key={course.localDate + course.mentorName}>
+                <CourseCard key={course.productIdx}>
                 <Info>멘토: {course.mentorName}</Info>
                 <Info>날짜: {course.localDate}</Info>
                 <Info>가격: {course.amount}</Info>
@@ -213,15 +212,13 @@ function MyCourses() {
             <PageNavigation>
                 <NavButton 
                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                    disabled={currentPage <= 1}
-                >
+                    disabled={currentPage <= 1}>
                     &lt; 이전
                 </NavButton>
                 <span> {currentPage} / {totalPages}</span>
                 <NavButton 
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage >= totalPages}
-                >
+                    disabled={currentPage >= totalPages}>
                     다음 &gt;
                 </NavButton>
             </PageNavigation>
