@@ -154,7 +154,7 @@ const MainHeader = () => {
     const [hasNewAlarm, setHasNewAlarm] = useState(false); 
 
     const { loginForm } = useContext(LoginContext)
-    const { authority, name} = loginForm
+    const { authority} = loginForm
 
 
     // 렌더링 될 때마다 새로운 알람있는지 체크
@@ -162,7 +162,7 @@ const MainHeader = () => {
         const checkAlarmStatus = async () => {
             try {
                 const statusData = await getAlarmStatus();
-                // console.log("렌더링될때마다 실행")
+                console.log("렌더링될때마다 실행")
                 const status = statusData.status
                 // console.log(authority, name, status)
 
@@ -171,9 +171,11 @@ const MainHeader = () => {
                 console.error("Failed to fetch alarm status:", error);
             }
         };
+        if(isLoggedIn){
+            checkAlarmStatus();
+        }
 
-        checkAlarmStatus();
-    }, []);
+    }, [isLoggedIn]);
 
     //알람 클릭할때
     useEffect(() => {
