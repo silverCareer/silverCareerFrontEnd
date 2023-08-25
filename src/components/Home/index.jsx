@@ -28,7 +28,7 @@ function Home() {
             }
         }
         fetchData();
-    }, [currentPage]);   
+    }, [currentPage]);
 
     return (
         <div>

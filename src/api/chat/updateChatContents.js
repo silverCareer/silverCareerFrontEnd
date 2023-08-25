@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 export const updateChatContents = async (chatId, newMessage) => {
     try {
         const response = await axios.post(
