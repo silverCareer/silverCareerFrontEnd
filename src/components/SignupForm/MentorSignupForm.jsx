@@ -5,84 +5,80 @@ import { SignupContext } from '../../hooks/signupContext';
 import { signup } from '../../api/signup/signup';
 
 const Container = styled.div`
-    margin-top: 5em;
+    margin-top: 20px;
 `;
-
 const FormContainer = styled.div`
-    margin: 0 auto;
+    margin: auto;
     width: 50%;
 `;
-
 const StyledForm = styled.form`
+    border: 1px solid #84a0808e;
+    border-radius: 5px;
     padding: 2em;
-    border: 1px solid #ccc;
-    border-radius: 15px;
 `;
-
 const Title = styled.h1`
-    text-align: center;
+    font-size: 25px;
+    font-weight: bolder;
     margin-bottom: 1em;
+    margin-left: 2px;
 `;
-
+const SubTitle = styled.div `
+    font-size: 16px;
+    margin-bottom: 10px;
+`;
 const FormGroup = styled.div`
     margin-bottom: 1em;
 `;
-
 const Label = styled.label`
     display: block;
     margin-bottom: 0.5em;
     font-size: 0.9em;
 `;
-
-
 const UserType = styled.div`
     display: flex;
     justify-content: flex-start;
+    gap: 10px;
 `;
-
 const Option = styled.div`
-    padding: 0.5em;
-    cursor: pointer;
     transition: background-color 0.3s ease; 
-    border-radius: 15px;
+    border-radius: 5px;
+    margin-top: 1px;
+    padding: 5px;
+    cursor: pointer;
     &:hover {
         background-color: #84A080;
+        color: white;
     }
     ${({ selected }) =>
         selected &&
         `
         background-color: #84A080;
         color: white;
+        padding: 5px;
     `}
-
 `;
-
 const Button = styled.button`
     display: block;
-    font-size: 1em;
-    font-weight: 900;
     width: 15%;
-    border-radius: 15px;
-
+    padding: 5px;
+    margin: 0 auto; 
+    text-decoration: none;
+    text-align: center;
+    border-radius: 5px;
     border: none;
     color: white;
     background-color: #84A080;
-    border-radius: 15px;
+    font-size: 1.2em;
+    
     cursor: pointer;
-    text-align: center;
-    margin: 0 auto; 
-    text-decoration: none;
 `;
-
 const Select = styled.select`
     width: 30%;
     padding: 0.5em;
     margin-bottom: 0.5em;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    border-radius: 5px;
 `;
-
-
 const Modal = styled.div`
     position: fixed;
     top: 0;
@@ -94,7 +90,6 @@ const Modal = styled.div`
     align-items: center;
     justify-content: center;
 `;
-
 const ModalContent = styled.div`
     background-color: #fff;
     padding: 20px;
@@ -102,7 +97,6 @@ const ModalContent = styled.div`
     text-align: center;
     border: 2px solid #84A080; // 경계선 색상 추가
 `;
-
 const ModalButton = styled.button`
     background-color: #84A080; // 버튼 배경 색상
     color: white; // 텍스트 색상
@@ -115,7 +109,6 @@ const ModalButton = styled.button`
     font-weight: bold;
     margin-top: 10px;
 `;
-
 
 function MentorSignupForm() {
 
@@ -160,12 +153,8 @@ function MentorSignupForm() {
             <FormContainer>
                 <StyledForm onSubmit={handleSubmit}>
                 <Title className="mb-4">멘토 회원가입</Title>
-
-
-
                     <FormGroup>
-                    
-                        <Label htmlFor="category">서비스 분야</Label>
+                        <SubTitle>서비스 분야를 선택해주세요!</SubTitle>
                         <UserType>
                             <Option 
                                 onClick={() => handleInputChange({ target: { name: 'category', value: '현장직' } })}
