@@ -14,14 +14,12 @@ const ProductItem = styled.li `
     display: flex;
     flex-direction: column;
     gap: 8px;
-
 `
 const ProductImg = styled.div `
     height: 350px;
     border: 1px solid var(--border-color);
     border-radius: 10px;
     overflow: hidden;
-    
     cursor: pointer;
 `
 const Product1 = styled.div `
@@ -61,6 +59,7 @@ const LikeOnIcon = styled.div `
     background-repeat: no-repeat;
     margin-right: 5px;
 `
+
 export default function Card({product}) {
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -75,7 +74,6 @@ export default function Card({product}) {
             console.log('Product Detail:', productDetailResponse);
             
             if (productDetailResponse.success) {
-                //setProductTitle(product);
                 setProductDetailInfo(productDetailResponse.response);
 
                 navigate(`/product/${product.productIdx}`);
@@ -88,8 +86,8 @@ export default function Card({product}) {
     };
 
     return (
-        <ProductItem onClick={handleCardClick}>
-            <ProductImg>
+        <ProductItem>
+            <ProductImg onClick={handleCardClick}>
                 <img src={product.productImage} alt="img"/>
             </ProductImg>
             <Product1>
@@ -101,7 +99,7 @@ export default function Card({product}) {
                     ) : (
                         <LikeIcon />
                     )}
-                    <span>{product.productLikes}</span>
+                    <span>&nbsp;{product.productLikes}</span>
                     {/*<LikeIcon />
                     <span>&nbsp;{product.productLikes}</span>*/}
                 </div>
