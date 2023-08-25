@@ -33,7 +33,6 @@ const TopIcon = styled.div `
 const LikeIcon = styled.div `
     width: 22px;
     height: 22px;
-    color: black;
     background-image: url(${likeIconImage});
     background-repeat: no-repeat;
     margin-right: 5px;
@@ -42,7 +41,6 @@ const LikeIcon = styled.div `
 const LikeOnIcon = styled.div `
     width: 22px;
     height: 22px;
-    color: black;
     background-image: url(${likeOnIconImage});
     background-repeat: no-repeat;
     margin-right: 5px;
@@ -223,11 +221,7 @@ export default function ProductDetailTop({avgRating}) {
     };
     const { productDetailInfo, setProductDetailInfo } = useContext(ProductDetailContext);
     const { liked, productIdx, productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
-
     const [ islike, setIsLike ] = useState(liked);
-
-    console.log(liked, islike, "ㅁㅇㄻㅇㄻㅇㅁㅇㄻㅇㄻㄴㅇㄹㄻㅇ");
-
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
 

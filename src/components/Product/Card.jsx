@@ -7,6 +7,7 @@ import { getProductDetail } from '../../api/product/productDetail';
 
 /* svg */
 import likeIconImage from '../../assets/svg/icon-heart.svg'
+import likeOnIconImage from '../../assets/svg/icon-heart-on.svg'
 
 const ProductItem = styled.li `
     width: 100%;
@@ -14,13 +15,14 @@ const ProductItem = styled.li `
     flex-direction: column;
     gap: 8px;
 
-    cursor: pointer;
 `
 const ProductImg = styled.div `
     height: 350px;
     border: 1px solid var(--border-color);
     border-radius: 10px;
     overflow: hidden;
+    
+    cursor: pointer;
 `
 const Product1 = styled.div `
     align-items: center;
@@ -51,8 +53,13 @@ const LikeIcon = styled.div `
     color: black;
     background-image: url(${likeIconImage});
     background-repeat: no-repeat;
-
-    cursor: pointer;
+`
+const LikeOnIcon = styled.div `
+    width: 22px;
+    height: 22px;
+    background-image: url(${likeOnIconImage});
+    background-repeat: no-repeat;
+    margin-right: 5px;
 `
 export default function Card({product}) {
     const numberWithCommas = (x) => {
@@ -88,8 +95,15 @@ export default function Card({product}) {
             <Product1>
                 <div>{product.category}</div>
                 <div className="productLike">
-                    <LikeIcon />
-                    <span>&nbsp;{product.productLikes}</span>
+                    {console.log(product.liked)}
+                    {product.liked ? (
+                        <LikeOnIcon  />
+                    ) : (
+                        <LikeIcon />
+                    )}
+                    <span>{product.productLikes}</span>
+                    {/*<LikeIcon />
+                    <span>&nbsp;{product.productLikes}</span>*/}
                 </div>
             </Product1>
             <div className="product-detail">
