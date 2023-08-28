@@ -66,6 +66,12 @@ const TopRightImage = styled.div `
     height: 442px;
     border-radius: 10px;
     border: 1px solid #000;
+    overflow: hidden;
+
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+
 `
 const Title = styled.div `
     font-weight: 600;
@@ -291,7 +297,7 @@ export default function ProductDetailTop({avgRating}) {
                     <span>{address}</span>
                 </Location>
                 <div className="description">
-                    {description}
+                    {description.length > 20 ? `${description.slice(0, 20)}...` : description}
                 </div>
                 <Price>
                     {numberWithCommas(price)} 원
@@ -318,7 +324,8 @@ export default function ProductDetailTop({avgRating}) {
                 </ButtonList>
             </TopLeft>
             <TopRightImage>
-                <img src={image} alt="Product" />
+                <img src={image} alt="Product" style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                {/* <img src={image} alt="Product" style={{ maxWidth: '100%', maxHeight: '100%' }} /> */}
             </TopRightImage>
         </ProductTopSection>
         <InquiryModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} name={name} />
