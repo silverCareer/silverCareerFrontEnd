@@ -12,7 +12,7 @@ import { getSuggestion } from '../../api/request/getSuggestion';
 import { getBidInfo } from '../../api/request/getBidInfo';
 import { searchAPI } from '../../api/search/productSearch';
 import { SearchContext } from '../../hooks/searchContext';
-
+import LoginCheckFunction from './LoginCheck';
 
 const Header = styled.header`
     display: flex;
@@ -154,26 +154,6 @@ const MainHeader = () => {
 
     const [hasNewAlarm, setHasNewAlarm] = useState(false); 
     
-
-    //로그인 확인여부
-    useEffect(() => {
-        // Check if the user is logged in when the component mounts (page loads)
-        const checkLoginStatus = () => {
-            const userIsLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; // Check local storage for login status
-            setIsLoggedIn(userIsLoggedIn);
-
-            if (userIsLoggedIn) {
-                const newLoginForm = { ...loginForm, authority: localStorage.getItem('authority') };
-                setLoginForm(newLoginForm);
-            }
-        };
-
-        checkLoginStatus(); // Call the function when the component mounts
-
-        // ... other useEffect code ...
-
-    }, []);
-
     // 렌더링 될 때마다 새로운 알람있는지 체크
     useEffect(() => {
         const checkAlarmStatus = async () => {
@@ -260,7 +240,6 @@ const MainHeader = () => {
     };
 
     const handleLogout = () => {
-
         setIsLoggedIn(false);
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('jwttoken');
@@ -321,6 +300,7 @@ const MainHeader = () => {
     return (
         <>
             <Header>
+                <LoginCheckFunction setIsLoggedIn={setIsLoggedIn}/>
                 <Logo onClick={() => navigate('/')}></Logo>
                 <SearchContainer>
                     <SearchBox type="text"

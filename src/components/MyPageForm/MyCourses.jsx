@@ -7,6 +7,8 @@ import { postReview } from '../../api/mypage/postReview';
 import { ProductDetailContext } from '../../hooks/productDetailContext';
 import { getProductDetail } from '../../api/product/productDetail';
 
+import fullstarIcon from '../../assets/svg/icon-full-star.svg';
+import emptystarIcon from '../../assets/svg/icon-empty-star.svg';
 
 const MainContainer = styled.div`
     display: flex;
@@ -14,7 +16,6 @@ const MainContainer = styled.div`
     justify-content: space-between;
     align-items: center;
 `;
-
 const CourseCard = styled.div`
     display: flex;
     justify-content: space-between;
@@ -25,13 +26,11 @@ const CourseCard = styled.div`
     margin-top: 10px;
     width: 100%;
 `;
-
 const Info = styled.span`
     flex: 1;
     margin: 0 10px;
     text-align: center;
 `;
-
 const ReviewButton = styled.button`
     padding: 5px 10px;
     background-color: ${({ isHidden }) => isHidden ? 'transparent' : '#84A080'};
@@ -40,7 +39,6 @@ const ReviewButton = styled.button`
     border: none;
     cursor: pointer;
 `;
-
 const PageNavigation = styled.div`
     display: flex;
     justify-content: center;
@@ -52,8 +50,18 @@ const PageNavigation = styled.div`
         font-size: 1.2rem;
     }
 `;
-
+const ButtonList = styled.div `
+    display: flex;
+    align-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+`
+const NavButtonList = styled.div `
+    display : flex;
+    justify-content: center;
+`
 const NavButton = styled.button`
+    width: 200px;
     padding: 5px 10px;
     margin: 0 5px;
     background-color: white;
@@ -72,7 +80,32 @@ const NavButton = styled.button`
         display: none;
     }
 `;
-
+const ReviewRate = styled.div `
+    display: flex;
+    margin-left: 7px;
+    margin-top: 5px;
+`;
+const ReviewBtn = styled.div `
+    
+`;
+const FullStar = styled.div`
+    display: flex;
+    align-items: center;
+    align-content: center;
+    width: 23px;
+    height: 23px;
+    background-image: url(${fullstarIcon});
+    background-repeat: no-repeat;
+`;
+const EmptyStar = styled.div`
+    display: flex;
+    align-items: center;
+    align-content: center;
+    width: 23px;
+    height: 23px;
+    background-image: url(${emptystarIcon});
+    background-repeat: no-repeat;
+`;
 const ModalBackground = styled.div`
     position: fixed;
     top: 0;
@@ -84,14 +117,16 @@ const ModalBackground = styled.div`
     justify-content: center;
     align-items: center;
 `;
-
 const ModalContainer = styled.div`
     width: 400px;
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
 `;
+const ReviewTitle = styled.h3 `
 
+    font-size: 20px;
+`;
 const ReviewTextarea = styled.textarea`
     width: 100%;
     height: 150px;
@@ -226,26 +261,29 @@ function MyCourses() {
             {isModalOpen && (
                 <ModalBackground>
                     <ModalContainer>
+                        <ButtonList>
+                            <ReviewTitle>리뷰 작성하기</ReviewTitle>
+                            <ReviewRate>
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <ReviewBtn
+                                        key={star}
+                                        onClick={() => setRating(star)}
+                                        style={{ color: star <= rating ? '#FFD700' : 'gray' }}
+                                    >
+                                        {star <= rating ? <FullStar /> : <EmptyStar />}
+                                    </ReviewBtn>
+                                ))}
+                            </ReviewRate>
+                        </ButtonList>
                         <ReviewTextarea 
                             value={reviewMessage} 
                             onChange={(e) => setReviewMessage(e.target.value)} 
                             placeholder="리뷰를 입력해주세요" 
                         />
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <NavButton onClick={sendReview}>보내기</NavButton>
-                            <NavButton onClick={closeModal} style={{ marginLeft: '20px' }}>닫기</NavButton>
-                            <div>
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <button
-                                        key={star}
-                                        onClick={() => setRating(star)}
-                                        style={{ color: star <= rating ? '#FFD700' : 'gray' }}
-                                    >
-                                        ★
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
+                        <NavButtonList>
+                            <NavButton onClick={sendReview}>작성하기</NavButton>
+                            <NavButton onClick={closeModal} style={{ marginLeft: '20px' }}>닫기</NavButton>  
+                        </NavButtonList>
                     </ModalContainer>
                 </ModalBackground>
             )}

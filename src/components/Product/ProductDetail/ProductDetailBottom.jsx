@@ -1,6 +1,4 @@
-import { useContext } from 'react';
 import styled from 'styled-components';
-import { ProductDetailContext } from './../../../hooks/productDetailContext';
 import CancelInfo from './PageComponent/CancelInfo';
 
 const ProductBottomsection = styled.div `
@@ -35,20 +33,38 @@ const ContentComponent = styled.div `
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    .top {
+        margin-top: 30px;
+    }
+    .content {
+        line-height: 1.5;
+    }
 `
 const Title = styled.h1`
     font-size: 25px;
     font-weight: bold;
+
+    .restrict {
+        font-size: 20px;
+    }
 `;
 const Line = styled.div`
     height: 1px;
     background-color: #ededed;
 `;
+const MentorCareer = styled.div `
+    margin-top: 10px;
+    color: gray;
+    font-size: 15px;
+`;
+const MentorName = styled.div `
+    font-size: 18px;
+`
 
-export default function ProductDetailBottom() {
-    const { productDetailInfo } = useContext(ProductDetailContext);
-    const { description, memberName } = productDetailInfo
-    
+export default function ProductDetailBottom({productDetailInfo}) {
+    const { description, memberName, memberCareer } = productDetailInfo
+    console.log(productDetailInfo);
     return (
         <ProductBottomsection>
             <BottomMenu>
@@ -57,9 +73,10 @@ export default function ProductDetailBottom() {
                 <div className="menu-review">리뷰</div>
             </BottomMenu>
             <BottomContents>
-                <ContentComponent style={{'margin-top':'30px'}}>
+                <ContentComponent className="top">
                     <Title>멘토정보</Title>
-                    <div className="content">{memberName}</div>      
+                    <MentorCareer>경력 {memberCareer}</MentorCareer>     
+                    <MentorName>{memberName} 멘토님</MentorName>
                 </ContentComponent>
                 <Line />
                 <ContentComponent>
@@ -68,7 +85,7 @@ export default function ProductDetailBottom() {
                 </ContentComponent>
                 <Line />
                 <ContentComponent>
-                    <Title style={{ 'font-size':'23px'}}>취소 규정</Title>
+                    <Title className="restrict">취소 규정</Title>
                     <CancelInfo />
                 </ContentComponent>
                 <Line />                

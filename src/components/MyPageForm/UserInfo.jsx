@@ -32,17 +32,15 @@ const Contents = styled.div`
     color: #808080;
 `
 
-function UserInfo() {
-    const { myPageForm } = useContext(MypageContext);
+function UserInfo({myPageForm}) {
     const { authority, name, email, phoneNumber, age, career } = myPageForm;
-
 
     return (
         <MainContainer>
             <PayInfo>
                 <InfoContainer>
                     <Title>가입정보</Title>
-                    <Contents>{ authority }</Contents>
+                    <Contents>{authority === 'ROLE_MENTEE' ? '멘티' : '멘토'}</Contents>
                 </InfoContainer>
                 <InfoContainer>
                     <Title>이름</Title>

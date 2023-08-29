@@ -116,7 +116,7 @@ function ProfilePicEditor() {
     return (
         <>
             <Alarm visible={showAlarm}>
-            프로필 이미지가 변경되었습니다.
+                프로필 이미지가 변경되었습니다.
             </Alarm>
             <MainContainer>
                 <ProfileInfo>

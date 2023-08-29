@@ -73,8 +73,7 @@ const ChatRoom = () => {
     // const { name } = myPageForm;
     const messagesEndRef = useRef(null); //마지막 메시지 따라가게 하려고 생성
     const otherUserName = selectedChat?.user1 === name ? selectedChat?.user2 : selectedChat?.user1;
-
-
+    
     useEffect(() => {
         setMessages(selectedChat?.messages || []);
         if(client.current && client.current.connected) {

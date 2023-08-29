@@ -133,8 +133,7 @@ const Button = styled.div `
     cursor: pointer;
 `;
 
-export default function ProductReview({setAvgRating}) {
-    const { productDetailInfo } = useContext(ProductDetailContext);
+export default function ProductReview({productDetailInfo, setAvgRating}) {
     const [visibleReviews, setVisibleReviews] = useState(3);
 
     const showMoreReviews = () => {
