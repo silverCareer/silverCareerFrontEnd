@@ -102,12 +102,6 @@ const AuthButton = styled.button`
     line-height: 1.2em; 
     font-size: 0.7em; 
 `;
-const Line = styled.div`
-    height: 1px;
-    width: 100%;
-    background-color: #ccc; 
-    margin: 1em 0; 
-`;
 
 const SignupForm = () => {
     const { updateSignupData } = useContext(SignupContext);

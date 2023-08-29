@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import PaymentInfo from './PaymentInfo';
 import { ProductDetailContext } from '../../hooks/productDetailContext';
-import { LoginContext } from '../../hooks/loginContext';
 
 const PaymentContainer = styled.div `
     display: flex;

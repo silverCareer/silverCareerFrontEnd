@@ -22,7 +22,6 @@ const Header = styled.header`
     height: 70px;
     margin : 10px 50px 0px 50px;
 `;
-
 const Logo = styled.div`
     cursor: pointer;
     width: 100px;
@@ -30,34 +29,28 @@ const Logo = styled.div`
     background-image: url(${logoImage});;
     background-repeat: no-repeat;
 `;
-
 const SearchContainer = styled.div`
     position: relative;
     display: flex;
     align-items: center;
     margin: 0 10px;
 `;
-
 const SearchBox = styled.input`
     padding: 5px;
-    border-radius: 10px;
+    border-radius: 8px;
     width: 300px;
-
-    border-radius: 25px;
     border: 1px solid #000;
     background: #FFF;
 `;
-
 const SearchIcon = styled.span`
     position: absolute;
-    right: 10px;
+    right: 3px;
     cursor: pointer;
     background-image: url(${searchIconImage});
     background-repeat: no-repeat;
     width: 20px;
     height: 20px;
 `;
-
 const Button = styled.button`
     margin-left: 10px;
     background: none;
@@ -69,7 +62,6 @@ const Button = styled.button`
     outline: inherit;
     font-weight : 700;
 `;
-
 const ReqButton = styled.button`
     margin-left: 10px;
     background: none;
@@ -81,22 +73,22 @@ const ReqButton = styled.button`
     padding: 5px 20px 5px 20px;
     outline: inherit;
     font-weight : 700;
+
+    &:hover {
+        background-color: #84A080;
+        color: white;
+    }
 `;
-
-
 const Line = styled.div`
     height: 1px;
     width: 100%;
     background-color: #ccc; 
     margin: 1em 0; 
 `;
-
 const NotificationWrapper = styled.div`
     position: relative; // 이를 통해 내부의 absolute 포지셔닝 NotificationContainer가 상대적으로 위치를 잡게 됩니다.
 `;
-const NotificationContainer = styled.div `
-
-`;
+const NotificationContainer = styled.div ``;
 const NotificationContext = styled.div`
     display: flex;
     flex-direction: column;
@@ -116,7 +108,6 @@ const NotificationContext = styled.div`
         color: black;
     }
 `;
-
 const NotificationItem = styled.div`
     padding: 10px;
     border-bottom: 1px solid #e0e0e0;
@@ -130,13 +121,11 @@ const NotificationItem = styled.div`
         border-bottom: none; // 마지막 아이템에는 테두리 제거
     }
 `;
-
 const NoNotificationText = styled.div`
     color: #7e7e7e; 
     padding: 10px;
     text-align: center; 
 `;
-
 const AlarmStatusIcon = styled.div`
     width: 10px;
     height: 10px;
