@@ -219,7 +219,7 @@ function InquiryModal({ isOpen, onClose, name }) {
 
 
 export default function ProductDetailTop({avgRating}) {
-    const { loginForm } = useContext(LoginContext);
+    const { isLoggedIn, loginForm } = useContext(LoginContext);
     const { name } = loginForm;
 
     const numberWithCommas = (x) => {
@@ -242,7 +242,7 @@ export default function ProductDetailTop({avgRating}) {
             if(response.success) {
                 setIsLike((prevIsLiked) => !prevIsLiked);
                 
-                const productDetailResponse = await getProductDetail(productIdx);
+                const productDetailResponse = await getProductDetail(productIdx, isLoggedIn);
                 const newLikes = productDetailResponse.response.likes;
 
                 setProductDetailInfo((prevProductDetailInfo => ({
@@ -253,7 +253,7 @@ export default function ProductDetailTop({avgRating}) {
             }
 
         } catch (error) {
-
+            console.log(error);
         }
     }
 
@@ -275,7 +275,7 @@ export default function ProductDetailTop({avgRating}) {
             }
 
         } catch (error) {
-
+            console.log(error);
         }
     }
 
@@ -315,12 +315,13 @@ export default function ProductDetailTop({avgRating}) {
                 </ClassInfo>
 
                 <ButtonList>
+                    {console.log(productDetailInfo, " ", name)}
                     {/* <Button onClick={name ? handlePaymentClick : null} disabled={!name}>결제하기</Button>
                     <Button onClick={name ? () => setModalOpen(true) : null} disabled={!name}>문의하기</Button> */}
-                    <Button onClick={name && productDetailInfo.status === 3 ? handlePaymentClick : null} 
-                            disabled={!name || productDetailInfo.status !== 3}>결제하기</Button>
-                    <Button onClick={name && productDetailInfo.status === 3 ? () => setModalOpen(true) : null} 
-                            disabled={!name || productDetailInfo.status !== 3}>문의하기</Button>
+                    <Button onClick={productDetailInfo.status === 3 ? handlePaymentClick : null} 
+                            disabled={productDetailInfo.status !== 3}>결제하기</Button>
+                    <Button onClick={productDetailInfo.status === 3 ? () => setModalOpen(true) : null} 
+                            disabled={productDetailInfo.status !== 3}>문의하기</Button>
                 </ButtonList>
             </TopLeft>
             <TopRightImage>
