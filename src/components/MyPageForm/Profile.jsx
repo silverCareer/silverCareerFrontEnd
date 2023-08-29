@@ -60,8 +60,7 @@ const Email = styled.div`
     color: #808080;
 `
 
-function Profile() {
-    const { myPageForm } = useContext(MypageContext);
+function Profile({myPageForm}) {
     const { authority, name, email, userImage } = myPageForm;
     const navigate = useNavigate();
 
@@ -72,7 +71,7 @@ function Profile() {
                 <UserInfo>
                     <Username>
                         {name}
-                        <span> {authority}님</span>
+                        <span> {authority === 'ROLE_MENTEE' ? '멘티' : '멘토'}님</span>
                     </Username>
                     <Email>{email}</Email>
                 </UserInfo>

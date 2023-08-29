@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const GrayText = styled.p`
     color: #898989;
+    font-size: 12px;
 `;
 
 export default function CancelInfo() {

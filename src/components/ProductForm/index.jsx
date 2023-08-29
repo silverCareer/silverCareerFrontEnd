@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { productRegistContents } from '../../api/product/productRegistContents';
 import uploadIconImage from '../../assets/svg/icon-upload.svg';
 import SelectAddress from './SelectAddress';
+import ReactMarkdown from 'react-markdown';
 
 const ProductContainer = styled.div `
     display: flex;
@@ -143,6 +144,66 @@ background-repeat: no-repeat;
 
 cursor: pointer;
 `
+/* modal */
+/* modal */
+const ModalBackground = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const ModalContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+`;
+const Button = styled.div `
+    margin-top: 10px;
+    width: 100%;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+
+    border-radius: 5px;
+    background: #84A080;
+    color: white;
+
+    cursor: pointer;
+    &:hover {
+        background: #6f8a6a;
+    }
+`
+const ButtonList = styled.div `
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+    gap: 10px;
+`
+const Alarm = styled.div`
+    background: #84A080;
+    color: white;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 1000;
+    display: ${({ visible }) => (visible ? 'block' : 'none')};
+`;
 
 function ProductForm() {
     const navigate = useNavigate();
@@ -154,10 +215,22 @@ function ProductForm() {
     const [price, setPrice] = useState('');
     const [address, setAddress] = useState('');
     const [selectedImageUrl, setSelectedImageUrl] = useState('');
-    const [ uploadedImageUrl, setUploadedImageUrl ] = useState(null); // 업로드한 이미지 URL
+    const [uploadedImageUrl, setUploadedImageUrl] = useState(null); // 업로드한 이미지 URL
     
     const [selectedAddress, setSelectedAddress] = useState('');
     
+    //modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showAlarm, setShowAlarm] = useState(false);
+
+    const modalOpen = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     // 이미지 URL을 업데이트하는 함수
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -225,7 +298,11 @@ function ProductForm() {
             const response = await productRegistContents(createProductReq, formData);
 
             if (response.success) {
-                navigate(`/category/${encodeURIComponent(selectedCategory)}`);
+                setShowAlarm(true);
+                setTimeout(() => {
+                    setShowAlarm(false); 
+                    navigate(`/category/${encodeURIComponent(selectedCategory)}`);
+                }, 2000); 
             }
         } catch (error) {
             console.error('Error sending data to backend:', error);
@@ -233,12 +310,16 @@ function ProductForm() {
 
     };
 
+   
     return (
         <>
-            <ProductContainer>
+            <Alarm visible={showAlarm}>
+                상품 등록이 완료되었습니다.
+            </Alarm>
+            <ProductContainer>              
                 <SubHead>
                     <span>기본정보</span>
-                    <SubmitButton onClick={handleSubmit}>등록하기</SubmitButton>
+                    <SubmitButton onClick={modalOpen}>등록하기</SubmitButton>
                 </SubHead>
                 <ProductBox>
                     <BoxTitle>상품명</BoxTitle>
@@ -290,6 +371,18 @@ function ProductForm() {
                     </ImageUploadDiv>
                     {uploadedImageUrl && <img style={{ width: '50px' }} src={uploadedImageUrl} alt="Selected" />}
                 </ImageUpload>
+
+                {isModalOpen && (
+                    <ModalBackground>
+                        <ModalContainer>
+                            <div>상품 등록을 하시겠습니까?</div>
+                            <ButtonList>
+                                <Button onClick={handleSubmit}>확인</Button>
+                                <Button onClick={closeModal}>취소</Button>
+                            </ButtonList>                       
+                        </ModalContainer>
+                    </ModalBackground>
+                )}
             </ProductContainer>
         </>
     );

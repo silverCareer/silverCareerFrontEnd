@@ -1,4 +1,4 @@
-import { useContext, useState  } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import likeIconImage from '../../../assets/svg/icon-heart.svg'
 import likeOnIconImage from '../../../assets/svg/icon-heart-on.svg'
@@ -36,7 +36,7 @@ const LikeIcon = styled.div `
     background-image: url(${likeIconImage});
     background-repeat: no-repeat;
     margin-right: 5px;
-    cursor: pointer;
+    cursor: ${({ isMentor }) => isMentor ? '' : 'pointer'};
 `
 const LikeOnIcon = styled.div `
     width: 22px;
@@ -169,8 +169,7 @@ const ModalButton = styled.button`
     }
 `;
 
-function InquiryModal({ isOpen, onClose, name }) {
-    const { productDetailInfo } = useContext(ProductDetailContext);
+function InquiryModal({ productDetailInfo, isOpen, onClose, name }) {
     const { memberName } = productDetailInfo;
     
     const [inquiryContent, setInquiryContent] = useState('');
@@ -217,15 +216,15 @@ function InquiryModal({ isOpen, onClose, name }) {
     );
 }
 
-
-export default function ProductDetailTop({avgRating}) {
+export default function ProductDetailTop({productDetailInfo, avgRating}) {
     const { isLoggedIn, loginForm } = useContext(LoginContext);
     const { name } = loginForm;
-
+    console.log(loginForm, " afadfadfadfadsf");
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
-    const { productDetailInfo, setProductDetailInfo } = useContext(ProductDetailContext);
+    
+    const { setProductDetailInfo } = useContext(ProductDetailContext);
     const { liked, productIdx, productName, address, description, price, image, likes, memberCareer } = productDetailInfo;
     const [ islike, setIsLike ] = useState(liked);
     const [isModalOpen, setModalOpen] = useState(false);
@@ -236,9 +235,11 @@ export default function ProductDetailTop({avgRating}) {
     };
 
     const toggleLikeOn = async () => {
+        if(loginForm.authority === '멘토') return;
+        
         try {
             const response = await productLikeOn(productIdx);
-
+            console.log(response);
             if(response.success) {
                 setIsLike((prevIsLiked) => !prevIsLiked);
                 
@@ -284,10 +285,11 @@ export default function ProductDetailTop({avgRating}) {
         <ProductTopSection>
             <TopLeft>
                 <TopIcon>
+                    {console.log(liked)}
                     {liked ? (
                         <LikeOnIcon onClick={toggleLikeOff} />
                     ) : (
-                        <LikeIcon onClick={toggleLikeOn} />
+                        <LikeIcon isMentor={loginForm.authority === '멘토'} onClick={toggleLikeOn} />
                     )}
                     <span>{likes}</span>
                 </TopIcon>
@@ -315,9 +317,6 @@ export default function ProductDetailTop({avgRating}) {
                 </ClassInfo>
 
                 <ButtonList>
-                    {console.log(productDetailInfo, " ", name)}
-                    {/* <Button onClick={name ? handlePaymentClick : null} disabled={!name}>결제하기</Button>
-                    <Button onClick={name ? () => setModalOpen(true) : null} disabled={!name}>문의하기</Button> */}
                     <Button onClick={productDetailInfo.status === 3 ? handlePaymentClick : null} 
                             disabled={productDetailInfo.status !== 3}>결제하기</Button>
                     <Button onClick={productDetailInfo.status === 3 ? () => setModalOpen(true) : null} 
@@ -329,7 +328,7 @@ export default function ProductDetailTop({avgRating}) {
                 {/* <img src={image} alt="Product" style={{ maxWidth: '100%', maxHeight: '100%' }} /> */}
             </TopRightImage>
         </ProductTopSection>
-        <InquiryModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} name={name} />
+        <InquiryModal productDetailInfo={productDetailInfo} isOpen={isModalOpen} onClose={() => setModalOpen(false)} name={name} />
         </>
     );
 }
