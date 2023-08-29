@@ -113,9 +113,11 @@ function LoginForm() {
         localStorage.setItem('isLoggedIn', 'true');
 
         if (response.data.response.authority === 'ROLE_MENTOR') {
-          setLoginForm(prev => ({ ...prev, authority: '멘토' }));
+            setLoginForm(prev => ({ ...prev, authority: '멘토' }));
+            localStorage.setItem('authority', '멘토');
         } else if (response.data.response.authority === 'ROLE_MENTEE') {
             setLoginForm(prev => ({ ...prev, authority: '멘티' }));
+            localStorage.setItem('authority', '멘티');
         }
 
         setLoginForm(prev => ({
