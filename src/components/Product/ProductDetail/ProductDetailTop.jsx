@@ -36,7 +36,7 @@ const LikeIcon = styled.div `
     background-image: url(${likeIconImage});
     background-repeat: no-repeat;
     margin-right: 5px;
-    ${({ isMentor }) => isMentor && 'cursor: '}
+    cursor: ${({ isMentor }) => isMentor ? '' : 'pointer'};
 `
 const LikeOnIcon = styled.div `
     width: 22px;
