@@ -10,39 +10,41 @@ const MainContainer = styled.div`
     border: 1px solid #E0E0E0;
     display: flex;
     flex-direction: column;
-    padding: 20px 50px;
+    padding: 20px 30px;
     width: 650px;
-    color: #84A080;
-    margin: 20px auto;
+    margin: auto;
     border-radius: 5px;
 `;
-
+const MainTitle = styled.div `
+    font-size: 23px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    margin: 20px auto;
+    width: 650px;
+`
 const InfoContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
 `;
-
 const Title = styled.div`
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 400;
 `;
-
 const Contents = styled.div`
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 300;
-    color: #808080;
 `;
-
 const DetailedContents = styled.div`
     background-color: #F7F7F7;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 300;
-    color: #808080;
     margin: 20px 0;
     padding: 15px;
     border-radius: 4px;
     text-align: justify;
+    line-height: 1.5;
 `;
 
 const InputBox = styled.input`
@@ -153,7 +155,10 @@ const RequestDetail = () => {
     const { loginForm } = useContext(LoginContext);
     const { name } = loginForm;
 
-
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+    
     const [formData, setFormData] = useState({
     });
 
@@ -192,6 +197,7 @@ const RequestDetail = () => {
             <Alarm visible={showAlarm}>
                 의뢰인에게 입찰가를 전달했습니다. 잠시만 기다려 주세요.
             </Alarm>
+            <MainTitle>의뢰 정보</MainTitle>
             <MainContainer>
                 <InfoContainer>
                     <Title>카테고리</Title>
@@ -213,7 +219,7 @@ const RequestDetail = () => {
 
                 <InfoContainer>
                     <Title>의뢰 가격</Title>
-                    <Contents>{requestPrice}원</Contents>
+                    <Contents>{numberWithCommas(requestPrice)}원</Contents>
                 </InfoContainer>
 
                 <InfoContainer>

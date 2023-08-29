@@ -94,19 +94,27 @@ const Line = styled.div`
 const NotificationWrapper = styled.div`
     position: relative; // 이를 통해 내부의 absolute 포지셔닝 NotificationContainer가 상대적으로 위치를 잡게 됩니다.
 `;
+const NotificationContainer = styled.div `
 
-const NotificationContainer = styled.div`
+`;
+const NotificationContext = styled.div`
     display: flex;
     flex-direction: column;
     background: #FFF;
-    border: 1px solid #84A080; // 포인트 컬러 추가
+    border: 2px solid #84A080; // 포인트 컬러 추가
+    border-radius: 5px;
     max-height: 300px;
     overflow-y: auto;
     position: absolute;
     top: 100%;
     right: 0;
     z-index: 1;
-    width: 250px; // 일정 크기를 갖도록 설정. 크기는 원하는대로 조절 가능합니다.
+    width: 350px; // 일정 크기를 갖도록 설정. 크기는 원하는대로 조절 가능합니다.
+    padding: 5px;
+    line-height: 1.5;
+    span {
+        color: black;
+    }
 `;
 
 const NotificationItem = styled.div`
@@ -154,6 +162,10 @@ const MainHeader = () => {
 
     const [hasNewAlarm, setHasNewAlarm] = useState(false); 
     
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
     // 렌더링 될 때마다 새로운 알람있는지 체크
     useEffect(() => {
         const checkAlarmStatus = async () => {
@@ -323,7 +335,7 @@ const MainHeader = () => {
                         <Button ref={buttonRef} onClick={toggleNotifications}>알림</Button>
                         <AlarmStatusIcon show={hasNewAlarm} /> {/* AlarmStatusIcon의 'show' props를 이용해서 보여주고 안보여주고 구현 */}
                         {isNotificationOpen && (
-                            <NotificationContainer ref={notificationRef}>
+                            <NotificationContext ref={notificationRef}>
                                 {hasNewAlarm ? ( /* 새로운 알림이 있을 경우 메시지 표시 */
                                     <NotificationItem>새로운 알람이 도착했습니다!</NotificationItem>
                                 ) : null}
@@ -334,23 +346,40 @@ const MainHeader = () => {
                                         let content;
 
                                         if (authority === '멘토') {
-                                            content = `${notification.suggester}님의 ${notification.title}에 대한 의뢰 신청입니다.`;
+                                            content = (
+                                                <div>
+                                                    <span>{notification.suggester}님</span>의 '{notification.title}' 에 대한 의뢰 신청입니다.
+                                                </div>
+                                            );
                                         } else if (authority === '멘티') {
-                                            content = `${notification.suggestionTitle}건에 ${notification.mentorName}님이 ${notification.price}원으로 입찰을 요청했습니다.`;
+                                            content = (
+                                                <div>
+                                                    <span>'{notification.suggestionTitle}'</span> 건에 {notification.mentorName}님이 {numberWithCommas(notification.price)}원으로 입찰을 요청했습니다.
+                                                </div>  
+                                            );
                                         } else {
                                             content = "알림 내용"; // 다른 권한이나 예외 상황에 대한 내용. 필요에 따라 수정
                                         }
 
-                                        const displayContent = content.length > 20 ? content.substring(0, 20) + '...' : content;
+                                        const displayContent =
+                                            content.length > 20 ? (
+                                                <>
+                                                {content.substring(0, 20)}...
+                                                </>
+                                            ) : (
+                                                content
+                                            );
 
                                         return (
                                             <NotificationItem key={notification.suggestionIdx} onClick={() => authority === '멘토' ? handleMentorNotificationClick(notification.suggestionIdx) : handleMenteeNotificationClick(notification.bidIdx)}>
-                                            {displayContent}
+                                                <NotificationContainer>
+                                                    {displayContent}
+                                                </NotificationContainer>
                                             </NotificationItem>
                                         );
                                     })
                                 )}
-                            </NotificationContainer>
+                            </NotificationContext>
                         )}
                     </NotificationWrapper>
                     <Button onClick={handleMyPageClick}>마이페이지</Button>

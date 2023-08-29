@@ -37,7 +37,6 @@ function MyPageForm() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log("여기가 계속 되나?");
                 const data = await getMyProfile();
                 setMyPageForm(data);
             } catch (error) {
