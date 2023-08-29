@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { paymentApi } from './../../api/pay/payment';
 import { LoginContext } from '../../hooks/loginContext';
@@ -249,6 +249,20 @@ export default function PaymentInfo({ productDetailInfo }) {
             console.log('Error sending payment: ', error);
         }
     };
+
+    /* 새로고침 */
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = ''; // 페이지를 떠날 때 경고 메시지 (브라우저마다 다를 수 있음)
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload); // 컴포넌트 언마운트 시 이벤트 제거
+        };
+    }, []);
 
     //numberWithCommas
     const price = numberWithCommas(productDetailInfo.price);

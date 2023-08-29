@@ -109,7 +109,6 @@ function LoginForm() {
         localStorage.setItem('jwttoken', response.data.response.accessToken);
         localStorage.setItem('refreshToken', response.data.response.refreshToken)
         setIsLoggedIn(true);
-
         localStorage.setItem('isLoggedIn', 'true');
 
         if (response.data.response.authority === 'ROLE_MENTOR') {

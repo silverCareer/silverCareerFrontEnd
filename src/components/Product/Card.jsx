@@ -96,7 +96,6 @@ export default function Card({product}) {
             <Product1>
                 <div>{product.category}</div>
                 <div className="productLike">
-                    {console.log(product.liked)}
                     {product.liked ? (
                         <LikeOnIcon  />
                     ) : (
