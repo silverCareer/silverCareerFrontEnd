@@ -61,7 +61,7 @@ const NavButtonList = styled.div `
     justify-content: center;
 `
 const NavButton = styled.button`
-    width: 200px;
+    
     padding: 5px 10px;
     margin: 0 5px;
     background-color: white;
@@ -127,11 +127,20 @@ const ReviewTitle = styled.h3 `
 
     font-size: 20px;
 `;
+const TextList = styled.div `
+    display:flex;
+    flex-direction: column;
+
+    div {
+        font-size: 12px;
+        text-align: right;
+    }
+`
 const ReviewTextarea = styled.textarea`
     width: 100%;
-    height: 150px;
+    height: 50px;
     resize: none;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 `;
 
 function MyCourses() {
@@ -150,6 +159,10 @@ function MyCourses() {
 
     const navigate  = useNavigate();
     const { setProductDetailInfo } = useContext(ProductDetailContext);
+
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
 
     useEffect(() => {
         async function fetchMyCourses() {
@@ -183,6 +196,15 @@ function MyCourses() {
         setReviewMessage('');
         setSelectedProductIdx(null);
         setIsModalOpen(false);
+    };
+
+    const handleReview = (e) => {
+        const inputValue = e.target.value;
+        
+        // 글자 수가 20자를 초과하지 않도록 제한
+        if (inputValue.length <= 20) {
+            setReviewMessage(inputValue);
+        }
     };
 
     const sendReview = async () => {
@@ -232,7 +254,7 @@ function MyCourses() {
                 <CourseCard key={course.productIdx}>
                 <Info>멘토: {course.mentorName}</Info>
                 <Info>날짜: {course.localDate}</Info>
-                <Info>가격: {course.amount}</Info>
+                <Info>가격: {numberWithCommas(course.amount)}</Info>
                 <Info> {course.paymentName}</Info>
                 {course.paymentType === '상품' ? 
                     (course.reviewed ? 
@@ -275,11 +297,14 @@ function MyCourses() {
                                 ))}
                             </ReviewRate>
                         </ButtonList>
-                        <ReviewTextarea 
-                            value={reviewMessage} 
-                            onChange={(e) => setReviewMessage(e.target.value)} 
-                            placeholder="리뷰를 입력해주세요" 
-                        />
+                        <TextList>
+                            <ReviewTextarea 
+                                value={reviewMessage} 
+                                onChange={handleReview}
+                                placeholder="리뷰를 입력해주세요 (최대 20자)" 
+                            />
+                            <div>{reviewMessage.length} / 20</div>
+                        </TextList>
                         <NavButtonList>
                             <NavButton onClick={sendReview}>작성하기</NavButton>
                             <NavButton onClick={closeModal} style={{ marginLeft: '20px' }}>닫기</NavButton>  

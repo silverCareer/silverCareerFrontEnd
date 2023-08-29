@@ -10,33 +10,43 @@ const MainContainer = styled.div`
     border: 1px solid #E0E0E0;
     display: flex;
     flex-direction: column;
-    padding: 20px 50px;
+    padding: 5px 20px;
     width: 900px;
-    color: #84A080;
     margin: 20px auto;
     border-radius: 5px;
 `;
-
+const MainTitle = styled.div `
+    font-size: 23px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    margin: 20px auto;
+    width: 900px;
+`;
 const BidItem = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 0;
     border-bottom: 1px solid #E0E0E0;
     &:last-child {
         border-bottom: none;
     }
 `;
-
 const BidDetail = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
+    margin: 20px 10px;
 `;
 
 const BidTitle = styled.h3`
     margin: 0;
     font-weight: 600;
+    font-size: 16px;
+
+    div {
+        
+    }
 `;
 
 const BidButton = styled.button`
@@ -136,6 +146,9 @@ const BidListForm = () => {
     const [isModalOpen, setModalOpen] = useState(false);
 
     const [selectedMentorName, setSelectedMentorName] = useState("");
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
 
     useEffect(() => {
         async function fetchBidData() {
@@ -174,13 +187,14 @@ const BidListForm = () => {
         <Alarm visible={showAlarm}>
         결제 페이지 이동...
         </Alarm>
+        <MainTitle>입찰 내역</MainTitle>
         <MainContainer>
             {bids.length > 0 ? bids.map((bid) => (
                 <BidItem key={bid.bidIdx}>
                     <BidDetail>
                         <BidTitle>{bid.title}</BidTitle>
                         <div>카테고리: {bid.category}</div>
-                        <div>입찰 가격: {bid.price}원</div>
+                        <div>입찰 가격: {numberWithCommas(bid.price)}원</div>
                         <div>멘토: {bid.mentorName}</div>
                     </BidDetail>
                     <div>
@@ -231,7 +245,7 @@ function InquiryModal({ isOpen, onClose, name, mentorName }) {
         isOpen && (
             <ModalWrapper onClick={onClose}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
-                <ModalLabel>To {mentorName}</ModalLabel>
+                <ModalLabel>{mentorName} 멘토님에게</ModalLabel>
                 <ModalInput 
                     placeholder="첫 채팅할 내용을 적어주세요." 
                     rows="5"

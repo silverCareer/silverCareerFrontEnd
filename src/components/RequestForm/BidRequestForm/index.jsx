@@ -9,28 +9,32 @@ const MainContainer = styled.div`
     border: 1px solid #E0E0E0;
     display: flex;
     flex-direction: column;
-    padding: 20px 50px;
+    padding: 20px 30px;
     width: 650px;
-    color: #84A080;
     margin: 20px auto;
     border-radius: 5px;
 `;
-
+const MainTitle = styled.div `
+    font-size: 23px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    margin: 20px auto;
+    width: 650px;
+`
 const InfoContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 `;
 
 const Title = styled.div`
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 `;
 
 const Contents = styled.div`
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 300;
-    color: #808080;
 `;
 
 const ButtonContainer = styled.div`
@@ -63,7 +67,6 @@ const Alarm = styled.div`
     z-index: 1000;
     display: ${({ visible }) => (visible ? 'block' : 'none')};
 `;
-
 const ModalWrapper = styled.div`
     position: fixed;
     top: 0;
@@ -129,7 +132,11 @@ const BidRequestForm = () => {
     const { loginForm } = useContext(LoginContext);
     const { name } = loginForm;
     const [isModalOpen, setModalOpen] = useState(false);
-
+    
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+    
     const handleAccepted = async (bidIdx, bidprice, bidtitle, mentor) => {
 
         try{
@@ -153,6 +160,7 @@ const BidRequestForm = () => {
             <Alarm visible={showAlarm}>
                 결제창으로 이동합니다...
             </Alarm>
+            <MainTitle>입찰 요청</MainTitle>
             <MainContainer>
                 <InfoContainer>
                     <Title>카테고리</Title>
@@ -171,7 +179,7 @@ const BidRequestForm = () => {
 
                 <InfoContainer>
                     <Title>멘토의 입찰 가격</Title>
-                    <Contents>{requestPrice}원</Contents>
+                    <Contents>{numberWithCommas(requestPrice)}원</Contents>
                 </InfoContainer>
 
 
@@ -213,7 +221,7 @@ function InquiryModal({ isOpen, onClose, name, memtorName }) {
         isOpen && (
             <ModalWrapper onClick={onClose}>
             <ModalContent onClick={(e) => e.stopPropagation()}>
-                <ModalLabel>To {memtorName}</ModalLabel>
+                <ModalLabel>{memtorName} 멘토님에게</ModalLabel>
                 <ModalInput 
                     placeholder="첫 채팅할 내용을 적어주세요." 
                     rows="5"

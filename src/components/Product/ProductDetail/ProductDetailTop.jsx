@@ -219,7 +219,7 @@ function InquiryModal({ productDetailInfo, isOpen, onClose, name }) {
 export default function ProductDetailTop({productDetailInfo, avgRating}) {
     const { isLoggedIn, loginForm } = useContext(LoginContext);
     const { name } = loginForm;
-    console.log(loginForm, " afadfadfadfadsf");
+    
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
