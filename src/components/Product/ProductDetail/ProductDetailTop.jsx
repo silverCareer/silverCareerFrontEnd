@@ -66,6 +66,12 @@ const TopRightImage = styled.div `
     height: 442px;
     border-radius: 10px;
     border: 1px solid #000;
+    overflow: hidden;
+
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+
 `
 const Title = styled.div `
     font-weight: 600;
@@ -213,7 +219,7 @@ function InquiryModal({ isOpen, onClose, name }) {
 
 
 export default function ProductDetailTop({avgRating}) {
-    const { loginForm } = useContext(LoginContext);
+    const { isLoggedIn, loginForm } = useContext(LoginContext);
     const { name } = loginForm;
 
     const numberWithCommas = (x) => {
@@ -236,7 +242,7 @@ export default function ProductDetailTop({avgRating}) {
             if(response.success) {
                 setIsLike((prevIsLiked) => !prevIsLiked);
                 
-                const productDetailResponse = await getProductDetail(productIdx);
+                const productDetailResponse = await getProductDetail(productIdx, isLoggedIn);
                 const newLikes = productDetailResponse.response.likes;
 
                 setProductDetailInfo((prevProductDetailInfo => ({
@@ -247,7 +253,7 @@ export default function ProductDetailTop({avgRating}) {
             }
 
         } catch (error) {
-
+            console.log(error);
         }
     }
 
@@ -269,7 +275,7 @@ export default function ProductDetailTop({avgRating}) {
             }
 
         } catch (error) {
-
+            console.log(error);
         }
     }
 
@@ -291,7 +297,7 @@ export default function ProductDetailTop({avgRating}) {
                     <span>{address}</span>
                 </Location>
                 <div className="description">
-                    {description}
+                    {description.length > 20 ? `${description.slice(0, 20)}...` : description}
                 </div>
                 <Price>
                     {numberWithCommas(price)} 원
@@ -309,16 +315,18 @@ export default function ProductDetailTop({avgRating}) {
                 </ClassInfo>
 
                 <ButtonList>
+                    {console.log(productDetailInfo, " ", name)}
                     {/* <Button onClick={name ? handlePaymentClick : null} disabled={!name}>결제하기</Button>
                     <Button onClick={name ? () => setModalOpen(true) : null} disabled={!name}>문의하기</Button> */}
-                    <Button onClick={name && productDetailInfo.status === 3 ? handlePaymentClick : null} 
-                            disabled={!name || productDetailInfo.status !== 3}>결제하기</Button>
-                    <Button onClick={name && productDetailInfo.status === 3 ? () => setModalOpen(true) : null} 
-                            disabled={!name || productDetailInfo.status !== 3}>문의하기</Button>
+                    <Button onClick={productDetailInfo.status === 3 ? handlePaymentClick : null} 
+                            disabled={productDetailInfo.status !== 3}>결제하기</Button>
+                    <Button onClick={productDetailInfo.status === 3 ? () => setModalOpen(true) : null} 
+                            disabled={productDetailInfo.status !== 3}>문의하기</Button>
                 </ButtonList>
             </TopLeft>
             <TopRightImage>
-                <img src={image} alt="Product" />
+                <img src={image} alt="Product" style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                {/* <img src={image} alt="Product" style={{ maxWidth: '100%', maxHeight: '100%' }} /> */}
             </TopRightImage>
         </ProductTopSection>
         <InquiryModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} name={name} />

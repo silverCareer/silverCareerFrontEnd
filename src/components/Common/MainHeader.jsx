@@ -141,8 +141,9 @@ const AlarmStatusIcon = styled.div`
 `;
 
 const MainHeader = () => {
-    const { isLoggedIn, setIsLoggedIn } = useContext(LoginContext); 
+    const { isLoggedIn, setIsLoggedIn, loginForm, setLoginForm } = useContext(LoginContext); 
     const { setMyPageForm } = useContext(MypageContext);
+    const { authority } = loginForm;
     const navigate = useNavigate();
 
     const notificationRef = useRef(null); // 알림창에 대한 ref
@@ -152,10 +153,26 @@ const MainHeader = () => {
     const [notifications, setNotifications] = useState([]);
 
     const [hasNewAlarm, setHasNewAlarm] = useState(false); 
+    
 
-    const { loginForm } = useContext(LoginContext)
-    const { authority} = loginForm
+    //로그인 확인여부
+    useEffect(() => {
+        // Check if the user is logged in when the component mounts (page loads)
+        const checkLoginStatus = () => {
+            const userIsLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; // Check local storage for login status
+            setIsLoggedIn(userIsLoggedIn);
 
+            if (userIsLoggedIn) {
+                const newLoginForm = { ...loginForm, authority: localStorage.getItem('authority') };
+                setLoginForm(newLoginForm);
+            }
+        };
+
+        checkLoginStatus(); // Call the function when the component mounts
+
+        // ... other useEffect code ...
+
+    }, []);
 
     // 렌더링 될 때마다 새로운 알람있는지 체크
     useEffect(() => {
@@ -218,8 +235,7 @@ const MainHeader = () => {
         if (isLoggedIn) {
             try {
                 const data = await getMyProfile();
-            
-                console.log("adfadfadfadf0");
+
                 if (data.authority === 'ROLE_MENTOR') {
                     data.authority = '멘토';
                 }
@@ -248,6 +264,7 @@ const MainHeader = () => {
         setIsLoggedIn(false);
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('jwttoken');
+        localStorage.removeItem('authority');
         navigate('/login')
     }
 
@@ -312,6 +329,7 @@ const MainHeader = () => {
                             onChange={handleSearchChange} />
                     <SearchIcon onClick={handleSearch} />
                 </SearchContainer>
+                {console.log(isLoggedIn, ",로긘여부")}
                 {isLoggedIn  ? (
                 <>
                     {authority === '멘티' && <ReqButton onClick={() => navigate('/request')}>의뢰하기</ReqButton>}
