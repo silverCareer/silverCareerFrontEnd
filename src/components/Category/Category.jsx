@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import CategoryItem from './CategoryItem'; // Import the CategoryItem component from the new file
 import ProductList from '../Product';
 import { getProductList } from '../../api/product/productList';
 import PagingContent from '../Common/Paging';
+import { LoginContext } from '../../hooks/loginContext';
 
 const Container = styled.div`
   display: flex;
@@ -21,6 +22,8 @@ const SelectedCategory = styled.div`
 `;
 
 const Category = ({ category }) => {
+  const { isLoggedIn } = useContext(LoginContext);
+
   const categories = ["현장직", "사무직", "문화", "기술직", "요리"];
   const [selectedCategory, setSelectedCategory] = useState(category); // 초기값 설정
   const [productList, setProductList] = useState([]);
@@ -35,8 +38,9 @@ const Category = ({ category }) => {
   useEffect(() => {
       async function fetchData() {
           try {
-              const productList = await getProductList(selectedCategory, currentPage, 9);
-
+              console.log(isLoggedIn, "adfadfa");
+              const productList = await getProductList(selectedCategory, currentPage, 9, isLoggedIn);
+              
               if (productList.success) {
                   setProductList(productList.response.content);
                   setTotalPage(productList.response.totalPages);
@@ -50,7 +54,7 @@ const Category = ({ category }) => {
           }
       }
       fetchData();
-  }, [selectedCategory, currentPage]);
+  }, [selectedCategory, currentPage, isLoggedIn]);
 
   return (
     <>

@@ -101,7 +101,7 @@ const NotificationContext = styled.div`
     display: flex;
     flex-direction: column;
     background: #FFF;
-    border: 2px solid #84A080; // 포인트 컬러 추가
+    border: 2px solid #7e7e7e; // 포인트 컬러 추가
     border-radius: 5px;
     max-height: 300px;
     overflow-y: auto;
@@ -132,7 +132,7 @@ const NotificationItem = styled.div`
 `;
 
 const NoNotificationText = styled.div`
-    color: #84A080; 
+    color: #7e7e7e; 
     padding: 10px;
     text-align: center; 
 `;
