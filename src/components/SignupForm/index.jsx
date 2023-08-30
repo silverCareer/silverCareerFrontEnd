@@ -43,6 +43,24 @@ const Input = styled.input`
     border-radius: 5px;
     margin-bottom: 5px;
 `;
+const EmailInput = styled.input `
+    width: 300px;
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin-bottom: 5px;
+`
+const SelectInput = styled.select `
+    width: 180px;
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin-bottom: 5px;
+`;
+const PwCheck = styled.div `
+    color: #ff5252;
+    font-size: 10px;
+`
 const UserType = styled.div`
     display: flex;
     justify-content: flex-start;
@@ -102,24 +120,74 @@ const AuthButton = styled.button`
     line-height: 1.2em; 
     font-size: 0.7em; 
 `;
-const Line = styled.div`
-    height: 1px;
-    width: 100%;
-    background-color: #ccc; 
-    margin: 1em 0; 
-`;
 
 const SignupForm = () => {
     const { updateSignupData } = useContext(SignupContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({});
-    const [isAuthVerified, setIsAuthVerified] = useState(false);
+    
+    /* password검사 */
+    const [password, setPassword] = useState('');
+    const [passwordForCheck, setPasswordForCheck] = useState('');
+    const [passwordValid, setPasswordValid] = useState(true);
+    const [passwordMatch, setPasswordMatch] = useState(true);
+
+    /* 이메일 */
+    const [id, setId] = useState('');
+    const [domain, setDomain] = useState('gmail.com');
 
     const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        
         setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
+            ...formData,
+            [name]: value,
         });
+    };
+
+    const combineEmail = (id, domain) => {
+        return `${id}@${domain}`;
+    };
+    const handleIdChange = (event) => {
+        setId(event.target.value);
+    };
+    const handleDomainChange = (event) => {
+        setDomain(event.target.value);
+    };
+    
+    /* 비밀번호 유효성 check */
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+
+        // 비밀번호 유효성 검사 - 최소 하나 이상의 알파벳, 숫자, 특수문자를 포함해야 합니다.
+        const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&!*])[A-Za-z\d@#$%^&!*]+$/;
+        const isValid = newPassword === '' || regex.test(newPassword);
+        setPasswordValid(isValid);
+
+        // 비밀번호 확인과 일치하는지 확인
+        setPasswordMatch(passwordForCheck === '' || passwordForCheck === newPassword);
+
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+    const handlePasswordCheckChange = (e) => {
+        const newPasswordCheck = e.target.value;
+        setPasswordForCheck(newPasswordCheck);
+
+        // 비밀번호 확인과 일치하는지 확인
+        setPasswordMatch(password === newPasswordCheck);
+
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+    const handlePasswordCheckBlur = () => {
+        // 비밀번호 확인 필드가 포커스 아웃 될 때 유효성 검사 수행
+        setPasswordMatch(password === passwordForCheck);
     };
 
     const handleBirthChange = (e) => {
@@ -188,12 +256,17 @@ const SignupForm = () => {
     const handleEmailCheck = async (event) => {
         event.preventDefault();
         try{
-            const email = formData.email;
+            const email = combineEmail(id, domain);
             const response = await emailCheck(email);
     
             if (response.success){
                 sessionStorage.setItem('checkEmail', 'true');
                 alert('사용가능한 이메일입니다.');
+
+                setFormData({
+                    ...formData,
+                    email: email,
+                });
             } 
 
         }catch (error){
@@ -272,27 +345,45 @@ const SignupForm = () => {
 
                 <FormGroup>
                     <Label htmlFor="birthDate">생년월일</Label>
-                    <div>
+                    <PhoneInputGroup>
                         <Input id="birthDate" type="date" name="birthDate" onChange={handleBirthChange} />
-                    </div>
+                    </PhoneInputGroup>
                 </FormGroup>
                 
                 <FormGroup>
                     <Label htmlFor="email">이메일</Label>
                     <PhoneInputGroup>
-                        <Input id="email" type="email" name="email" onChange={handleInputChange} placeholder="이메일을 입력해주세요."/>
+                        {/* <Input id="email" type="email" name="email" onChange={handleInputChange} placeholder="이메일을 입력해주세요."/>
+                        <AuthButton onClick={handleEmailCheck}>중복 확인</AuthButton> */}
+                        <EmailInput type="text" value={id} onChange={handleIdChange} placeholder="이메일을 입력해주세요." />
+                        @
+                        <SelectInput value={domain} onChange={handleDomainChange}>
+                            <option value="gmail.com">gmail.com</option>
+                            <option value="naver.com">naver.com</option>
+                        </SelectInput>
                         <AuthButton onClick={handleEmailCheck}>중복 확인</AuthButton>
                     </PhoneInputGroup>
                 </FormGroup>
 
                 <FormGroup>
                     <Label htmlFor="password">비밀번호 입력</Label>
-                    <div>
-                        <Input id="password" type="password" name="password" onChange={handleInputChange} placeholder="최소 하나 이상의 알파벳/숫자/특수문자를 작성해주세요."/>
-                    </div>
-                    <div>
-                        <Input id="passwordForCheck" type="password" name="passwordForCheck" onChange={handleInputChange} placeholder="비밀번호를 한번 더 입력해주세요."/>
-                    </div>
+                        <Input
+                            id="password"
+                            type="password"
+                            name="password"
+                            onChange={handlePasswordChange}
+                            placeholder="최소 하나 이상의 알파벳/숫자/특수문자를 작성해주세요."
+                        />
+                        {!passwordValid && <PwCheck>비밀번호가 유효하지 않습니다.</PwCheck>}
+                        <Input
+                            id="passwordForCheck"
+                            type="password"
+                            name="passwordForCheck"
+                            onChange={handlePasswordCheckChange}
+                            onBlur={handlePasswordCheckBlur}
+                            placeholder="비밀번호를 한번 더 입력해주세요."
+                        />
+                        {!passwordMatch && <p style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</p>}
                 </FormGroup>
 
                 <FormGroup>
