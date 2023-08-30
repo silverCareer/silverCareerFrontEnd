@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { productRegistContents } from '../../api/product/productRegistContents';
 import uploadIconImage from '../../assets/svg/icon-upload.svg';
 import SelectAddress from './SelectAddress';
-import ReactMarkdown from 'react-markdown';
+
 
 const ProductContainer = styled.div `
     display: flex;

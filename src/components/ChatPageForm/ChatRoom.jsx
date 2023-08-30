@@ -69,8 +69,7 @@ const ChatRoom = () => {
     const client = useRef(null);
     const { loginForm } = useContext(LoginContext)
     const { name } = loginForm
-    // const { myPageForm } = useContext(MypageContext);
-    // const { name } = myPageForm;
+
     const messagesEndRef = useRef(null); //마지막 메시지 따라가게 하려고 생성
     const otherUserName = selectedChat?.user1 === name ? selectedChat?.user2 : selectedChat?.user1;
     
@@ -84,8 +83,9 @@ const ChatRoom = () => {
         client.current.onConnect = (frame) => {
             console.log('Connected:', frame);
 
+
             // 구독 시작
-            client.current.subscribe(`/topic/messages`, (message) => {
+            client.current.subscribe(`/topic/messages/${name}`, (message) => {
                 const receivedMessage = JSON.parse(message.body);
                 setMessages(prevMessages => [...prevMessages, receivedMessage]);
                 //console.log("receiveMessage : " + receivedMessage.content)
@@ -116,6 +116,7 @@ const ChatRoom = () => {
             const newMessage = {
                 content: message,
                 sender: name,
+                receiver: otherUserName,
             };
             client.current.publish({
                 destination: '/app/sendMessage',
