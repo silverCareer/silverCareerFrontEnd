@@ -85,7 +85,7 @@ const ChatRoom = () => {
             console.log('Connected:', frame);
 
             // 구독 시작
-            client.current.subscribe(`/topic/messages/${name}`, (message) => {
+            client.current.subscribe(`/topic/messages/`, (message) => {
                 const receivedMessage = JSON.parse(message.body);
                 setMessages(prevMessages => [...prevMessages, receivedMessage]);
                 
@@ -115,8 +115,7 @@ const ChatRoom = () => {
         if (message && client.current && client.current.connected) {
             const newMessage = {
                 content: message,
-                sender: name,
-                receiver: otherUserName 
+                sender: name
             };
             client.current.publish({
                 destination: '/app/sendMessage',
