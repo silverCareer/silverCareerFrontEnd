@@ -86,11 +86,11 @@ const ChatRoom = () => {
             console.log('Connected:', frame);
 
             // 구독 시작
-            client.current.subscribe(`/topic/messages`, (message) => {
+            client.current.subscribe(`/topic/messages/${name}`, (message) => {
                 const receivedMessage = JSON.parse(message.body);
                 setMessages(prevMessages => [...prevMessages, receivedMessage]);
-                //console.log("receiveMessage : " + receivedMessage.content)
-                toggleMessageUpdated(); // 사이드바 useEffect의 의존성배열에 신호주기 위함
+                
+                toggleMessageUpdated(); 
             });
         };
 
@@ -117,6 +117,7 @@ const ChatRoom = () => {
             const newMessage = {
                 content: message,
                 sender: name,
+                receiver: otherUserName 
             };
             client.current.publish({
                 destination: '/app/sendMessage',
