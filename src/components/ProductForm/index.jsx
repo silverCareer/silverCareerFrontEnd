@@ -1,10 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { productRegistContents } from '../../api/product/productRegistContents';
 import uploadIconImage from '../../assets/svg/icon-upload.svg';
 import SelectAddress from './SelectAddress';
-import ReactMarkdown from 'react-markdown';
 
 const ProductContainer = styled.div `
     display: flex;
@@ -293,7 +292,6 @@ function ProductForm() {
 
         formData.append('productImage', selectedImageUrl);
     
-        console.log(createProductReq);
         try {
             const response = await productRegistContents(createProductReq, formData);
 
@@ -307,10 +305,20 @@ function ProductForm() {
         } catch (error) {
             console.error('Error sending data to backend:', error);
         }
-
     };
 
-   
+    /* 새로고침 */
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = ''; // 페이지를 떠날 때 경고 메시지 (브라우저마다 다를 수 있음)
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload); // 컴포넌트 언마운트 시 이벤트 제거
+        };
+    }, []);
+
     return (
         <>
             <Alarm visible={showAlarm}>
